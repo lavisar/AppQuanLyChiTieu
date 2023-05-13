@@ -93,9 +93,7 @@ function LoginScreen({ navigation }:any): JSX.Element {
         const db = await initializeDatabase();
         if (db) {
           await createTable(db);
-    
-          // Rest of the login logic
-          // ...
+          
           if (username && password) {
             db.transaction((tx) => {
               tx.executeSql(
