@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
         height: '70%',
         backgroundColor: 'white',
         elevation: 10,
+        position : 'absolute'
     },
     titleInput: {
         fontWeight: 'bold',
