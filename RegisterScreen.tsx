@@ -48,17 +48,18 @@ function RegisterScreen({ navigation }: any): JSX.Element {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 ,backgroundColor:"red"}}>
             <ImageBackground style={styles.panel} resizeMode='cover' source={require('./assets/src/img/panel-login.png')}>
-                <ScrollView style={{flex: 1 }}>
-                    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
 
+                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                    <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
+                    
                         <View style={styles.loginContainer}>
+                            
                             <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
                                 <Image source={require('./assets/src/img/icon-back.png')}></Image>
                             </TouchableOpacity>
-
+                            <ScrollView style={{ flex: 1 }}>
                             <Text style={styles.titleInput}>Tên đăng nhập:</Text>
                             <TextInput
                                 placeholder="Tên đăng nhập"
@@ -100,6 +101,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
 
                             />
+
                             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                 <Text>Bạn đã có tài khoản ?</Text>
                                 <TouchableOpacity onPress={BackTo}>
@@ -111,11 +113,13 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                             <TouchableOpacity style={styles.btnRegister} onPress={Register}>
                                 <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>ĐĂNG KÍ</Text>
                             </TouchableOpacity>
-
+                            </ScrollView>
+                    
                         </View>
-                    </View>
-                </ScrollView>
-            </ImageBackground>
+                    
+                </View>
+            
+        </ImageBackground>
         </View>
     );
 }
