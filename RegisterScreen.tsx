@@ -6,8 +6,9 @@
  * @format
  */
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useState} from 'react';
 import type { PropsWithChildren } from 'react';
+import SQLite from 'react-native-sqlite-storage';
 import {
     SafeAreaView,
     ScrollView,
@@ -38,14 +39,23 @@ import {
 
 function RegisterScreen({ navigation }:any): JSX.Element {
 
-    const [text, onChangeText] = React.useState('');
+    const [username, setUsername] = useState('');
+    const [fullname, setFullname] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+
+    const [text, onChangeText] = useState('');
     const Register = () => (
         navigation.goBack()
     )
     const BackTo = () => (
         navigation.goBack()
     )
-
+    
+    
+      
 
     return (
         <View style={{ flex: 1 }}>
@@ -72,19 +82,21 @@ function RegisterScreen({ navigation }:any): JSX.Element {
                             placeholder="Ngày sinh"
                             style={styles.textInput}
                             placeholderTextColor= 'black'
+                            onChangeText={setBirthday}
                         />
                         <Text style={styles.titleInput}>Gmail:</Text>
                         <TextInput
                             placeholder="Gmail"
                             style={styles.textInput}
                             placeholderTextColor= 'black'
-
+                            onChangeText={setEmail}
                         />
                         <Text style={styles.titleInput}>Nhập mật khẩu mới</Text>
                         <TextInput
                             placeholder="Nhập mật khẩu mới"
                             style={styles.textInput}
                             placeholderTextColor= 'black'
+                            onChangeText={setPassword}
 
                         />
                         <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
@@ -92,7 +104,7 @@ function RegisterScreen({ navigation }:any): JSX.Element {
                             placeholder="Nhập lại mật khẩu"
                             style={styles.textInput}
                             placeholderTextColor= 'black'
-
+                            onChangeText={setPasswordConfirm}
                         />
                         <View style={{flexDirection:'row',alignSelf:'center'}}>
                             <Text>Bạn đã có tài khoản ?</Text>
