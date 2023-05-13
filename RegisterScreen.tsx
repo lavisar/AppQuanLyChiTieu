@@ -48,18 +48,18 @@ function RegisterScreen({ navigation }: any): JSX.Element {
 
 
     return (
-        <View style={{ flex: 1 ,backgroundColor:"red"}}>
+        <View style={{ flex: 1, backgroundColor: "red" }}>
             <ImageBackground style={styles.panel} resizeMode='cover' source={require('./assets/src/img/panel-login.png')}>
 
                 <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
-                    
-                        <View style={styles.loginContainer}>
-                            
-                            <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
-                                <Image source={require('./assets/src/img/icon-back.png')}></Image>
-                            </TouchableOpacity>
-                            <ScrollView style={{ flex: 1 }}>
+
+                    <View style={styles.loginContainer}>
+
+                        <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
+                            <Image source={require('./assets/src/img/icon-back.png')}></Image>
+                        </TouchableOpacity>
+                        <ScrollView style={{ flex: 1 }}>
                             <Text style={styles.titleInput}>Tên đăng nhập:</Text>
                             <TextInput
                                 placeholder="Tên đăng nhập"
@@ -94,32 +94,24 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
 
                             />
-                            <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
-                            <TextInput
-                                placeholder="Nhập lại mật khẩu"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
 
-                            />
-
-                            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                <Text>Bạn đã có tài khoản ?</Text>
-                                <TouchableOpacity onPress={BackTo}>
-                                    <Text style={{ color: 'rgba(0, 151, 126, 1)' }}> Đăng nhập</Text>
-                                </TouchableOpacity>
-                            </View>
-
-
-                            <TouchableOpacity style={styles.btnRegister} onPress={Register}>
-                                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>ĐĂNG KÍ</Text>
+                        </ScrollView>
+                        <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                            <Text>Bạn đã có tài khoản ?</Text>
+                            <TouchableOpacity onPress={BackTo}>
+                                <Text style={{ color: 'rgba(0, 151, 126, 1)' }}> Đăng nhập</Text>
                             </TouchableOpacity>
-                            </ScrollView>
-                    
                         </View>
-                    
+                        <TouchableOpacity style={styles.btnRegister} onPress={Register}>
+                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>ĐĂNG KÍ</Text>
+                        </TouchableOpacity>
+
+
+                    </View>
+
                 </View>
-            
-        </ImageBackground>
+
+            </ImageBackground>
         </View>
     );
 }
@@ -150,7 +142,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 10,
         width: 375,
-        height: 675,
+        height: '70%',
         backgroundColor: 'white',
         elevation: 10,
     },
