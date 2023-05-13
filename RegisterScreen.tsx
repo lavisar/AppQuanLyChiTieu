@@ -36,7 +36,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 
-function RegisterScreen({ navigation }:any): JSX.Element {
+function RegisterScreen({ navigation }: any): JSX.Element {
 
     const [text, onChangeText] = React.useState('');
     const Register = () => (
@@ -50,60 +50,66 @@ function RegisterScreen({ navigation }:any): JSX.Element {
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground style={styles.panel} source={require('./assets/src/img/panel-login.png')}>
-                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center'}}>
+                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
 
 
                     <View style={styles.loginContainer}>
-                    <TouchableOpacity style={{marginLeft:-30,marginBottom:10}} onPress={BackTo}>
-                        <Image source={require('./assets/src/img/icon-back.png')}></Image>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
+                            <Image source={require('./assets/src/img/icon-back.png')}></Image>
+                        </TouchableOpacity>
 
+                        <Text style={styles.titleInput}>Tên đăng nhập:</Text>
+                        <TextInput
+                            placeholder="Tên đăng nhập"
+                            style={styles.textInput}
+                            placeholderTextColor='black'
+                        />
 
 
                         <Text style={styles.titleInput}>Họ và tên:</Text>
                         <TextInput
                             placeholder="Họ và tên"
                             style={styles.textInput}
-                            placeholderTextColor= 'black'
+                            placeholderTextColor='black'
                         />
                         <Text style={styles.titleInput}>Ngày sinh:</Text>
                         <TextInput
                             placeholder="Ngày sinh"
                             style={styles.textInput}
-                            placeholderTextColor= 'black'
+                            placeholderTextColor='black'
                         />
                         <Text style={styles.titleInput}>Gmail:</Text>
                         <TextInput
                             placeholder="Gmail"
                             style={styles.textInput}
-                            placeholderTextColor= 'black'
+                            placeholderTextColor='black'
 
                         />
                         <Text style={styles.titleInput}>Nhập mật khẩu mới</Text>
                         <TextInput
                             placeholder="Nhập mật khẩu mới"
                             style={styles.textInput}
-                            placeholderTextColor= 'black'
+                            placeholderTextColor='black'
 
                         />
                         <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
                         <TextInput
                             placeholder="Nhập lại mật khẩu"
                             style={styles.textInput}
-                            placeholderTextColor= 'black'
+                            placeholderTextColor='black'
 
                         />
-                        <View style={{flexDirection:'row',alignSelf:'center'}}>
+                        <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                             <Text>Bạn đã có tài khoản ?</Text>
                             <TouchableOpacity onPress={BackTo}>
-                                <Text style={{color: 'rgba(0, 151, 126, 1)'}}> Đăng nhập</Text>
-                            </TouchableOpacity>                          
+                                <Text style={{ color: 'rgba(0, 151, 126, 1)' }}> Đăng nhập</Text>
+                            </TouchableOpacity>
                         </View>
 
 
                         <TouchableOpacity style={styles.btnRegister} onPress={Register}>
-                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold'}}>ĐĂNG KÍ</Text>
+                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>ĐĂNG KÍ</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
         fontSize: 38,
         marginBottom: 20,
         textShadowColor: 'black',
-        textShadowOffset: {width:1,height:3},
+        textShadowOffset: { width: 1, height: 3 },
         textShadowRadius: 25,
     },
     loginContainer: {
@@ -141,18 +147,18 @@ const styles = StyleSheet.create({
         width: 375,
         height: 675,
         backgroundColor: 'white',
-        elevation:10,
+        elevation: 10,
     },
-    titleInput:{
+    titleInput: {
         fontWeight: 'bold',
         fontSize: 18,
         color: 'rgba(214, 149, 0, 1)',
     },
     textInput: {
-        height: 40,
+        height: 35,
         borderColor: '#000000',
         borderBottomWidth: 1,
-        marginBottom: 36,
+        marginBottom: 25,
 
     },
     btnRegister: {
@@ -162,18 +168,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 151, 126, 1)',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft:90,
-        marginTop:20,
-        elevation:5
+        marginLeft: 90,
+        marginTop: 20,
+        elevation: 5
 
     },
     textLogin: {
         alignSelf: 'center',
-        paddingTop: 15,
+        paddingTop: 5,
         fontWeight: 'bold',
         color: 'rgba(214, 149, 0, 1)',
     }
-    
+
 });
 
 export default RegisterScreen;
