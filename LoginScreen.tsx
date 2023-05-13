@@ -116,34 +116,6 @@ function LoginScreen({ navigation }:any): JSX.Element {
           }
         }
       };
-    
-
-      // const addColumns = async (db: SQLite.SQLiteDatabase) => {
-      //   try {
-      //     await db.transaction((tx) => {
-      //       tx.executeSql(
-      //         'ALTER TABLE account ADD COLUMN fullname TEXT;',
-      //         [],
-      //         () => console.log('Column "fullname" added successfully'),
-      //         (error) => console.log('Error adding column "fullname": ', error)
-      //       );
-      //       tx.executeSql(
-      //         'ALTER TABLE account ADD COLUMN birthday TEXT;',
-      //         [],
-      //         () => console.log('Column "birthday" added successfully'),
-      //         (error) => console.log('Error adding column "birthday": ', error)
-      //       );
-      //       tx.executeSql(
-      //         'ALTER TABLE account ADD COLUMN email TEXT;',
-      //         [],
-      //         () => console.log('Column "gmail" added successfully'),
-      //         (error) => console.log('Error adding column "gmail": ', error)
-      //       );
-      //     });
-      //   } catch (error) {
-      //     console.log('Error executing transaction: ', error);
-      //   }
-      // };
       
     const [text, onChangeText] = useState('');
 
