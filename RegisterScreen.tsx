@@ -1,10 +1,3 @@
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 import 'react-native-gesture-handler';
 import React, { useState} from 'react';
 import type { PropsWithChildren } from 'react';
