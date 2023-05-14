@@ -1,10 +1,3 @@
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import type { PropsWithChildren } from 'react';
@@ -40,75 +33,13 @@ const db = SQLite.openDatabase(
     name: 'QuanLiChiTieu',
     location: 'default',
   },
-  () => {
-    // Alert.alert("Open db successfully");
-  },
+  () => {},
   error=>{console.log(error)}  
 );
 
 function LoginScreen({ navigation }:any): JSX.Element {
-
-    // const initializeDatabase = async () => {
-    //     try {
-    //       const db = await SQLite.openDatabase({ name: 'QuanLyChiTieu.db', createFromLocation: '~QuanLyChiTieu.db' });
-    //       return db;
-    //     } catch (error) {
-    //       console.log('Error opening database: ', error);
-    //       return null;
-    //     }
-    //   };
-    
-    //   const createTable = async (db: SQLite.SQLiteDatabase) => {
-    //     try {
-    //       await db.transaction((tx) => {
-    //         tx.executeSql(
-    //           `CREATE TABLE IF NOT EXISTS Accounts (
-    //             id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //             username TEXT,
-    //             password TEXT,
-    //             fullname TEXT,
-    //             birthday TEXT,
-    //             email TEXT
-    //           )`,
-    //           [],
-    //           () => console.log('Table created successfully'),
-    //           (error) => console.log('Error creating table: ', error)
-    //         );
-    //       });
-    //     } catch (error) {
-    //       console.log('Error executing transaction: ', error);
-    //     }
-    //   };
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
-    // const handleLogin = async () => {
-    //     const db = await initializeDatabase();
-    //     if (db) {
-    //       await createTable(db);
-
-    //       if (username && password) {
-    //         db.transaction((tx) => {
-    //           tx.executeSql(
-    //             'SELECT * FROM Accounts WHERE username = ? AND password = ?',
-    //             [username, password],
-    //             (_, { rows }) => {
-    //               if (rows.length > 0) {
-    //                 Alert.alert('Login successful');
-                    
-    //               } else {
-    //                 Alert.alert('Invalid username or password');
-    //               }
-    //             },
-    //             (error) => console.log('Error executing query: ', error)
-    //           );
-    //         });
-    //       } else {
-    //         Alert.alert('Please enter username and password');
-    //       }
-    //     }
-    //   };
     
     useEffect(() =>{
       createTable();
