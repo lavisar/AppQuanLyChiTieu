@@ -48,7 +48,6 @@ const db = SQLite.openDatabase(
 
 
 function RegisterScreen({ navigation }: any): JSX.Element {
-
     const [username, setUsername] = useState('');
     const [fullname, setFullname] = useState('');
     const [password, setPassword] = useState('');
@@ -57,6 +56,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [usernameIsValid, setUsernameIsValid] = useState(true);
     const [emailIsValid, setEmailIsValid] = useState(true);
+
 
     const [text, onChangeText] = React.useState('');
     const Register = () => (
@@ -165,8 +165,6 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
                                 onChangeText={setUsername}
                             />
-
-
                             <Text style={styles.titleInput}>Họ và tên:</Text>
                             <TextInput
                                 placeholder="Họ và tên"
