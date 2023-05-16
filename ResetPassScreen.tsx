@@ -36,7 +36,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 
-function ResetPassScreen({navigation}:any): JSX.Element {
+function ResetPassScreen({ navigation }: any): JSX.Element {
 
     const [text, onChangeText] = React.useState('');
     const [confirm, setConfirm] = React.useState(false)
@@ -46,61 +46,62 @@ function ResetPassScreen({navigation}:any): JSX.Element {
     const BackTo = () => (
         navigation.goBack()
     )
-    const KeyGmail = () =>{
+    const KeyGmail = () => {
         Alert.alert("Đã gửi lại mã")
     }
 
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground style={styles.panel} source={require('./assets/src/img/panel-login.png')}>
-                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center'}}>
+                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={styles.header}>QUÊN MẬT KHẨU</Text>
 
                     <View style={styles.loginContainer}>
-                    <TouchableOpacity style={{marginLeft:-30,marginBottom:20}} onPress={BackTo}>
-                        <Image source={require('./assets/src/img/icon-back.png')}></Image>
-                    </TouchableOpacity>
-
-
-                        <Text style={styles.titleInput}>Gmail:</Text>
-                        <TextInput
-                            placeholder="Gmail"
-                            style={styles.textInput}
-                            placeholderTextColor= 'black'
-                        />
-                        <Text style={styles.titleInput}>Mã xác nhận:</Text>
-                        <TextInput
-                            placeholder="Mã xác nhận"
-                            style={styles.textInput}
-                            placeholderTextColor= 'black'
-                        />
-                        <Text style={styles.titleInput}>Nhập mật khẩu mới</Text>
-                        <TextInput
-                            placeholder="Nhập mật khẩu mới"
-                            style={styles.textInput}
-                            placeholderTextColor= 'black'
-                        />
-                        <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
-                        <TextInput
-                            placeholder="Nhập lại mật khẩu"
-                            style={styles.textInput}
-                            placeholderTextColor= 'black'
-                        />
-
-
-                        <View style={{flexDirection:'row',alignSelf:'center'}}>
-                            <Text>Bạn chưa nhận được ?</Text>
-                            <TouchableOpacity onPress={KeyGmail}>
-                                <Text style={{color: 'rgba(0, 151, 126, 1)'}}> Gửi lại mã</Text>
-                            </TouchableOpacity>                          
-                        </View>
-
-                        
-                        <TouchableOpacity style={styles.btnApct} onPress={BackTo}>
-                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold'}}>XÁC NHẬN</Text>
+                        <TouchableOpacity style={{ marginLeft: -30, marginBottom: 20 }} onPress={BackTo}>
+                            <Image source={require('./assets/src/img/icon-back.png')}></Image>
                         </TouchableOpacity>
 
+                        <ScrollView style={{ flex: 1,marginBottom:10 }}>
+                            <Text style={styles.titleInput}>Gmail:</Text>
+                            <TextInput
+                                placeholder="Gmail"
+                                style={styles.textInput}
+                                placeholderTextColor='black'
+                            />
+                            <Text style={styles.titleInput}>Mã xác nhận:</Text>
+                            <TextInput
+                                placeholder="Mã xác nhận"
+                                style={styles.textInput}
+                                placeholderTextColor='black'
+                            />
+                            <Text style={styles.titleInput}>Nhập mật khẩu mới</Text>
+                            <TextInput
+                                placeholder="Nhập mật khẩu mới"
+                                style={styles.textInput}
+                                placeholderTextColor='black'
+                            />
+                            <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
+                            <TextInput
+                                placeholder="Nhập lại mật khẩu"
+                                style={styles.textInput}
+                                placeholderTextColor='black'
+                            />
+                        </ScrollView>
+
+                            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                                <Text>Bạn chưa nhận được ?</Text>
+                                <TouchableOpacity onPress={KeyGmail}>
+                                    <Text style={{ color: 'rgba(0, 151, 126, 1)' }}> Gửi lại mã</Text>
+                                </TouchableOpacity>
+                            </View>
+
+
+                            <TouchableOpacity style={styles.btnApct} onPress={BackTo}>
+                                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>XÁC NHẬN</Text>
+                            </TouchableOpacity>
+                        
                     </View>
+
                 </KeyboardAvoidingView>
             </ImageBackground>
         </View>
@@ -124,9 +125,10 @@ const styles = StyleSheet.create({
         fontSize: 38,
         marginBottom: 20,
         textShadowColor: 'black',
-        textShadowOffset: {width:1,height:2},
+        textShadowOffset: { width: 1, height: 2 },
         textShadowRadius: 20,
-        
+        marginTop: 10
+
     },
     loginContainer: {
         paddingHorizontal: 20,
@@ -134,11 +136,11 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 10,
         width: 350,
-        height: 580,
+        height: '78%',
         backgroundColor: 'white',
-        elevation:10
+        elevation: 10
     },
-    titleInput:{
+    titleInput: {
         fontWeight: 'bold',
         fontSize: 18,
         color: 'rgba(214, 149, 0, 1)',
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: '#000000',
         borderBottomWidth: 1,
-        marginBottom: 36,
+        marginBottom: 28,
 
     },
     btnApct: {
@@ -157,9 +159,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 151, 126, 1)',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft:90,
-        marginTop:10,
-        elevation:5
+        marginLeft: 90,
+        marginTop: 10,
+        elevation: 5
 
     },
     textLogin: {
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
         color: 'rgba(214, 149, 0, 1)',
         fontFamily: 'Segoe UI'
     }
-    
+
 });
 
 export default ResetPassScreen;

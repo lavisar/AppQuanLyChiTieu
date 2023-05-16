@@ -32,24 +32,24 @@ import {
 const DATA = [
   {
     month: '4/2023',
-    id:'thang4',
+    id: 'thang4',
     value:
       [{
-        id:3,
+        id: 3,
         src: require('./assets/src/img/fillter-icon/hoa-don.png'),
         title: "Thanh toán tiền điện thoại",
         day: '21/4/2023',
         money: 100000
       },
       {
-        id:2,
+        id: 2,
         src: require('./assets/src/img/fillter-icon/cham-soc.png'),
         title: "Skincare",
         day: '12/4/2023',
         money: 218000
       },
       {
-        id:1,
+        id: 1,
         src: require('./assets/src/img/fillter-icon/an-vat.png'),
         title: "Ăn gà rán",
         day: '11/4/2023',
@@ -59,17 +59,17 @@ const DATA = [
   },
   {
     month: '3/2023',
-    id:'thang5',
+    id: 'thang5',
     value:
       [{
-        id:2,
+        id: 2,
         src: require('./assets/src/img/fillter-icon/tien-nha.png'),
         title: "Thanh toán tiền nhà",
         day: '21/3/2023',
         money: 2100000
       },
       {
-        id:1,
+        id: 1,
         src: require('./assets/src/img/fillter-icon/tien-dien.png'),
         title: "Thanh toán tiền điện",
         day: '21/3/2023',
@@ -101,7 +101,7 @@ const InputFind = ({ placeholder }: any) => {
   )
 }
 type Props = { src: any, title: any, day: any, money: any }
-const ListValuePay = ({src,title,day,money}: Props) => {
+const ListValuePay = ({ src, title, day, money }: Props) => {
   return (
     <View>
       <TouchableOpacity style={styles.MoneyTypeContainer}>
@@ -125,7 +125,7 @@ const ListValuePay = ({src,title,day,money}: Props) => {
 }
 
 
-const TotalSpendScreen = ({ navigation }:any) => {
+const TotalSpendScreen = ({ navigation }: any) => {
   return (
 
     <View style={{ flex: 3, marginHorizontal: 20 }}>
@@ -141,28 +141,32 @@ const TotalSpendScreen = ({ navigation }:any) => {
         </View>
       </View>
 
+      <KeyboardAvoidingView>
+        <ScrollView>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1 }}>
+            <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
-      <View style={{ flex: 1 ,justifyContent:'center',alignItems:'center',borderBottomWidth:1}}>
-        <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
-      </View>
 
 
 
-      <View style={{ flex: 6,marginBottom:30 }}>
+      <View style={{ flex: 6, marginBottom: 30 }}>
 
         <FlatList
           data={DATA}
-          renderItem={({item})=>
+          renderItem={({ item }) =>
 
             <View>
               <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
               {item.value.map(value => (
-                <ListValuePay src={value.src} title={value.title} day={value.day} money={value.money}  />
+                <ListValuePay src={value.src} title={value.title} day={value.day} money={value.money} />
               ))}
-            </View> 
-            
+            </View>
+
           }
-          keyExtractor={item=>item.id}
+          keyExtractor={item => item.id}
         />
       </View>
 
