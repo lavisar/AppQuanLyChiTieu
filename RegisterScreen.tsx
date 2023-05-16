@@ -142,7 +142,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
         <View style={{ flex: 1, backgroundColor: "red" }}>
             <ImageBackground style={styles.panel} resizeMode='cover' source={require('./assets/src/img/panel-login.png')}>
 
-                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', flex: 1 }} behavior='height'>
+                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} behavior='height'>
 
                     <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
 
