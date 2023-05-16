@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {
@@ -31,12 +31,12 @@ import {
 
 const db = SQLite.openDatabase(
     {
-      name: 'QuanLiChiTieu',
-      location: 'default',
+        name: 'QuanLiChiTieu',
+        location: 'default',
     },
     () => {
     },
-    error=>{console.log(error)}  
+    error => { console.log(error) }
 );
 
 
@@ -65,9 +65,9 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                 tx.executeSql(
                     "SELECT username FROM Users WHERE username = ?",
                     [username],
-                    (tx, results) =>{
+                    (tx, results) => {
                         var len = results.rows.length;
-                        if (len > 0){
+                        if (len > 0) {
                             Alert.alert("Tên đăng nhập này đã có người sử dụng. Hãy chọn một tên đăng nhập khác!");
                             setUsernameIsValid(false);
                         }
@@ -75,7 +75,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                 )
             })
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
     }
     const checkExistedEmail = () => {
@@ -84,9 +84,9 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                 tx.executeSql(
                     "SELECT email FROM Users WHERE email = ?",
                     [email],
-                    (tx, results) =>{
+                    (tx, results) => {
                         var len = results.rows.length;
-                        if (len > 0){
+                        if (len > 0) {
                             Alert.alert("Email này đã được sử dụng. Hãy chọn một email khác để đăng ký!");
                             setEmailIsValid(false);
                         }
@@ -94,46 +94,46 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                 )
             })
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
     }
 
     const handleRegister = async () => {
         try {
-          if (username && password && fullname && birthday && email){
-            if (password != passwordConfirm){
-                Alert.alert("Mật khẩu không trùng khớp!");
+            if (username && password && fullname && birthday && email) {
+                if (password != passwordConfirm) {
+                    Alert.alert("Mật khẩu không trùng khớp!");
+                }
+                else {
+
+                    checkExistedUsername;
+                    checkExistedEmail;
+                    if (usernameIsValid && emailIsValid) {
+                        db.transaction((tx) => {
+                            tx.executeSql(
+                                "INSERT INTO Users (username, password, fullname, birthday, email) VALUES (?,?,?,?,?)",
+                                [username, password, fullname, birthday, email],
+                                (tx, results) => {
+                                    if (results.rowsAffected > 0) {
+                                        Alert.alert("Đăng ký tài khoản thành công!");
+                                        Register;
+                                    }
+                                    else {
+                                        Alert.alert("Đăng ký tài khoản không thành công! Hãy thử lại");
+                                    }
+                                }
+                            )
+                        })
+                    }
+                }
+
             }
             else {
-
-                checkExistedUsername;
-                checkExistedEmail;
-                if (usernameIsValid && emailIsValid){
-                     db.transaction( (tx) => {
-                        tx.executeSql(
-                            "INSERT INTO Users (username, password, fullname, birthday, email) VALUES (?,?,?,?,?)",
-                            [username, password, fullname, birthday, email],
-                            (tx, results) =>{
-                                if (results.rowsAffected > 0){
-                                    Alert.alert("Đăng ký tài khoản thành công!");
-                                    Register;
-                                }
-                                else {
-                                    Alert.alert("Đăng ký tài khoản không thành công! Hãy thử lại");
-                                }
-                            }
-                        )
-                    })
-                }
+                Alert.alert("Hãy điền đầy đủ các thông tin cần thiết!");
             }
-            
-          }
-          else {
-              Alert.alert("Hãy điền đầy đủ các thông tin cần thiết!");
-          }
-          
+
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
     }
 
@@ -142,10 +142,10 @@ function RegisterScreen({ navigation }: any): JSX.Element {
         <View style={{ flex: 1, backgroundColor: "red" }}>
             <ImageBackground style={styles.panel} resizeMode='cover' source={require('./assets/src/img/panel-login.png')}>
 
-                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    
-                    <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>      
-                    
+                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', flex: 1 }} behavior='height'>
+
+                    <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
+
 
 
                     <View style={styles.loginContainer}>
@@ -153,7 +153,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                         <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
                             <Image source={require('./assets/src/img/icon-back.png')}></Image>
                         </TouchableOpacity>
-                        <View>
+                        <ScrollView style={{ flex: 1 }}>
                             <Text style={styles.titleInput}>Tên đăng nhập:</Text>
                             <TextInput
                                 placeholder="Tên đăng nhập"
@@ -196,8 +196,9 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
                                 onChangeText={setPasswordConfirm}
                             />
+                        </ScrollView>
 
-                        
+
                         <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                             <Text>Bạn đã có tài khoản ?</Text>
                             <TouchableOpacity onPress={BackTo}>
@@ -207,14 +208,14 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                         <TouchableOpacity style={styles.btnRegister} onPress={handleRegister}>
                             <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>ĐĂNG KÍ</Text>
                         </TouchableOpacity>
-                        </View>
-
                     </View>
 
-                </View>
+
+
+                </KeyboardAvoidingView>
 
             </ImageBackground>
-        </View>
+        </View >
     );
 }
 
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
         textShadowColor: 'black',
         textShadowOffset: { width: 1, height: 3 },
         textShadowRadius: 25,
-        
+
     },
     loginContainer: {
         paddingHorizontal: 20,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
         height: '80%',
         backgroundColor: 'white',
         elevation: 10,
-        
+
     },
     titleInput: {
         fontWeight: 'bold',
