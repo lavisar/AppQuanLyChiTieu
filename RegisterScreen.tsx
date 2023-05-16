@@ -143,7 +143,10 @@ function RegisterScreen({ navigation }: any): JSX.Element {
             <ImageBackground style={styles.panel} resizeMode='cover' source={require('./assets/src/img/panel-login.png')}>
 
                 <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
+                    
+                    <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>      
+                    
+
 
                     <View style={styles.loginContainer}>
 
@@ -234,6 +237,7 @@ const styles = StyleSheet.create({
         textShadowColor: 'black',
         textShadowOffset: { width: 1, height: 3 },
         textShadowRadius: 25,
+        
     },
     loginContainer: {
         paddingHorizontal: 20,
@@ -244,7 +248,7 @@ const styles = StyleSheet.create({
         height: '70%',
         backgroundColor: 'white',
         elevation: 10,
-        position : 'absolute'
+        
     },
     titleInput: {
         fontWeight: 'bold',
