@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 90,
-        marginTop: 20,
+        marginTop: 10,
         elevation: 5
 
     },
