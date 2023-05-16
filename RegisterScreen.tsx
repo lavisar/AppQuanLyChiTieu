@@ -153,7 +153,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                         <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
                             <Image source={require('./assets/src/img/icon-back.png')}></Image>
                         </TouchableOpacity>
-                        <ScrollView style={{ flex: 1 }}>
+                        <View>
                             <Text style={styles.titleInput}>Tên đăng nhập:</Text>
                             <TextInput
                                 placeholder="Tên đăng nhập"
@@ -197,7 +197,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 onChangeText={setPasswordConfirm}
                             />
 
-                        </ScrollView>
+                        
                         <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                             <Text>Bạn đã có tài khoản ?</Text>
                             <TouchableOpacity onPress={BackTo}>
@@ -207,7 +207,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                         <TouchableOpacity style={styles.btnRegister} onPress={handleRegister}>
                             <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>ĐĂNG KÍ</Text>
                         </TouchableOpacity>
-
+                        </View>
 
                     </View>
 
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 10,
         width: 375,
-        height: '70%',
+        height: '80%',
         backgroundColor: 'white',
         elevation: 10,
         
