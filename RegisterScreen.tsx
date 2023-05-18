@@ -28,6 +28,7 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const db = SQLite.openDatabase(
     {
@@ -38,7 +39,17 @@ const db = SQLite.openDatabase(
     },
     error => { console.log(error) }
 );
+const ButtonDateTime = ({ onPress }: any) => {
 
+    const event = () => {
+      onPress();
+    }
+    return (
+      <TouchableOpacity style={[styles.btnDT, { borderColor: '#D69500' }]} onPress={event}>
+        <Text style={[styles.titleBtnDT, { color: '#D69500' }]}>Chọn</Text>
+      </TouchableOpacity>
+    );
+  }
 
 function RegisterScreen({ navigation }: any): JSX.Element {
     const [username, setUsername] = useState('');
@@ -50,7 +61,23 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const [usernameIsValid, setUsernameIsValid] = useState(true);
     const [emailIsValid, setEmailIsValid] = useState(true);
 
+    const [selected, setSelected] = React.useState(false);
+    const [date, setDate] = React.useState(new Date());
+    const [show, setShow] = React.useState(false);
 
+    const onChangeDate = (event, value) => {
+        const curDate = value || date;
+        setDate(curDate);
+        let tempDate = new Date(curDate);
+        let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
+        setShow(!show);
+        setBirthday(fDate);
+
+    }
+    const showDateTime = () => {
+        setShow(true);
+
+    }
     const [text, onChangeText] = React.useState('');
     const Register = () => (
         navigation.goBack()
@@ -97,7 +124,6 @@ function RegisterScreen({ navigation }: any): JSX.Element {
             console.log(error);
         }
     }
-
     const handleRegister = async () => {
         try {
             if (username && password && fullname && birthday && email) {
@@ -168,13 +194,30 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
                                 onChangeText={setFullname}
                             />
-                            <Text style={styles.titleInput}>Ngày sinh:</Text>
-                            <TextInput
-                                placeholder="Ngày sinh"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                                onChangeText={setBirthday}
-                            />
+                            <View style={{ flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
+                                <View style={{ flex: 3 }}>
+                                    <Text style={styles.titleInput}>Ngày tháng năm:</Text>
+                                    <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
+                                        <Text style={{color:'black'}}>{birthday}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ flex: 1.35, alignSelf:'center',paddingBottom:9,marginTop:-30}}>
+                                    <ButtonDateTime onPress={() => showDateTime()}></ButtonDateTime>
+                                    {show && (
+                                        <View>
+                                            <DateTimePicker
+                                                testID='dateTimePicker'
+                                                value={date}
+                                                mode={'date'}
+                                                display='spinner'
+                                                onChange={onChangeDate}
+                                                style={{}}
+                                            />
+                                        </View>)
+
+                                    }
+                                </View>
+                            </View>
                             <Text style={styles.titleInput}>Gmail:</Text>
                             <TextInput
                                 placeholder="Gmail"
@@ -280,7 +323,24 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         fontWeight: 'bold',
         color: 'rgba(214, 149, 0, 1)',
-    }
+    },
+    btnDT: {
+        marginTop: 35,
+        borderTopWidth: 1,
+        borderRightWidth: 1,
+        borderLeftWidth: 4,
+        borderBottomWidth: 4,
+        borderRadius: 15,
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 80,
+        height: 40,
+        fontSize: 12
+      },
+      titleBtnDT: {
+        fontSize: 20, fontWeight: 'bold',
+      },
 
 });
 

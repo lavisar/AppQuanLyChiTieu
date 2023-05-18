@@ -241,25 +241,25 @@ const AddSpendScreen = ({ navigation }: any) => {
   const [selected, setSelected] = React.useState(false);
   const [date, setDate] = React.useState(new Date());
 
-  const [show,setShow]=React.useState(false);
+  const [show, setShow] = React.useState(false);
   const Pay = () => {
     Alert.alert("Pay")
   }
   const Get = () => {
     Alert.alert("Get")
   }
-  const onChangeDate = (event,value) => {
+  const onChangeDate = (event, value) => {
     const curDate = value || date;
     setDate(curDate);
     let tempDate = new Date(curDate);
     let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
     setShow(!show);
     setText(fDate);
-    
+
   }
-  const showDateTime = () =>{
+  const showDateTime = () => {
     setShow(true);
-    
+
   }
 
 
@@ -289,7 +289,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             renderItem={({ item }) => <IconButton title={item.name} src={item.url}
               onPress={() => { setType(item.name) }}
             />}
-            keyExtractor={(item)=>item.name}
+            keyExtractor={(item) => item.name}
           />
 
         </View>
@@ -303,15 +303,26 @@ const AddSpendScreen = ({ navigation }: any) => {
           <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" />
 
           <View style={{ flexDirection: 'row' }}>
-            <View style={{flex:3}}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10,marginBottom: 2 }}>Ngày tháng năm</Text>
-              <View style={[styles.textInput,{justifyContent:'center',alignItems:'flex-start'}]}>
-                <Text style={{fontSize: 14,color:'black'}}>{text}</Text>
+            <View style={{ flex: 3 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10, marginBottom: 2 }}>Ngày tháng năm</Text>
+              <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
+                <Text style={{ fontSize: 14, color: 'black' }}>{text}</Text>
               </View>
             </View>
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                <ButtonDateTime onPress={()=> showDateTime()}></ButtonDateTime>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <ButtonDateTime onPress={() => showDateTime()}></ButtonDateTime>
+              {show && (
+                <View>
+                  <DateTimePicker
+                    testID='dateTimePicker'
+                    value={date}
+                    mode={'date'}
+                    display='spinner'
+                    onChange={onChangeDate}
+                  />
+                </View>)
 
+              }
             </View>
           </View>
 
@@ -324,19 +335,7 @@ const AddSpendScreen = ({ navigation }: any) => {
 
 
       </View>
-      {show && 
-              <DateTimePicker 
-              testID='dateTimePicker'
-              value={date}
-              mode={'date'}
-              display='spinner'
-              onChange={onChangeDate}
-              
-              
-              
-              />
-              
-            }
+
     </KeyboardAvoidingView>
 
 
@@ -372,7 +371,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderBottomWidth: 4,
     borderRadius: 15,
-    marginLeft:10,
+    marginLeft: 10,
     justifyContent: 'center',
     alignItems: 'center',
     width: 80,
