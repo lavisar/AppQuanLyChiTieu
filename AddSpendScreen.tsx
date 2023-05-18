@@ -240,7 +240,7 @@ const AddSpendScreen = ({ navigation }: any) => {
   const [text, onChangeText] = React.useState('');
   const [selected, setSelected] = React.useState(false);
   const [datetime, setDateTime] = React.useState(new Date());
-  const [textDate,setTextDate] = React.useState((new Date()).toISOString());
+  const [textDate,setTextDate] = React.useState(new Date().toLocaleDateString());
   const [show,setShow]=React.useState(false);
   const Pay = () => {
     Alert.alert("Pay")
