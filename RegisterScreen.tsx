@@ -211,7 +211,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                                 mode={'date'}
                                                 display='spinner'
                                                 onChange={onChangeDate}
-                                                style={{}}
+                                                
                                             />
                                         </View>)
 
