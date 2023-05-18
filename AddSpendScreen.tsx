@@ -18,7 +18,7 @@ import {
   FlatList,
   Pressable
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, PrivateValueStore } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -237,10 +237,10 @@ const IconButton = ({ title, src, onPress }: ItemProps) => {
 
 const AddSpendScreen = ({ navigation }: any) => {
   const [type, setType] = React.useState('');
-  const [text, onChangeText] = React.useState('');
+  const [text, setText] = React.useState('');
   const [selected, setSelected] = React.useState(false);
-  const [datetime, setDateTime] = React.useState(new Date());
-  const [textDate,setTextDate] = React.useState(new Date().toLocaleDateString());
+  const [date, setDate] = React.useState(new Date());
+
   const [show,setShow]=React.useState(false);
   const Pay = () => {
     Alert.alert("Pay")
@@ -248,17 +248,18 @@ const AddSpendScreen = ({ navigation }: any) => {
   const Get = () => {
     Alert.alert("Get")
   }
-  const onChangeDate = ({event,selectedDate}:any) => {
-    const curDate= selectedDate || datetime;
-
-    setDateTime(curDate);
+  const onChangeDate = (event,value) => {
+    const curDate = value || date;
+    setDate(curDate);
     let tempDate = new Date(curDate);
     let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
-    setTextDate(fDate)
-    setShow(false)
+    setShow(!show);
+    setText(fDate);
+    
   }
   const showDateTime = () =>{
     setShow(true);
+    
   }
 
 
@@ -288,6 +289,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             renderItem={({ item }) => <IconButton title={item.name} src={item.url}
               onPress={() => { setType(item.name) }}
             />}
+            keyExtractor={(item)=>item.name}
           />
 
         </View>
@@ -304,22 +306,13 @@ const AddSpendScreen = ({ navigation }: any) => {
             <View style={{flex:3}}>
               <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10,marginBottom: 2 }}>Ngày tháng năm</Text>
               <View style={[styles.textInput,{justifyContent:'center',alignItems:'flex-start'}]}>
-                <Text style={{fontSize: 14,color:'black'}}>{textDate}</Text>
+                <Text style={{fontSize: 14,color:'black'}}>{text}</Text>
               </View>
             </View>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <ButtonDateTime onPress={()=> showDateTime()}></ButtonDateTime>
+
             </View>
-            {show && (
-              <DateTimePicker 
-              
-              value={datetime}
-              mode={'date'}
-              display='spinner'
-              onChange={onChangeDate}
-              />
-              
-            )}
           </View>
 
           <InputInfo title="Số tiền chi" placeholder="Số tiền" />
@@ -331,7 +324,19 @@ const AddSpendScreen = ({ navigation }: any) => {
 
 
       </View>
-
+      {show && 
+              <DateTimePicker 
+              testID='dateTimePicker'
+              value={date}
+              mode={'date'}
+              display='spinner'
+              onChange={onChangeDate}
+              
+              
+              
+              />
+              
+            }
     </KeyboardAvoidingView>
 
 
