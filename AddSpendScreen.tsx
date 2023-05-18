@@ -255,7 +255,7 @@ const AddSpendScreen = ({ navigation }: any) => {
     let tempDate = new Date(curDate);
     let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
     setTextDate(fDate)
-
+    setShow(false)
   }
   const showDateTime = () =>{
     setShow(true);
