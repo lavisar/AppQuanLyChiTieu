@@ -21,6 +21,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {ChangeEvent} from 'react';
 import {
     Colors,
     DebugInstructions,
@@ -65,14 +66,13 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const [date, setDate] = React.useState(new Date());
     const [show, setShow] = React.useState(false);
 
-    const onChangeDate = (event, value) => {
+    const onChangeDate = (event: Event, value?: Date) => {
         const curDate = value || date;
         setDate(curDate);
         let tempDate = new Date(curDate);
-        let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
+        let fDate = tempDate.getDate() + "/" + (tempDate.getMonth()+1) + "/" + tempDate.getFullYear();
         setShow(!show);
         setBirthday(fDate);
-
     }
     const showDateTime = () => {
         setShow(true);
