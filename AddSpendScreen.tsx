@@ -265,9 +265,6 @@ const AddSpendScreen = ({ navigation }: any) => {
 
   const [show, setShow] = React.useState(false);
   const Pay = async () => {
-    // if (monthIndex.length === 1){
-    //   setMonthIndex('0'+monthIndex.toString());
-    // }
     let dateString = dateIndex.toString();
     let monthIndexString = monthIndex.toString();
     let AmountIndex = amount;
@@ -276,8 +273,6 @@ const AddSpendScreen = ({ navigation }: any) => {
     }
     let yearIndexString = yearIndex.toString();
     let string = yearIndexString + "-" + monthIndexString + "-" + dateString;
-    // Alert.alert(type + ": " + string + ": " + AmountIndex + ": " + purpose);
-
       try {
         db.transaction((tx) => {
           tx.executeSql(
