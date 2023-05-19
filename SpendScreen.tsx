@@ -131,8 +131,8 @@ const TotalSpendScreen = ({ navigation }: any) => {
     <View style={{ flex: 3, marginHorizontal: 20 }}>
       <View style={{ flex: 1, }} >
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
-          <View style={{ flex: 3, width: 70, height: 70, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, marginVertical: 20 }}>
-            <Image source={require('./assets/src/img/wallet.png')} />
+          <View style={{ flex: 3, width: 70, height: 70, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, marginVertical:20, }}>
+            <Image source={require('./assets/src/img/wallet.png')} style={{margin:10}} />
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
             <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
@@ -143,7 +143,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
 
       <KeyboardAvoidingView>
         <ScrollView>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1 }}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1,backgroundColor: '#00977E',height:40}}>
             <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
           </View>
         </ScrollView>

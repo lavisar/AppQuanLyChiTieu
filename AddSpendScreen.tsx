@@ -16,8 +16,9 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  Pressable
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, PrivateValueStore } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {DatePickerOptions} from '@react-native-community/datetimepicker'
@@ -31,6 +32,8 @@ import {
 import SpendScreen from './SpendScreen';
 import TotalSpendScreen from './TotalSpendScreen';
 import StockScreen from './StockScreen';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 
 
@@ -169,7 +172,7 @@ const DATA = [
 ]
 
 
-const ButtonUpdateGet = ({ onPress }:any) => {
+const ButtonUpdateGet = ({ onPress }: any) => {
 
   const event = () => {
     onPress();
@@ -180,7 +183,18 @@ const ButtonUpdateGet = ({ onPress }:any) => {
     </TouchableOpacity>
   );
 }
-const ButtonUpdatePay = ({ onPress }:any) => {
+const ButtonDateTime = ({ onPress }: any) => {
+
+  const event = () => {
+    onPress();
+  }
+  return (
+    <TouchableOpacity style={[styles.btnDT, { borderColor: '#D69500' }]} onPress={event}>
+      <Text style={[styles.titleBtnDT, { color: '#D69500' }]}>Chọn</Text>
+    </TouchableOpacity>
+  );
+}
+const ButtonUpdatePay = ({ onPress }: any) => {
   const event = () => {
     onPress();
   }
@@ -222,27 +236,43 @@ const IconButton = ({ title, src, onPress }: ItemProps) => {
 
 
 
-const AddSpendScreen = ({ navigation }:any) => {
+const AddSpendScreen = ({ navigation }: any) => {
   const [type, setType] = React.useState('');
-  const [text, onChangeText] = React.useState('');
+  const [text, setText] = React.useState('');
   const [selected, setSelected] = React.useState(false);
+  const [date, setDate] = React.useState(new Date());
+
+  const [show, setShow] = React.useState(false);
   const Pay = () => {
     Alert.alert("Pay")
   }
   const Get = () => {
     Alert.alert("Get")
   }
+  const onChangeDate = (event, value) => {
+    const curDate = value || date;
+    setDate(curDate);
+    let tempDate = new Date(curDate);
+    let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
+    setShow(!show);
+    setText(fDate);
+
+  }
+  const showDateTime = () => {
+    setShow(true);
+
+  }
 
 
   return (
 
     <KeyboardAvoidingView style={{ flex: 1 }} enabled={true} behavior="padding">
-      
+
       <View style={{ backgroundColor: '#00977E', height: 100, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}> THÊM GIAO DỊCH</Text>
       </View>
       <View style={{ flex: 11, marginHorizontal: 20 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 20, flex: 0.5,marginBottom:20 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 20, flex: 0.5, marginBottom: 20 }}>
           <View style={{ width: 60, height: 60, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, flex: 1 }}>
             <Image resizeMode='cover' source={require('./assets/src/img/icon-account.png')} />
           </View>
@@ -260,6 +290,7 @@ const AddSpendScreen = ({ navigation }:any) => {
             renderItem={({ item }) => <IconButton title={item.name} src={item.url}
               onPress={() => { setType(item.name) }}
             />}
+            keyExtractor={(item) => item.name}
           />
 
         </View>
@@ -271,7 +302,31 @@ const AddSpendScreen = ({ navigation }:any) => {
             <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#00977E', marginLeft: 10, }}>{type}</Text>
           </View>
           <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" />
-          <InputInfo title="Ngày chi tiêu" placeholder="Ngày-tháng-năm" />
+
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flex: 3 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10, marginBottom: 2 }}>Ngày tháng năm</Text>
+              <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
+                <Text style={{ fontSize: 14, color: 'black' }}>{text}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <ButtonDateTime onPress={() => showDateTime()}></ButtonDateTime>
+              {show && (
+                <View>
+                  <DateTimePicker
+                    testID='dateTimePicker'
+                    value={date}
+                    mode={'date'}
+                    display='spinner'
+                    onChange={onChangeDate}
+                  />
+                </View>)
+
+              }
+            </View>
+          </View>
+
           <InputInfo title="Số tiền chi" placeholder="Số tiền" />
           <View style={{ flexDirection: 'row', flex: 2 }}>
             <ButtonUpdateGet onPress={Get} />
@@ -310,7 +365,24 @@ const styles = StyleSheet.create({
     height: 45,
     fontSize: 15
   },
+  btnDT: {
+    marginTop: 35,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderLeftWidth: 4,
+    borderBottomWidth: 4,
+    borderRadius: 15,
+    marginLeft: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: 40,
+    fontSize: 12
+  },
   titleBtn: {
+    fontSize: 20, fontWeight: 'bold',
+  },
+  titleBtnDT: {
     fontSize: 20, fontWeight: 'bold',
   },
   textInput: {
