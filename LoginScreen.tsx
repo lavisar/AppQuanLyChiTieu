@@ -42,16 +42,42 @@ function LoginScreen({ navigation }:any): JSX.Element {
     const [password, setPassword] = useState('');
     
     useEffect(() =>{
-      createTable();
+      createUsersTable();
+      createTypeTable();
+      createSpendingTable();
+      createReceivingTable();
     });
-    const createTable = () => {
-      db.transaction((tx) =>{
-        tx.executeSql(
-          "CREATE TABLE IF NOT EXISTS "
-          + "Users "
-          + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
-        )
-      })
+    const createUsersTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Users "
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
+             )
+        })
+    }
+    const createTypeTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Type "
+                + "(type TEXT NOT NULL UNIQUE PRIMARY KEY);"
+            )
+        })
+    }
+    const createSpendingTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS Spending (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT,FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
+            )
+        })
+    }
+    const createReceivingTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS Receiving (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT, FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
+            )
+        })
     }
 
     const handleLogin = () => {
