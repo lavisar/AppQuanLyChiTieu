@@ -46,6 +46,7 @@ function LoginScreen({ navigation }:any): JSX.Element {
       createTypeTable();
       createSpendingTable();
       createReceivingTable();
+      insertTypes();
     });
     const createUsersTable = () => {
         db.transaction((tx) =>{
