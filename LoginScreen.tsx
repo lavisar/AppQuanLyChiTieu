@@ -47,6 +47,7 @@ function LoginScreen({ navigation }:any): JSX.Element {
       createSpendingTable();
       createReceivingTable();
       insertTypes();
+      
     });
     const createUsersTable = () => {
         db.transaction((tx) =>{
@@ -91,6 +92,7 @@ function LoginScreen({ navigation }:any): JSX.Element {
             });
         })
     }
+
 
     const handleLogin = () => {
         try {

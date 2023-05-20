@@ -37,141 +37,17 @@ const db = SQLite.openDatabase(
   error=>{console.log(error)}  
 );
 
+type Props = { id: any, type: any, amount: any, date: any, purpose: any }
+// type DataItem = {
+//   id: any;
+//   src: any;
+//   purpose: any;
+//   date: any;
+//   amount: any;
+// };
 
-type DataItem = {
-  id: any;
-  src: any;
-  purpose: any;
-  date: any;
-  amount: any;
-};
 
-
-const [data, setData] = useState<{ id: any, src: any, purpose: any, date: any, amount: any }[]>([]);
-// const [data, setData] = useState<DataItem[]>([]);
-useEffect(() => {
-  getDataFromDatabase
-})
-const getDataFromDatabase = () => {
-  try {
-    db.transaction((tx) => {
-      tx.executeSql(
-          "SELECT * FROM Spending",
-          [],
-          (tx, result) =>{
-            const rows = result.rows;
-            const fetchedData = [];
-
-            for (let i = 0; i < rows.length; i++) {
-              const row = rows.item(i);
-              let path : any;
-              switch (row.type) {
-                case "Quà tặng":
-                  path = require("./assets/src/img/fillter-icon/qua-tang.png");
-                  break;
-                case "Xã giao":
-                  path = require("./assets/src/img/fillter-icon/xa-giao.png");
-                  break;
-                case "Mua sắm":
-                  path = require("./assets/src/img/fillter-icon/mua-sam.png");
-                  break;
-                case "Gửi tiền":
-                  path = require("./assets/src/img/fillter-icon/gui-tien.png");
-                  break;
-                case "Nhận tiền":
-                  path = require("./assets/src/img/fillter-icon/nhan-tien.png");
-                  break;
-                case "Hóa đơn":
-                  path = require("./assets/src/img/fillter-icon/hoa-don.png");
-                  break;
-                case "Tiết kiệm":
-                  path = require("./assets/src/img/fillter-icon/tiet-kiem.png");
-                  break;
-                case "Tiền nhà":
-                  path = require("./assets/src/img/fillter-icon/tien-nha.png");
-                  break;
-                case "Hẹn hò":
-                  path = require("./assets/src/img/fillter-icon/hen-ho.png");
-                  break;
-                case "Học tập":
-                  path = require("./assets/src/img/fillter-icon/hoc-tap.png");
-                  break;
-                case "Mua Online":
-                  path = require("./assets/src/img/fillter-icon/muado-online.png");
-                  break;
-                case "CH Tiện Lợi":
-                  path = require("./assets/src/img/fillter-icon/chtl.png");
-                  break;
-                case "Du lịch":
-                  path = require("./assets/src/img/fillter-icon/du-lich.png");
-                  break;
-                case "Sức khỏe":
-                  path = require("./assets/src/img/fillter-icon/suc-khoe.png");
-                  break;
-                case "Tiền nước":
-                  path = require("./assets/src/img/fillter-icon/tien-nuoc.png");
-                  break;
-                case "Tiền điện":
-                  path = require("./assets/src/img/fillter-icon/tien-dien.png");
-                  break;
-                case "Ăn uống":
-                  path = require("./assets/src/img/fillter-icon/an-uong.png");
-                  break;
-                case "Thú cưng":
-                  path = require("./assets/src/img/fillter-icon/thu-cung.png");
-                  break;
-                case "Trẻ nhỏ":
-                  path = require("./assets/src/img/fillter-icon/tre-nho.png");
-                  break;
-                case "Ăn vặt":
-                  path = require("./assets/src/img/fillter-icon/an-vat.png");
-                  break;
-                case "Quần áo":
-                  path = require("./assets/src/img/fillter-icon/quan-ao.png");
-                  break;
-                case "Sửa chữa":
-                  path = require("./assets/src/img/fillter-icon/sua-chua.png");
-                  break;
-                case "Đi chơi":
-                  path = require("./assets/src/img/fillter-icon/di-choi.png");
-                  break;
-                case "Nhiên liệu":
-                  path = require("./assets/src/img/fillter-icon/xang.png");
-                  break;
-                case "Chăm sóc":
-                  path = require("./assets/src/img/fillter-icon/cham-soc.png");
-                  break;
-                case "Khác":
-                  path = require("./assets/src/img/fillter-icon/khac.png");
-                  break;
-              }
-              // Transform the fetched row into the desired format
-              const transformedRow = {
-                id: row.id,
-                purpose: row.purpose,
-                src: path,
-                date: row.date,
-                amount: row.amount
-              };
-
-            fetchedData.push(transformedRow);
-          }
-          setData(fetchedData);
-          }
-      )
-  })
-  } catch (error) {
-      console.log(error);
-  }
-} 
-
-const renderItem=({ item }: { item: DataItem }) => {
-  return (
-    <View>
-      <ListValuePay src={item.src} title={item.purpose} day={item.date} money={item.amount} />
-    </View>
-  );
-};
+// const [data, setData] = useState<{ id: any, src: any, purpose: any, date: any, amount: any }[]>([]);
 
 // const DATA = [
 //   {
@@ -243,22 +119,22 @@ const InputFind = ({ placeholder }: any) => {
     </View>
   )
 }
-type Props = { src: any, title: any, day: any, money: any }
-const ListValuePay = ({ src, title, day, money }: Props) => {
+
+const ListValuePay = ({amount, date, purpose}: Props) => {
   return (
     <View>
       <TouchableOpacity style={styles.MoneyTypeContainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
           <View style={{ borderRadius: 45, borderWidth: 4, justifyContent: 'center', alignItems: 'center', width: 70, height: 70, backgroundColor: 'white' }}>
-            <Image style={{ height: 45, width: 45 }} source={src}></Image>
+            <Image style={{ height: 45, width: 45 }} source={require('./assets/src/img/fillter-icon/hoa-don.png')}></Image>
           </View>
           <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
             <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2, }}>
-              <Text style={styles.textBigger}>{title}</Text>
-              <Text style={styles.textBigger}>{day}</Text>
+              <Text style={styles.textBigger}>{purpose}</Text>
+              <Text style={styles.textBigger}>{date}</Text>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
-              <Text style={styles.text}>Số tiền: {money}</Text>
+              <Text style={styles.text}>Số tiền: {amount}</Text>
             </View>
           </View>
         </View>
@@ -269,6 +145,138 @@ const ListValuePay = ({ src, title, day, money }: Props) => {
 
 
 const TotalSpendScreen = ({ navigation }: any) => {
+  const [data, setData] = useState<Props[]>([]);
+  const [num, setnum] = useState<Props[]>();
+useEffect(() => {
+  getDataFromDatabase();
+
+})
+// const LetMe = () => {
+//   Alert.alert(num.toString())
+// }
+const getDataFromDatabase = () => {
+  try {
+    db.transaction((tx) => {
+      tx.executeSql(
+          "SELECT * FROM Spending",
+          [],
+          (tx, result) =>{
+            // setnum(result.rows.item(0));
+            const fetchedData = [];
+
+            for (let i = 0; i < result.rows.length; i++) {
+              let path : any;
+              // switch (result.rows.item(i).type) {
+              //   case "Quà tặng":
+              //     path = require("./assets/src/img/fillter-icon/qua-tang.png");
+              //     break;
+              //   case "Xã giao":
+              //     path = require("./assets/src/img/fillter-icon/xa-giao.png");
+                  
+              //     break;
+              //   case "Mua sắm":
+              //     path = require("./assets/src/img/fillter-icon/mua-sam.png");
+              //     break;
+              //   case "Gửi tiền":
+              //     path = require("./assets/src/img/fillter-icon/gui-tien.png");
+              //     break;
+              //   case "Nhận tiền":
+              //     path = require("./assets/src/img/fillter-icon/nhan-tien.png");
+              //     break;
+              //   case "Hóa đơn":
+              //     path = require("./assets/src/img/fillter-icon/hoa-don.png");
+              //     break;
+              //   case "Tiết kiệm":
+              //     path = require("./assets/src/img/fillter-icon/tiet-kiem.png");
+              //     break;
+              //   case "Tiền nhà":
+              //     path = require("./assets/src/img/fillter-icon/tien-nha.png");
+              //     break;
+              //   case "Hẹn hò":
+              //     path = require("./assets/src/img/fillter-icon/hen-ho.png");
+              //     break;
+              //   case "Học tập":
+              //     path = require("./assets/src/img/fillter-icon/hoc-tap.png");
+              //     break;
+              //   case "Mua Online":
+              //     path = require("./assets/src/img/fillter-icon/muado-online.png");
+              //     break;
+              //   case "CH Tiện Lợi":
+              //     path = require("./assets/src/img/fillter-icon/chtl.png");
+              //     break;
+              //   case "Du lịch":
+              //     path = require("./assets/src/img/fillter-icon/du-lich.png");
+              //     break;
+              //   case "Sức khỏe":
+              //     path = require("./assets/src/img/fillter-icon/suc-khoe.png");
+              //     break;
+              //   case "Tiền nước":
+              //     path = require("./assets/src/img/fillter-icon/tien-nuoc.png");
+              //     break;
+              //   case "Tiền điện":
+              //     path = require("./assets/src/img/fillter-icon/tien-dien.png");
+              //     break;
+              //   case "Ăn uống":
+              //     path = require("./assets/src/img/fillter-icon/an-uong.png");
+              //     break;
+              //   case "Thú cưng":
+              //     path = require("./assets/src/img/fillter-icon/thu-cung.png");
+              //     break;
+              //   case "Trẻ nhỏ":
+              //     path = require("./assets/src/img/fillter-icon/tre-nho.png");
+              //     break;
+              //   case "Ăn vặt":
+              //     path = require("./assets/src/img/fillter-icon/an-vat.png");
+              //     break;
+              //   case "Quần áo":
+              //     path = require("./assets/src/img/fillter-icon/quan-ao.png");
+              //     break;
+              //   case "Sửa chữa":
+              //     path = require("./assets/src/img/fillter-icon/sua-chua.png");
+              //     break;
+              //   case "Đi chơi":
+              //     path = require("./assets/src/img/fillter-icon/di-choi.png");
+              //     break;
+              //   case "Nhiên liệu":
+              //     path = require("./assets/src/img/fillter-icon/xang.png");
+              //     break;
+              //   case "Chăm sóc":
+              //     path = require("./assets/src/img/fillter-icon/cham-soc.png");
+              //     break;
+              //   case "Khác":
+              //     path = require("./assets/src/img/fillter-icon/khac.png");
+              //     break;
+              // }
+              // <ListValuePay id = {result.rows.item(i).id} src={path} title={result.rows.item(i).purpose} day={result.rows.item(i).date} money={result.rows.item(i).amount} />
+              // setData({ id: result.rows.item(i).id , src: path, title : result.rows.item(i).purpose, day: result.rows.item(i).date, money : result.rows.item(i).amount});
+              // Transform the fetched row into the desired format
+              // const transformedRow = {
+              //   id: row.id,
+              //   title: row.purpose,
+              //   src: path,
+              //   day: row.date,
+              //   money: row.amount
+              // };
+              // setData({id: result.rows.item(i).id, type: result.rows.item(i).type, amount: result.rows.item(i).amount, date: result.rows.item(i).date, purpose: result.rows.item(i).purpose})
+              setData(result.rows.item(i));
+          }
+          
+          }
+      )
+  })
+  } catch (error) {
+      console.log(error);
+  }
+} 
+
+const renderItem=({ item }: { item: Props }) => {
+  return (
+    <View>
+      <ListValuePay amount = {item.amount} date={item.date} purpose={item.purpose} id = {item.id} type = {item.type} />
+    </View>
+  );
+};
+
   return (
 
     <View style={{ flex: 3, marginHorizontal: 20 }}>
@@ -291,7 +299,14 @@ const TotalSpendScreen = ({ navigation }: any) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <View style={{ flex: 6, marginBottom: 30 }}>
 
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
 
 
       {/* <View style={{ flex: 6, marginBottom: 30 }}>
