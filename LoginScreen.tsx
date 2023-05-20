@@ -47,6 +47,7 @@ function LoginScreen({ navigation }:any): JSX.Element {
       createSpendingTable();
       createReceivingTable();
       insertTypes();
+      
     });
     const createUsersTable = () => {
         db.transaction((tx) =>{
@@ -94,36 +95,36 @@ function LoginScreen({ navigation }:any): JSX.Element {
 
 
     const handleLogin = () => {
-      try {
-        if (username && password){
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "SELECT username, password FROM Users WHERE username = ?",
-                    [username],
-                    (tx, results) =>{
-                        var len = results.rows.length;
-                        if (len > 0){
-                            if (results.rows.item(0).password == password){
-                                navigation.navigate("HomeScreen");
+        try {
+            if (username && password){
+                db.transaction((tx) => {
+                    tx.executeSql(
+                        "SELECT username, password FROM Users WHERE username = ?",
+                        [username],
+                        (tx, results) =>{
+                            var len = results.rows.length;
+                            if (len > 0){
+                                if (results.rows.item(0).password == password){
+                                    navigation.navigate("HomeScreen");
+                                }
+                                else {
+                                    Alert.alert("Mật khẩu không chính xác! Hãy thử lại");
+                                }
                             }
                             else {
-                                Alert.alert("Mật khẩu không chính xác! Hãy thử lại");
+                                Alert.alert("Tên đăng nhập mặt mật khẩu không đúng!");
                             }
                         }
-                        else {
-                            Alert.alert("Tên đăng nhập mặt mật khẩu không đúng!");
-                        }
-                    }
-                )
-            })
-        }
+                    )
+                })
+            }
         else {
             Alert.alert("Hãy điền đầy đủ tên đăng nhập và mật khẩu");
         }
         
-      } catch (error) {
-        console.log(error);
-      }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const [text, onChangeText] = useState('');
