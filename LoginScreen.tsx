@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {
@@ -27,64 +27,71 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { UserContext } from './UserContext';
 
 const db = SQLite.openDatabase(
-  {
-    name: 'QuanLiChiTieu',
-    location: 'default',
-  },
-  () => {},
-  error=>{console.log(error)}  
+    {
+        name: 'QuanLiChiTieu',
+        location: 'default',
+    },
+    () => { },
+    error => { console.log(error) }
 );
 
-function LoginScreen({ navigation }:any): JSX.Element {
+function LoginScreen({ navigation }: any): JSX.Element {
+    const { setUserName } = useContext(UserContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
-    useEffect(() =>{
-      createTable();
+
+    useEffect(() => {
+        createTable();
     });
     const createTable = () => {
-      db.transaction((tx) =>{
-        tx.executeSql(
-          "CREATE TABLE IF NOT EXISTS "
-          + "Users "
-          + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
-        )
-      })
+        db.transaction((tx) => {
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Users "
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
+            )
+        })
     }
 
     const handleLogin = () => {
-      try {
-        if (username && password){
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "SELECT username, password FROM Users WHERE username = ?",
-                    [username],
-                    (tx, results) =>{
-                        var len = results.rows.length;
-                        if (len > 0){
-                            if (results.rows.item(0).password == password){
-                                navigation.navigate("HomeScreen");
+        try {
+            if (username && password) {
+                db.transaction((tx) => {
+                    tx.executeSql(
+                        "SELECT username, password FROM Users WHERE username = ?",
+                        [username],
+                        (tx, results) => {
+                            var len = results.rows.length;
+
+                            //set userID with global variable - for access from another file
+                            const userName = [username];
+                            setUserName(userName);
+
+                            if (len > 0) {
+                                if (results.rows.item(0).password == password) {
+                                    navigation.navigate("HomeScreen");
+                                }
+                                else {
+                                    Alert.alert("Mật khẩu không chính xác! Hãy thử lại");
+                                }
                             }
                             else {
-                                Alert.alert("Mật khẩu không chính xác! Hãy thử lại");
+                                Alert.alert("Tên đăng nhập mặt mật khẩu không đúng!");
                             }
                         }
-                        else {
-                            Alert.alert("Tên đăng nhập mặt mật khẩu không đúng!");
-                        }
-                    }
-                )
-            })
+                    )
+                })
+            }
+            else {
+                Alert.alert("Hãy điền đầy đủ tên đăng nhập và mật khẩu");
+            }
+
+        } catch (error) {
+            console.log(error);
         }
-        else {
-            Alert.alert("Hãy điền đầy đủ tên đăng nhập và mật khẩu");
-        }
-        
-      } catch (error) {
-        console.log(error);
-      }
     }
 
     const [text, onChangeText] = useState('');
@@ -108,9 +115,6 @@ function LoginScreen({ navigation }:any): JSX.Element {
                 <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', }}>
 
                     <Text style={styles.header}>WATCH YOUR MONEY </Text>
-
-
-
                     <View style={styles.loginContainer}>
                         <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Tên đăng nhập:</Text>
                         <TextInput
@@ -126,9 +130,6 @@ function LoginScreen({ navigation }:any): JSX.Element {
                             placeholderTextColor='black'
                             onChangeText={setPassword}
                         />
-
-
-
                         <View style={{ flexDirection: 'row', alignSelf: 'flex-end', marginTop: -20 }}>
                             <TouchableOpacity onPress={ResetPass}>
                                 <Text style={{ color: 'rgba(214, 149, 0, 1)', fontWeight: 'bold' }}> Quên mật khẩu ?</Text>

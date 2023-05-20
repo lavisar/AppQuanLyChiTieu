@@ -6,7 +6,7 @@
  */
 import 'react-native-gesture-handler';
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -32,19 +32,22 @@ import HomeScreen from './HomeScreen';
 import RegisterScreen from './RegisterScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ResetPassScreen from './ResetPassScreen';
+import { UserProvider } from './UserContext';
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator();
 function App(): JSX.Element {
-  
+
   return (
-    <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false}}>
-          <Stack.Screen name='Login'  component={LoginScreen} />
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='Login' component={LoginScreen} />
           <Stack.Screen name='HomeScreen' component={HomeScreen} />
-          <Stack.Screen name='RegisterScreen'  component={RegisterScreen} />
-          <Stack.Screen name='ResetPassScreen'  component={ResetPassScreen}/>
+          <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
+          <Stack.Screen name='ResetPassScreen' component={ResetPassScreen} />
         </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </UserProvider>
   );
 }
 

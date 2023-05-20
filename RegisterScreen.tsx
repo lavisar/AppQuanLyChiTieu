@@ -65,7 +65,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const [date, setDate] = React.useState(new Date());
     const [show, setShow] = React.useState(false);
 
-    const onChangeDate = (event, value) => {
+    const onChangeDate = (event: any, value: Date) => {
         const curDate = value || date;
         setDate(curDate);
         let tempDate = new Date(curDate);
