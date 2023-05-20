@@ -72,7 +72,7 @@ const DATA = [
 ]
 
 
-const StockScreen = ({ navigation }:any) => {
+const StockScreen = ({ navigation }: any) => {
   return (
     <View style={{ flex: 1 }}>
 

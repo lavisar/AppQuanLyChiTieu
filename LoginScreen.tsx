@@ -40,7 +40,10 @@ const db = SQLite.openDatabase(
 function LoginScreen({ navigation }:any): JSX.Element {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
+    const [hide,setHide] = useState(true);
+    const Hide = () => {
+        setHide(!hide)
+      }
     useEffect(() =>{
       createTable();
     });
@@ -119,13 +122,21 @@ function LoginScreen({ navigation }:any): JSX.Element {
                             placeholderTextColor='black'
                             onChangeText={setUsername}
                         />
-                        <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Mật khẩu:</Text>
-                        <TextInput
-                            placeholder="Mật khẩu"
-                            style={styles.textInput}
-                            placeholderTextColor='black'
-                            onChangeText={setPassword}
-                        />
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Mật Khẩu:</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TextInput
+                                    placeholder="Nhập lại mật khẩu mới"
+                                    placeholderTextColor='black'
+                                    style={styles.textInput}
+                                    secureTextEntry={hide}
+                                    onChangeText={setPassword}
+                                >
+
+                                </TextInput>
+                                <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
+                                    <Image source={require('./assets/src/img/showhide.png')}></Image>
+                                </TouchableOpacity>
+                            </View>
 
 
 
@@ -190,6 +201,7 @@ const styles = StyleSheet.create({
         borderColor: '#000000',
         borderBottomWidth: 1,
         marginBottom: 30,
+        flex:4
 
     },
     btnLogin: {

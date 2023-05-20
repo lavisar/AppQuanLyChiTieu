@@ -42,14 +42,14 @@ const db = SQLite.openDatabase(
 const ButtonDateTime = ({ onPress }: any) => {
 
     const event = () => {
-      onPress();
+        onPress();
     }
     return (
-      <TouchableOpacity style={[styles.btnDT, { borderColor: '#D69500' }]} onPress={event}>
-        <Text style={[styles.titleBtnDT, { color: '#D69500' }]}>Chọn</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={[styles.btnDT, { borderColor: '#D69500' }]} onPress={event}>
+            <Text style={[styles.titleBtnDT, { color: '#D69500' }]}>Chọn</Text>
+        </TouchableOpacity>
     );
-  }
+}
 
 function RegisterScreen({ navigation }: any): JSX.Element {
     const [username, setUsername] = useState('');
@@ -63,6 +63,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
 
     const [selected, setSelected] = React.useState(false);
     const [date, setDate] = React.useState(new Date());
+    const [hide, setHide] = React.useState(true);
     const [show, setShow] = React.useState(false);
 
     const onChangeDate = (event, value) => {
@@ -74,10 +75,15 @@ function RegisterScreen({ navigation }: any): JSX.Element {
         setBirthday(fDate);
 
     }
+    const Show = () => {
+        setShow(!show)
+      }
     const showDateTime = () => {
         setShow(true);
-
     }
+    const Hide = () => {
+        setHide(!hide)
+      }
     const [text, onChangeText] = React.useState('');
     const Register = () => (
         navigation.goBack()
@@ -85,7 +91,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const BackTo = () => (
         navigation.goBack()
     )
-
+    
     const checkExistedUsername = () => {
         try {
             db.transaction((tx) => {
@@ -194,14 +200,14 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
                                 onChangeText={setFullname}
                             />
-                            <View style={{ flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ flex: 3 }}>
                                     <Text style={styles.titleInput}>Ngày tháng năm:</Text>
                                     <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
-                                        <Text style={{color:'black'}}>{birthday}</Text>
+                                        <Text style={{ color: 'black' }}>{birthday}</Text>
                                     </View>
                                 </View>
-                                <View style={{ flex: 1.35, alignSelf:'center',paddingBottom:9,marginTop:-30}}>
+                                <View style={{ flex: 1.35, alignSelf: 'center', paddingBottom: 9, marginTop: -30 }}>
                                     <ButtonDateTime onPress={() => showDateTime()}></ButtonDateTime>
                                     {show && (
                                         <View>
@@ -211,7 +217,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                                 mode={'date'}
                                                 display='spinner'
                                                 onChange={onChangeDate}
-                                                
+
                                             />
                                         </View>)
 
@@ -226,19 +232,35 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 onChangeText={setEmail}
                             />
                             <Text style={styles.titleInput}>Nhập mật khẩu mới</Text>
-                            <TextInput
-                                placeholder="Nhập mật khẩu mới"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                                onChangeText={setPassword}
-                            />
-                            <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
-                            <TextInput
-                                placeholder="Nhập mật khẩu mới"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                                onChangeText={setPasswordConfirm}
-                            />
+                            <View style={{ flexDirection: 'row' }}>
+                                <TextInput
+                                    placeholder="Nhập lại mật khẩu mới"
+                                    placeholderTextColor='black'
+                                    style={styles.textInput}
+                                    secureTextEntry={hide}
+                                    onChangeText={setPassword}
+                                >
+
+                                </TextInput>
+                                <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
+                                    <Image source={require('./assets/src/img/showhide.png')}></Image>
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.titleInput}>Nhập lại mật khẩu mới</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TextInput
+                                    placeholder="Nhập lại mật khẩu mới"
+                                    placeholderTextColor='black'
+                                    style={styles.textInput}
+                                    secureTextEntry={hide}
+                                    onChangeText={setPasswordConfirm}
+                                >
+
+                                </TextInput>
+                                <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
+                                    <Image source={require('./assets/src/img/showhide.png')}></Image>
+                                </TouchableOpacity>
+                            </View>
                         </ScrollView>
 
 
@@ -304,6 +326,7 @@ const styles = StyleSheet.create({
         borderColor: '#000000',
         borderBottomWidth: 1,
         marginBottom: 25,
+        flex:5
 
     },
     btnRegister: {
@@ -337,11 +360,21 @@ const styles = StyleSheet.create({
         width: 80,
         height: 40,
         fontSize: 12
-      },
-      titleBtnDT: {
+    },
+    titleBtnDT: {
         fontSize: 20, fontWeight: 'bold',
+    },
+    textInputHideShow: {
+        flex:7,
+        height: 45,
+        borderColor: 'black',
+        borderTopWidth: 1,
+        borderRightWidth: 1,
+        borderLeftWidth: 4,
+        borderBottomWidth: 4,
+        borderRadius: 15,
+        paddingLeft: 15,
       },
-
 });
 
 export default RegisterScreen;
