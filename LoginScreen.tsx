@@ -46,6 +46,7 @@ function LoginScreen({ navigation }:any): JSX.Element {
       createTypeTable();
       createSpendingTable();
       createReceivingTable();
+      insertTypes();
     });
     const createUsersTable = () => {
         db.transaction((tx) =>{
@@ -79,6 +80,18 @@ function LoginScreen({ navigation }:any): JSX.Element {
             )
         })
     }
+    const typeArray = ["Quà tặng","Xã giao","Mua sắm","Gửi tiền","Nhận tiền","Hóa đơn","Tiết kiệm","Tiền nhà","Hẹn hò","Học tập","Mua Online","CH Tiện Lợi","Du lịch","Sức khỏe","Tiền nước","Tiền điện","Ăn uống","Thú cưng","Trẻ nhỏ","Ăn vặt","Quần áo","Sửa chữa","Đi chơi","Nhiên liệu","Chăm sóc","Khác"]
+    const insertTypes = () => {
+        db.transaction((tx) =>{
+            typeArray.forEach(element => {
+                tx.executeSql(
+                    "INSERT INTO Type (type) VALUES (?)",
+                    [element]
+                )
+            });
+        })
+    }
+
 
     const handleLogin = () => {
       try {
