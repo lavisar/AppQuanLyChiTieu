@@ -10,7 +10,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-community/cli-platform-android": "^11.2.3",
+    "@mui/icons-material": "^5.11.16",
+    "@react-native-community/cli": "^11.3.0",
+    "@react-native-community/cli-platform-android": "^11.3.0",
     "@react-native-community/datetimepicker": "^7.1.0",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",

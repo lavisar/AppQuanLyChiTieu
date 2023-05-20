@@ -27,8 +27,33 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+type ItemProp = { title: any, placeholder: any, show: any, onPress: any }
+const InputHaveHideShow = ({ title, placeholder,show, onPress }: ItemProp) => {
+  const event = () => {
+    onPress();
+  }
+  return (
+    <View>
+      <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>{title}</Text>
+      <View style={{flexDirection:'row'}}>
+        <TextInput
+          placeholder={placeholder}
+          placeholderTextColor='black'
+          style={styles.textInputHideShow}
+          secureTextEntry={show}
+        >
+          
+        </TextInput>
+        <TouchableOpacity style={{ flex: 1 }} onPress={event}>
+          <Image source={require('./assets/src/img/showhide.png')}></Image>
+        </TouchableOpacity>
+      </View>
 
-const ButtonUpdate = ({ onPress }:any) => {
+    </View>
+
+  )
+}
+const ButtonUpdate = ({ onPress }: any) => {
   const event = () => {
     onPress();
   }
@@ -39,7 +64,7 @@ const ButtonUpdate = ({ onPress }:any) => {
   );
 }
 
-const ButtonLogout = ({ onPress }:any) => {
+const ButtonLogout = ({ onPress }: any) => {
   const event = () => {
     onPress();
   }
@@ -66,13 +91,17 @@ const InputInfo = ({ title, placeholder }: ItemProps) => {
 
 
 
-const UserScreen = ({ navigation }:any) => {
+const UserScreen = ({ navigation }: any) => {
   const [text, onChangeText] = React.useState('');
+  const [show, setShow] = React.useState(true);
   const Logout = () => {
     navigation.popToTop()
   }
   const Update = () => {
     Alert.alert("UPDATE")
+  }
+  const Show = () => {
+    setShow(!show)
   }
   return (
     <View style={{ flex: 1, marginHorizontal: 20 }}>
@@ -92,7 +121,7 @@ const UserScreen = ({ navigation }:any) => {
       <InputInfo title="Tên đăng nhập" placeholder="Tên đăng nhập" />
       <InputInfo title="SĐT" placeholder="SĐT" />
       <InputInfo title="Gmail" placeholder="Gmail" />
-      <InputInfo title="Mật khẩu" placeholder="Mật khẩu" />
+      <InputHaveHideShow title="Mật khẩu" placeholder="Mật khẩu" show={show} onPress={Show}/>
 
 
       <ButtonUpdate onPress={Update} />
@@ -127,6 +156,17 @@ const styles = StyleSheet.create({
   },
   textInput: {
 
+    height: 45,
+    borderColor: 'black',
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderLeftWidth: 4,
+    borderBottomWidth: 4,
+    borderRadius: 15,
+    paddingLeft: 15,
+  },
+  textInputHideShow: {
+    flex:7,
     height: 45,
     borderColor: 'black',
     borderTopWidth: 1,
