@@ -79,38 +79,49 @@ function LoginScreen({ navigation }:any): JSX.Element {
             )
         })
     }
+    const typeArray = ["Quà tặng","Xã giao","Mua sắm","Gửi tiền","Nhận tiền","Hóa đơn","Tiết kiệm","Tiền nhà","Hẹn hò","Học tập","Mua Online","CH Tiện Lợi","Du lịch","Sức khỏe","Tiền nước","Tiền điện","Ăn uống","Thú cưng","Trẻ nhỏ","Ăn vặt","Quần áo","Sửa chữa","Đi chơi","Nhiên liệu","Chăm sóc","Khác"]
+    const insertTypes = () => {
+        db.transaction((tx) =>{
+            typeArray.forEach(element => {
+                tx.executeSql(
+                    "INSERT INTO Type (type) VALUES (?)",
+                    [element]
+                )
+            });
+        })
+    }
 
     const handleLogin = () => {
-      try {
-        if (username && password){
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "SELECT username, password FROM Users WHERE username = ?",
-                    [username],
-                    (tx, results) =>{
-                        var len = results.rows.length;
-                        if (len > 0){
-                            if (results.rows.item(0).password == password){
-                                navigation.navigate("HomeScreen");
+        try {
+            if (username && password){
+                db.transaction((tx) => {
+                    tx.executeSql(
+                        "SELECT username, password FROM Users WHERE username = ?",
+                        [username],
+                        (tx, results) =>{
+                            var len = results.rows.length;
+                            if (len > 0){
+                                if (results.rows.item(0).password == password){
+                                    navigation.navigate("HomeScreen");
+                                }
+                                else {
+                                    Alert.alert("Mật khẩu không chính xác! Hãy thử lại");
+                                }
                             }
                             else {
-                                Alert.alert("Mật khẩu không chính xác! Hãy thử lại");
+                                Alert.alert("Tên đăng nhập mặt mật khẩu không đúng!");
                             }
                         }
-                        else {
-                            Alert.alert("Tên đăng nhập mặt mật khẩu không đúng!");
-                        }
-                    }
-                )
-            })
-        }
+                    )
+                })
+            }
         else {
             Alert.alert("Hãy điền đầy đủ tên đăng nhập và mật khẩu");
         }
         
-      } catch (error) {
-        console.log(error);
-      }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const [text, onChangeText] = useState('');

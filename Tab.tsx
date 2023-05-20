@@ -5,7 +5,7 @@ import UserScreen from './UserScreen';
 import StockScreen from './StockScreen';
 import AddSpendScreen from './AddSpendScreen'
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useState} from 'react';
 import type { PropsWithChildren } from 'react';
 import {
     Image,
