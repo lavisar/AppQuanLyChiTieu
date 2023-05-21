@@ -66,11 +66,11 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const [hide, setHide] = React.useState(true);
     const [show, setShow] = React.useState(false);
 
-    const onChangeDate = (event: any, value: Date) => {
+    const onChangeDate = (event: any, value?: Date) => {
         const curDate = value || date;
         setDate(curDate);
         let tempDate = new Date(curDate);
-        let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
+        let fDate = tempDate.getDate() + "/" + (tempDate.getMonth()+1) + "/" + tempDate.getFullYear();
         setShow(!show);
         setBirthday(fDate);
 
