@@ -9,10 +9,9 @@ import {
   View
 } from 'react-native';
 import 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import SQLite from 'react-native-sqlite-storage';
 import { UserContext } from './UserContext';
-import { ScrollView } from 'react-native-gesture-handler';
-
 
 const db = SQLite.openDatabase(
   {
