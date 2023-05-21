@@ -75,17 +75,19 @@ function LoginScreen({ navigation }: any): JSX.Element {
                             const userFullname = results.rows.item(0).fullname;
                             const userBirthday = results.rows.item(0).birthday;
                             const userEmail = results.rows.item(0).email;
-                            console.log("giá trị: " + userName, userPassWord, userFullname, userBirthday, userEmail);
+                            console.log(" - Đang truy xuất DB để lấy các field tương ứng ...")
+                            console.log(">> giá trị biến lấy từ DB: " + userName, userPassWord, userFullname, userBirthday, userEmail);
                             setUserName(userName);
                             setUserPassword(userPassWord);
                             setUserFullname(userFullname);
                             setUserBirthday(userBirthday);
                             setUserEmail(userEmail);
-                            console.log("đặt biến global thành công...");
+                            console.log("....................................");
+                            console.log(">> đặt biến global thành công...");
                             if (len > 0) {
-                                console.log("đang kiểm tra thông tin đăng nhập...");
+                                console.log("- đang kiểm tra thông tin đăng nhập...\n");
                                 if (results.rows.item(0).password == password) {
-                                    console.log("đăng nhập thành công");
+                                    console.log(">> đăng nhập thành công\n");
                                     navigation.navigate("HomeScreen");
                                 }
                                 else {

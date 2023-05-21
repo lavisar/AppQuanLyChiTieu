@@ -42,14 +42,14 @@ const db = SQLite.openDatabase(
 const ButtonDateTime = ({ onPress }: any) => {
 
     const event = () => {
-      onPress();
+        onPress();
     }
     return (
-      <TouchableOpacity style={[styles.btnDT, { borderColor: '#D69500' }]} onPress={event}>
-        <Text style={[styles.titleBtnDT, { color: '#D69500' }]}>Chọn</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={[styles.btnDT, { borderColor: '#D69500' }]} onPress={event}>
+            <Text style={[styles.titleBtnDT, { color: '#D69500' }]}>Chọn</Text>
+        </TouchableOpacity>
     );
-  }
+}
 
 function RegisterScreen({ navigation }: any): JSX.Element {
     const [username, setUsername] = useState('');
@@ -131,7 +131,6 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                     Alert.alert("Mật khẩu không trùng khớp!");
                 }
                 else {
-
                     checkExistedUsername;
                     checkExistedEmail;
                     if (usernameIsValid && emailIsValid) {
@@ -194,14 +193,14 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                 placeholderTextColor='black'
                                 onChangeText={setFullname}
                             />
-                            <View style={{ flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ flex: 3 }}>
                                     <Text style={styles.titleInput}>Ngày tháng năm:</Text>
                                     <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
-                                        <Text style={{color:'black'}}>{birthday}</Text>
+                                        <Text style={{ color: 'black' }}>{birthday}</Text>
                                     </View>
                                 </View>
-                                <View style={{ flex: 1.35, alignSelf:'center',paddingBottom:9,marginTop:-30}}>
+                                <View style={{ flex: 1.35, alignSelf: 'center', paddingBottom: 9, marginTop: -30 }}>
                                     <ButtonDateTime onPress={() => showDateTime()}></ButtonDateTime>
                                     {show && (
                                         <View>
@@ -211,7 +210,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                                 mode={'date'}
                                                 display='spinner'
                                                 onChange={onChangeDate}
-                                                
+
                                             />
                                         </View>)
 
@@ -337,10 +336,10 @@ const styles = StyleSheet.create({
         width: 80,
         height: 40,
         fontSize: 12
-      },
-      titleBtnDT: {
+    },
+    titleBtnDT: {
         fontSize: 20, fontWeight: 'bold',
-      },
+    },
 
 });
 

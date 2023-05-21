@@ -67,15 +67,15 @@ const UserScreen = ({ navigation }: any) => {
   const { birthday } = useContext(UserContext); // get global variable
   const { email } = useContext(UserContext); // get global variable
 
-  console.log(" đang lấy dữ liệu từ biến global")
-  console.log(userName, password, fullname, birthday, email)
+  console.log(" - Đang lấy dữ liệu từ biến global...")
+  console.log(">> Dữ liệu lấy được: " + userName, password, fullname, birthday, email)
 
   //for new update infomation
   const [newUsername, setNewUsername] = React.useState('');
+  const [newPassword, setNewPassword] = React.useState('');
   const [newFullname, setNewFullname] = React.useState('');
   const [newEmail, setNewEmail] = React.useState('');
-  const [newPassword, setNewPassword] = React.useState('');
-  // const [newBirthday, setNewBirthday] = React.useState('');
+  const [newBirthday, setNewBirthday] = React.useState('');
 
   const [text, onChangeText] = React.useState('');
 
@@ -86,25 +86,34 @@ const UserScreen = ({ navigation }: any) => {
 
   // handle update
   const HandleUpdate = () => {
-    console.log("đang thực hiện truy vấn DB để cập nhật ...")
-    db.transaction((tx) => {
-      tx.executeSql(
-        "UPDATE Users SET username = ?, password = ?, fullname = ?, email = ? WHERE username = ?",
-        [newUsername, newPassword, newFullname, newEmail, userName],
-        (tx, results) => {
-          // Xử lý kết quả sau khi cập nhật dữ liệu
-          if (results.rowsAffected > 0) {
-            Alert.alert("Cập nhật thành công");
-            // chuyển hướng trang 
-            // navigation.navigate("HomeScreen");
-            console.log("Ghi dữ liệu thành công");
-          } else {
-            console.log("Điều kiện fasle, check lại điều kiện");
-            Alert.alert("Cập nhật không thành công");
-          }
-        }
-      );
-    });
+    try {
+      console.log(" - Đang kiểm tra dữ liệu nhập vào")
+      if (newPassword && newFullname) {
+        console.log(" - Đang thực hiện truy vấn DB để cập nhật...")
+        db.transaction((tx) => {
+          tx.executeSql(
+            "UPDATE Users SET password = ?, fullname = ? WHERE username = ?",
+            [newPassword, newFullname, userName],
+            (tx, results) => {
+              // Xử lý kết quả sau khi cập nhật dữ liệu
+              if (results.rowsAffected > 0) {
+                Alert.alert("Cập nhật thành công");
+                console.log(" >> Ghi dữ liệu thành công");
+              } else {
+                console.log(" >> Điều kiện fasle");
+                Alert.alert("Có lỗi xảy ra, vui lòng khởi động lại ứng dụng");
+              }
+            }
+          );
+        });
+      }
+      else {
+        console.log(">> password và fullname chưa có dữ liệu")
+        Alert.alert("Hãy điền tên và mật khẩu mới!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <ScrollView>
@@ -117,37 +126,45 @@ const UserScreen = ({ navigation }: any) => {
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end' }}>  Xin chào, {fullname}</Text>
           </View>
         </View>
-        <InputInfo
-          title="Tên đăng nhập"
-          value={newUsername}
-          onChangeText={setNewUsername}
-          placeholder={userName.toString()}
-        />
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Tên Đăng Nhập</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={userName.toString()}
+            editable={false}
+          />
+        </View>
+
         <InputInfo
           title="Họ và Tên"
           value={newFullname}
           onChangeText={setNewFullname}
           placeholder={fullname.toString()}
         />
+
         <View>
           <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Ngày Sinh</Text>
           <TextInput
             style={styles.textInput}
-            placeholder={birthday}
+            placeholder={birthday.toString()}
             editable={false}
           />
         </View>
-        <InputInfo
-          title="Gmail"
-          value={newEmail}
-          onChangeText={setNewEmail}
-          placeholder={email.toString()}
-        />
+
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Email</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={email.toString()}
+            editable={false}
+          />
+        </View>
+
         <InputInfo
           title="Mật khẩu"
           value={newPassword}
           onChangeText={setNewPassword}
-          placeholder={password.toString()}
+          placeholder={"************"}
         />
 
         <ButtonUpdate onPress={HandleUpdate} />
