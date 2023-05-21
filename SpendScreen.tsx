@@ -37,7 +37,19 @@ const db = SQLite.openDatabase(
   error=>{console.log(error)}  
 );
 
-type Props = { id: any, type: any, amount: any, date: any, purpose: any, src: any }
+type Props = {
+  month: string;
+  id: string;
+  value: {
+    id: number;
+    type: string;
+    amount: number;
+    date: string;
+    purpose: string;
+    src: any;
+  }[];
+};
+
 // type DataItem = {
 //   id: any;
 //   src: any;
@@ -56,10 +68,11 @@ type Props = { id: any, type: any, amount: any, date: any, purpose: any, src: an
 //     value:
 //       [{
 //         id: 3,
+//         type: ...,
+//         amount: ...,
+//         date: '21/4/2023',
+//         purpose: ...,
 //         src: require('./assets/src/img/fillter-icon/hoa-don.png'),
-//         title: "Thanh toán tiền điện thoại",
-//         day: '21/4/2023',
-//         money: 100000
 //       },
 //       {
 //         id: 2,
