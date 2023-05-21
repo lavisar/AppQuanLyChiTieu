@@ -39,7 +39,11 @@ const db = SQLite.openDatabase(
 );
 
 function LoginScreen({ navigation }: any): JSX.Element {
-    const { setUserName } = useContext(UserContext);
+    const userContext = useContext(UserContext);
+    const { setUserName, setUserPassword, setUserFullname, setUserBirthday, setUserEmail } = userContext;
+
+
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -61,17 +65,27 @@ function LoginScreen({ navigation }: any): JSX.Element {
             if (username && password) {
                 db.transaction((tx) => {
                     tx.executeSql(
-                        "SELECT username, password FROM Users WHERE username = ?",
+                        "SELECT username, password, fullname, birthday, email FROM Users WHERE username = ?",
                         [username],
                         (tx, results) => {
                             var len = results.rows.length;
-
-                            //set userID with global variable - for access from another file
+                            //set global variable - for access from another file
                             const userName = [username];
+                            const userPassWord = results.rows.item(0).password;
+                            const userFullname = results.rows.item(0).fullname;
+                            const userBirthday = results.rows.item(0).birthday;
+                            const userEmail = results.rows.item(0).email;
+                            console.log("giá trị: " + userName, userPassWord, userFullname, userBirthday, userEmail);
                             setUserName(userName);
-
+                            setUserPassword(userPassWord);
+                            setUserFullname(userFullname);
+                            setUserBirthday(userBirthday);
+                            setUserEmail(userEmail);
+                            console.log("đặt biến global thành công...");
                             if (len > 0) {
+                                console.log("đang kiểm tra thông tin đăng nhập...");
                                 if (results.rows.item(0).password == password) {
+                                    console.log("đăng nhập thành công");
                                     navigation.navigate("HomeScreen");
                                 }
                                 else {
