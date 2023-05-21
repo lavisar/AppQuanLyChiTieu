@@ -13,32 +13,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SQLite from 'react-native-sqlite-storage';
 import { UserContext } from './UserContext';
 
-type ItemProp = { title: any, placeholder: any, show: any, onPress: any }
-const InputHaveHideShow = ({ title, placeholder,show, onPress }: ItemProp) => {
-  const event = () => {
-    onPress();
-  }
-  return (
-    <View>
-      <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>{title}</Text>
-      <View style={{flexDirection:'row'}}>
-        <TextInput
-          placeholder={placeholder}
-          placeholderTextColor='black'
-          style={styles.textInputHideShow}
-          secureTextEntry={show}
-        >
-          
-        </TextInput>
-        <TouchableOpacity style={{ flex: 1 }} onPress={event}>
-          <Image source={require('./assets/src/img/showhide.png')}></Image>
-        </TouchableOpacity>
-      </View>
+const db = SQLite.openDatabase(
+  {
+    name: 'QuanLiChiTieu',
+    location: 'default',
+  },
+  () => { },
+  error => { console.log(error) }
+);
 
-    </View>
-
-  )
-}
 const ButtonUpdate = ({ onPress }: any) => {
   const event = () => {
     onPress();
@@ -93,9 +76,9 @@ const UserScreen = ({ navigation }: any) => {
   const [newEmail, setNewEmail] = React.useState('');
   const [newBirthday, setNewBirthday] = React.useState('');
 
-const UserScreen = ({ navigation }: any) => {
   const [text, onChangeText] = React.useState('');
-  const [show, setShow] = React.useState(true);
+
+  // log out
   const Logout = () => {
     navigation.popToTop()
   }
@@ -130,9 +113,6 @@ const UserScreen = ({ navigation }: any) => {
     } catch (error) {
       console.log(error);
     }
-  }
-  const Show = () => {
-    setShow(!show)
   }
   return (
     <ScrollView>
@@ -194,19 +174,7 @@ const UserScreen = ({ navigation }: any) => {
           <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}></Text>
         </View>
       </View>
-
-
-
-      <InputInfo title="Tên đăng nhập" placeholder="Tên đăng nhập" />
-      <InputInfo title="SĐT" placeholder="SĐT" />
-      <InputInfo title="Gmail" placeholder="Gmail" />
-      <InputHaveHideShow title="Mật khẩu" placeholder="Mật khẩu" show={show} onPress={Show}/>
-
-
-      <ButtonUpdate onPress={Update} />
-      <ButtonLogout onPress={Logout} />
-
-    </View>
+    </ScrollView>
 
   )
 }
@@ -235,17 +203,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
 
-    height: 45,
-    borderColor: 'black',
-    borderTopWidth: 1,
-    borderRightWidth: 1,
-    borderLeftWidth: 4,
-    borderBottomWidth: 4,
-    borderRadius: 15,
-    paddingLeft: 15,
-  },
-  textInputHideShow: {
-    flex:7,
     height: 45,
     borderColor: 'black',
     borderTopWidth: 1,
