@@ -95,7 +95,135 @@ const InputFind = ({ placeholder }: any) => {
 //     </View>
 //   )
 // }
-
+const getDataFromDatabase = () => {
+  try {
+    db.transaction((tx) => {
+      
+      tx.executeSql(
+          "SELECT strftime('%Y-%m', date) AS formattedDate FROM Spending GROUP BY formattedDate ORDER BY formattedDate DESC;",
+          [],
+          (tx, result1) =>{
+            for (let i = 0; i < result1.rows.length; i++) {
+              let path : any;
+              let [year, month] = result1.rows.item(i).formattedDate.split("-");
+              const newData : Props = {
+                month: `${month}-${year}`,
+                id: i,
+                value: []
+              }
+              
+                tx.executeSql(
+                  "SELECT * FROM Spending WHERE date LIKE ? ORDER by date DESC",
+                  [`${result1.rows.item(i).formattedDate}%`],
+                  (tx, result2) =>{
+                    for (let j = 0; j < result2.rows.length; j++) {
+                      
+                      switch (result2.rows.item(j).type) {
+                        case "Quà tặng":
+                          path = require("./assets/src/img/fillter-icon/qua-tang.png");
+                          break;
+                        case "Xã giao":
+                          path = require("./assets/src/img/fillter-icon/xa-giao.png");
+                          break;
+                        case "Mua sắm":
+                          path = require("./assets/src/img/fillter-icon/mua-sam.png");
+                          break;
+                        case "Gửi tiền":
+                          path = require("./assets/src/img/fillter-icon/gui-tien.png");
+                          break;
+                        case "Nhận tiền":
+                          path = require("./assets/src/img/fillter-icon/nhan-tien.png");
+                          break;
+                        case "Hóa đơn":
+                          path = require("./assets/src/img/fillter-icon/hoa-don.png");
+                          break;
+                        case "Tiết kiệm":
+                          path = require("./assets/src/img/fillter-icon/tiet-kiem.png");
+                          break;
+                        case "Tiền nhà":
+                          path = require("./assets/src/img/fillter-icon/tien-nha.png");
+                          break;
+                        case "Hẹn hò":
+                          path = require("./assets/src/img/fillter-icon/hen-ho.png");
+                          break;
+                        case "Học tập":
+                          path = require("./assets/src/img/fillter-icon/hoc-tap.png");
+                          break;
+                        case "Mua Online":
+                          path = require("./assets/src/img/fillter-icon/muado-online.png");
+                          break;
+                        case "CH Tiện Lợi":
+                          path = require("./assets/src/img/fillter-icon/chtl.png");
+                          break;
+                        case "Du lịch":
+                          path = require("./assets/src/img/fillter-icon/du-lich.png");
+                          break;
+                        case "Sức khỏe":
+                          path = require("./assets/src/img/fillter-icon/suc-khoe.png");
+                          break;
+                        case "Tiền nước":
+                          path = require("./assets/src/img/fillter-icon/tien-nuoc.png");
+                          break;
+                        case "Tiền điện":
+                          path = require("./assets/src/img/fillter-icon/tien-dien.png");
+                          break;
+                        case "Ăn uống":
+                          path = require("./assets/src/img/fillter-icon/an-uong.png");
+                          break;
+                        case "Thú cưng":
+                          path = require("./assets/src/img/fillter-icon/thu-cung.png");
+                          break;
+                        case "Trẻ nhỏ":
+                          path = require("./assets/src/img/fillter-icon/tre-nho.png");
+                          break;
+                        case "Ăn vặt":
+                          path = require("./assets/src/img/fillter-icon/an-vat.png");
+                          break;
+                        case "Quần áo":
+                          path = require("./assets/src/img/fillter-icon/quan-ao.png");
+                          break;
+                        case "Sửa chữa":
+                          path = require("./assets/src/img/fillter-icon/sua-chua.png");
+                          break;
+                        case "Đi chơi":
+                          path = require("./assets/src/img/fillter-icon/di-choi.png");
+                          break;
+                        case "Nhiên liệu":
+                          path = require("./assets/src/img/fillter-icon/xang.png");
+                          break;
+                        case "Chăm sóc":
+                          path = require("./assets/src/img/fillter-icon/cham-soc.png");
+                          break;
+                        case "Khác":
+                          path = require("./assets/src/img/fillter-icon/khac.png");
+                          break;
+                      }
+                      
+                      newData.value.push(
+                        {
+                          id: result2.rows.item(j).id,
+                          type: result2.rows.item(j).type,
+                          amount: result2.rows.item(j).amount,
+                          date: result2.rows.item(j).date,
+                          purpose: result2.rows.item(j).purpose,
+                          src: path,
+                        }
+                      )
+                    }
+                  }
+                )
+                
+                setData(prevData => [...prevData, newData]);
+            }
+            
+          }
+      )
+     
+  })
+  } catch (error) {
+      console.log(error);
+  }
+} 
 
 const TotalSpendScreen = ({ navigation }: any) => {
   const [data, setData] = useState<Props[]>([]);
@@ -293,14 +421,22 @@ const renderItem=({ item }: { item: Props }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
+
+
           refreshControl={
             <RefreshControl refreshing={refreshControl} onRefresh={() => {
-              setRefreshControl(true);
-              getDataFromDatabase();
               
-              setRefreshControl(false);
+              setData([])
+              getDataFromDatabase();
+              setRefreshControl(true);
+              setTimeout(()=>{
+                setRefreshControl(false);  
+              },500)
+              
             }}/>
           }
+          extraData={data}
+          // refreshing={refreshControl}
         />
       </View>
     </View>
