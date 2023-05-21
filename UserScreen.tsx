@@ -75,7 +75,7 @@ const UserScreen = ({ navigation }: any) => {
   const [newFullname, setNewFullname] = React.useState('');
   const [newEmail, setNewEmail] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
-  const [newBirthday, setNewBirthday] = React.useState('');
+  // const [newBirthday, setNewBirthday] = React.useState('');
 
   const [text, onChangeText] = React.useState('');
 
@@ -89,14 +89,14 @@ const UserScreen = ({ navigation }: any) => {
     console.log("đang thực hiện truy vấn DB để cập nhật ...")
     db.transaction((tx) => {
       tx.executeSql(
-        "UPDATE Users SET username = ?, password = ?, fullname = ?, birthday = ?, email = ? WHERE username = ?",
-        [newUsername, newPassword, newFullname, newBirthday, newEmail, userName],
+        "UPDATE Users SET username = ?, password = ?, fullname = ?, email = ? WHERE username = ?",
+        [newUsername, newPassword, newFullname, newEmail, userName],
         (tx, results) => {
           // Xử lý kết quả sau khi cập nhật dữ liệu
           if (results.rowsAffected > 0) {
             Alert.alert("Cập nhật thành công");
             // chuyển hướng trang 
-            navigation.navigate("HomeScreen");
+            // navigation.navigate("HomeScreen");
             console.log("Ghi dữ liệu thành công");
           } else {
             console.log("Điều kiện fasle, check lại điều kiện");
@@ -114,47 +114,49 @@ const UserScreen = ({ navigation }: any) => {
             <Image source={require('./assets/src/img/icon-account.png')} />
           </View>
           <View>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end' }}>  Xin chào, {userName}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end' }}>  Xin chào, {fullname}</Text>
           </View>
         </View>
-
         <InputInfo
           title="Tên đăng nhập"
           value={newUsername}
           onChangeText={setNewUsername}
-          placeholder={userName}
+          placeholder={userName.toString()}
         />
         <InputInfo
           title="Họ và Tên"
           value={newFullname}
           onChangeText={setNewFullname}
-          placeholder={fullname}
+          placeholder={fullname.toString()}
         />
-
-        <InputInfo
-          title="Ngày sinh"
-          value={newBirthday}
-          onChangeText={null}
-          placeholder={birthday}
-        />
-
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Ngày Sinh</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={birthday}
+            editable={false}
+          />
+        </View>
         <InputInfo
           title="Gmail"
           value={newEmail}
           onChangeText={setNewEmail}
-          placeholder={email}
+          placeholder={email.toString()}
         />
         <InputInfo
           title="Mật khẩu"
           value={newPassword}
           onChangeText={setNewPassword}
-          placeholder={password}
+          placeholder={password.toString()}
         />
-
 
         <ButtonUpdate onPress={HandleUpdate} />
         <ButtonLogout onPress={Logout} />
 
+        {/* Empty view for margin bottom */}
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}></Text>
+        </View>
       </View>
     </ScrollView>
 
