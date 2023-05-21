@@ -66,7 +66,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
     const [hide, setHide] = React.useState(true);
     const [show, setShow] = React.useState(false);
 
-    const onChangeDate = (event, value) => {
+    const onChangeDate = (event: any, value: Date) => {
         const curDate = value || date;
         setDate(curDate);
         let tempDate = new Date(curDate);
@@ -137,7 +137,6 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                     Alert.alert("Mật khẩu không trùng khớp!");
                 }
                 else {
-
                     checkExistedUsername;
                     checkExistedEmail;
                     if (usernameIsValid && emailIsValid) {

@@ -1,31 +1,17 @@
-import 'react-native-gesture-handler';
-import React from 'react';
-import type { PropsWithChildren } from 'react';
+import React, { useContext } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
+  Alert,
+  Image,
   StyleSheet,
   Text,
-  useColorScheme,
-  View,
-  KeyboardAvoidingView,
-  Image,
-  ImageBackground,
   TextInput,
   TouchableOpacity,
-  Alert,
+  View
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import SQLite from 'react-native-sqlite-storage';
+import { UserContext } from './UserContext';
 
 type ItemProp = { title: any, placeholder: any, show: any, onPress: any }
 const InputHaveHideShow = ({ title, placeholder,show, onPress }: ItemProp) => {
@@ -74,22 +60,38 @@ const ButtonLogout = ({ onPress }: any) => {
     </TouchableOpacity>
   )
 }
-type ItemProps = { title: any, placeholder: any }
-const InputInfo = ({ title, placeholder }: ItemProps) => {
+type ItemProps = { title: any, value: any, onChangeText: any, placeholder: string }
+const InputInfo = ({ title, value, onChangeText, placeholder }: ItemProps) => {
   return (
     <View>
       <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>{title}</Text>
       <TextInput
-        placeholder={placeholder}
-        placeholderTextColor='black'
         style={styles.textInput}
-
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
       />
     </View>
   )
 }
 
+const UserScreen = ({ navigation }: any) => {
+  // access userName in global variables
+  const { userName } = useContext(UserContext); // get global variable
+  const { password } = useContext(UserContext); // get global variable
+  const { fullname } = useContext(UserContext); // get global variable
+  const { birthday } = useContext(UserContext); // get global variable
+  const { email } = useContext(UserContext); // get global variable
 
+  console.log(" - Đang lấy dữ liệu từ biến global...")
+  console.log(">> Dữ liệu lấy được: " + userName, password, fullname, birthday, email)
+
+  //for new update infomation
+  const [newUsername, setNewUsername] = React.useState('');
+  const [newPassword, setNewPassword] = React.useState('');
+  const [newFullname, setNewFullname] = React.useState('');
+  const [newEmail, setNewEmail] = React.useState('');
+  const [newBirthday, setNewBirthday] = React.useState('');
 
 const UserScreen = ({ navigation }: any) => {
   const [text, onChangeText] = React.useState('');
@@ -97,22 +99,99 @@ const UserScreen = ({ navigation }: any) => {
   const Logout = () => {
     navigation.popToTop()
   }
-  const Update = () => {
-    Alert.alert("UPDATE")
+
+  // handle update
+  const HandleUpdate = () => {
+    try {
+      console.log(" - Đang kiểm tra dữ liệu nhập vào")
+      if (newPassword && newFullname) {
+        console.log(" - Đang thực hiện truy vấn DB để cập nhật...")
+        db.transaction((tx) => {
+          tx.executeSql(
+            "UPDATE Users SET password = ?, fullname = ? WHERE username = ?",
+            [newPassword, newFullname, userName],
+            (tx, results) => {
+              // Xử lý kết quả sau khi cập nhật dữ liệu
+              if (results.rowsAffected > 0) {
+                Alert.alert("Cập nhật thành công");
+                console.log(" >> Ghi dữ liệu thành công");
+              } else {
+                console.log(" >> Điều kiện fasle");
+                Alert.alert("Có lỗi xảy ra, vui lòng khởi động lại ứng dụng");
+              }
+            }
+          );
+        });
+      }
+      else {
+        console.log(">> password và fullname chưa có dữ liệu")
+        Alert.alert("Hãy điền tên và mật khẩu mới!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   const Show = () => {
     setShow(!show)
   }
   return (
-    <View style={{ flex: 1, marginHorizontal: 20 }}>
-
-
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 20 }}>
-        <View style={{ width: 80, height: 80, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 45 }}>
-          <Image source={require('./assets/src/img/icon-account.png')} />
+    <ScrollView>
+      <View style={{ flex: 1, marginHorizontal: 20 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 20 }}>
+          <View style={{ width: 80, height: 80, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 45 }}>
+            <Image source={require('./assets/src/img/icon-account.png')} />
+          </View>
+          <View>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end' }}>  Xin chào, {fullname}</Text>
+          </View>
         </View>
         <View>
-          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end' }}>  Xin chào, User</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Tên Đăng Nhập</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={userName.toString()}
+            editable={false}
+          />
+        </View>
+
+        <InputInfo
+          title="Họ và Tên"
+          value={newFullname}
+          onChangeText={setNewFullname}
+          placeholder={fullname.toString()}
+        />
+
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Ngày Sinh</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={birthday.toString()}
+            editable={false}
+          />
+        </View>
+
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Email</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={email.toString()}
+            editable={false}
+          />
+        </View>
+
+        <InputInfo
+          title="Mật khẩu"
+          value={newPassword}
+          onChangeText={setNewPassword}
+          placeholder={"************"}
+        />
+
+        <ButtonUpdate onPress={HandleUpdate} />
+        <ButtonLogout onPress={Logout} />
+
+        {/* Empty view for margin bottom */}
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}></Text>
         </View>
       </View>
 
