@@ -194,7 +194,7 @@ function LoginScreen({ navigation }: any): JSX.Element {
                             <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Mật Khẩu:</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <TextInput
-                                    placeholder="Nhập lại mật khẩu mới"
+                                    placeholder="Mật khẩu"
                                     placeholderTextColor='black'
                                     style={styles.textInput}
                                     secureTextEntry={hide}
