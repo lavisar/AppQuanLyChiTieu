@@ -15,7 +15,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  FlatList
+  FlatList,
+  RefreshControl
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -98,6 +99,7 @@ const InputFind = ({ placeholder }: any) => {
 
 const TotalSpendScreen = ({ navigation }: any) => {
   const [data, setData] = useState<Props[]>([]);
+  const [refreshControl, setRefreshControl] = useState(false);
   useEffect(() => {
     getDataFromDatabase();
   }, [])
@@ -273,7 +275,7 @@ const renderItem=({ item }: { item: Props }) => {
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
             <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>8001 </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>8000 </Text>
           </View>
         </View>
       </View>
@@ -291,6 +293,14 @@ const renderItem=({ item }: { item: Props }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl refreshing={refreshControl} onRefresh={() => {
+              setRefreshControl(true);
+              getDataFromDatabase();
+              
+              setRefreshControl(false);
+            }}/>
+          }
         />
       </View>
     </View>
