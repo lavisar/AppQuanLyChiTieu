@@ -293,28 +293,6 @@ const renderItem=({ item }: { item: Props }) => {
           keyExtractor={item => item.id}
         />
       </View>
-
-
-      {/* <View style={{ flex: 6, marginBottom: 30 }}>
-
-        <FlatList
-          data={data}
-          renderItem={({ item }) =>
-
-            <View>
-              <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
-              {item.map(value => (
-                <ListValuePay id={value.src} title={value.title} day={value.day} money={value.money} />
-              ))}
-            </View>
-
-          }
-          keyExtractor={item => item.id.toString()}
-        />
-      </View> */}
-
-
-
     </View>
 
 
