@@ -34,8 +34,16 @@ import TotalSpendScreen from './TotalSpendScreen';
 import StockScreen from './StockScreen';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-
-
+import SQLite from 'react-native-sqlite-storage';
+const db = SQLite.openDatabase(
+  {
+      name: 'QuanLiChiTieu',
+      location: 'default',
+  },
+  () => {
+  },
+  error => { console.log(error) }
+);
 
 const DATA = [
   {
@@ -204,7 +212,14 @@ const ButtonUpdatePay = ({ onPress }: any) => {
     </TouchableOpacity>
   )
 }
-const InputInfo = ({ title, placeholder }: any) => {
+
+// type InputInfoProps = {
+//   title: string;
+//   placeholder: string;
+//   events?: (() => void) | null;
+// };
+
+const InputInfo = ({ title, placeholder, onChangeText }: any) => {
   return (
     <View>
       <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10 }}>{title}</Text>
@@ -212,7 +227,7 @@ const InputInfo = ({ title, placeholder }: any) => {
         placeholder={placeholder}
         placeholderTextColor='black'
         style={styles.textInput}
-
+        onChangeText={onChangeText}
       />
     </View>
   )
@@ -241,22 +256,56 @@ const AddSpendScreen = ({ navigation }: any) => {
   const [text, setText] = React.useState('');
   const [selected, setSelected] = React.useState(false);
   const [date, setDate] = React.useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [dateIndex, setDateIndex] = useState('');
+  const [monthIndex, setMonthIndex] = useState('');
+  const [yearIndex, setYearIndex] = useState('');
+  const [amount, setAmount] = useState(0);
+  const [purpose, setPurpose] = useState('');
 
   const [show, setShow] = React.useState(false);
-  const Pay = () => {
-    Alert.alert("Pay")
+  const Pay = async () => {
+    let dateString = dateIndex.toString();
+    let monthIndexString = monthIndex.toString();
+    let AmountIndex = amount;
+    if (monthIndexString.length < 2){
+      monthIndexString = '0'+monthIndexString;
+    }
+    let yearIndexString = yearIndex.toString();
+    let string = yearIndexString + "-" + monthIndexString + "-" + dateString;
+      try {
+        db.transaction((tx) => {
+          tx.executeSql(
+            "INSERT INTO Spending (type, amount, date, purpose) VALUES (?,?,?,?)",
+            [type, amount, string, purpose],
+            (tx, results) => {
+              if (results.rowsAffected > 0) {
+                Alert.alert("Thêm chi tiêu thành công!");
+              }
+              else {
+                Alert.alert("Thêm chi tiêu thất bại! Hãy thử lại");
+              }
+            }
+          )
+        })
+      } catch (error) {
+          console.log(error);
+      }
   }
   const Get = () => {
-    Alert.alert("Get")
+    Alert.alert(date.toString());
   }
-  const onChangeDate = (event, value) => {
+  const onChangeDate = (event: Event, value?: Date) => {
     const curDate = value || date;
     setDate(curDate);
     let tempDate = new Date(curDate);
-    let fDate = tempDate.getDate() + "/" + tempDate.getMonth() + "/" + tempDate.getFullYear();
+    let fDate = tempDate.getDate() + "/" +(tempDate.getMonth()+1) + "/" + tempDate.getFullYear();
+    setDateIndex(tempDate.getDate().toString());
+    setMonthIndex((tempDate.getMonth()+1).toString());
+    setYearIndex(tempDate.getFullYear().toString());
     setShow(!show);
     setText(fDate);
-
+    setShowDatePicker(false);
   }
   const showDateTime = () => {
     setShow(true);
@@ -288,7 +337,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             horizontal={true}
             data={DATA}
             renderItem={({ item }) => <IconButton title={item.name} src={item.url}
-              onPress={() => { setType(item.name) }}
+              onPress={() => {[ setType(item.name) ]}}
             />}
             keyExtractor={(item) => item.name}
           />
@@ -301,7 +350,7 @@ const AddSpendScreen = ({ navigation }: any) => {
           <View style={{ justifyContent: 'center', borderTopWidth: 1, borderRightWidth: 1, borderLeftWidth: 4, borderBottomWidth: 4, borderRadius: 15, height: 35, flex: 0.45 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#00977E', marginLeft: 10, }}>{type}</Text>
           </View>
-          <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" />
+          <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" onChangeText = {setPurpose}/>
 
           <View style={{ flexDirection: 'row' }}>
             <View style={{ flex: 3 }}>
@@ -327,7 +376,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             </View>
           </View>
 
-          <InputInfo title="Số tiền chi" placeholder="Số tiền" />
+          <InputInfo title="Số tiền chi" placeholder="Số tiền" onChangeText = {setAmount}/>
           <View style={{ flexDirection: 'row', flex: 2 }}>
             <ButtonUpdateGet onPress={Get} />
             <ButtonUpdatePay onPress={Pay} />

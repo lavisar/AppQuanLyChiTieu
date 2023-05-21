@@ -5,8 +5,8 @@
  * @format
  */
 import 'react-native-gesture-handler';
-import React from 'react';
-import type { PropsWithChildren } from 'react';
+import React, {useState} from 'react';
+import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,

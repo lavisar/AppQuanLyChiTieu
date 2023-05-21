@@ -50,8 +50,13 @@ function LoginScreen({ navigation }: any): JSX.Element {
     const Hide = () => {
         setHide(!hide)
       }
-    useEffect(() => {
-        createTable();
+    useEffect(() =>{
+      createUsersTable();
+      createTypeTable();
+      createSpendingTable();
+      createReceivingTable();
+      insertTypes();
+      createTable();
     });
     const createTable = () => {
         db.transaction((tx) => {
@@ -62,6 +67,50 @@ function LoginScreen({ navigation }: any): JSX.Element {
             )
         })
     }
+    const createUsersTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Users "
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
+             )
+        })
+    }
+    const createTypeTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS "
+                + "Type "
+                + "(type TEXT NOT NULL UNIQUE PRIMARY KEY);"
+            )
+        })
+    }
+    const createSpendingTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS Spending (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT,FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
+            )
+        })
+    }
+    const createReceivingTable = () => {
+        db.transaction((tx) =>{
+            tx.executeSql(
+                "CREATE TABLE IF NOT EXISTS Receiving (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT, FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
+            )
+        })
+    }
+    const typeArray = ["Quà tặng","Xã giao","Mua sắm","Gửi tiền","Nhận tiền","Hóa đơn","Tiết kiệm","Tiền nhà","Hẹn hò","Học tập","Mua Online","CH Tiện Lợi","Du lịch","Sức khỏe","Tiền nước","Tiền điện","Ăn uống","Thú cưng","Trẻ nhỏ","Ăn vặt","Quần áo","Sửa chữa","Đi chơi","Nhiên liệu","Chăm sóc","Khác"]
+    const insertTypes = () => {
+        db.transaction((tx) =>{
+            typeArray.forEach(element => {
+                tx.executeSql(
+                    "INSERT INTO Type (type) VALUES (?)",
+                    [element]
+                )
+            });
+        })
+    }
+
 
     const handleLogin = () => {
         try {
@@ -180,7 +229,6 @@ function LoginScreen({ navigation }: any): JSX.Element {
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     panel: {
         flex: 1,
@@ -248,8 +296,6 @@ const styles = StyleSheet.create({
         color: 'rgba(214, 149, 0, 1)',
         fontFamily: 'Segoe UI'
     }
-
 });
 
 export default LoginScreen;
-
