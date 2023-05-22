@@ -207,8 +207,8 @@ const ButtonUpdatePay = ({ onPress }: any) => {
     onPress();
   }
   return (
-    <TouchableOpacity style={[styles.btn, { borderColor: '#D69500' }]} onPress={event}>
-      <Text style={[styles.titleBtn, { color: '#D69500' }]}>Chi tiền</Text>
+    <TouchableOpacity style={[styles.btn, { borderColor: '#00977E' }]} onPress={event}>
+      <Text style={[styles.titleBtn, { color: '#00977E' }]}>Chi tiền</Text>
     </TouchableOpacity>
   )
 }
@@ -327,7 +327,7 @@ const AddSpendScreen = ({ navigation }: any) => {
           </View>
           <View style={{ marginLeft: 50, flex: 3.3 }}>
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Xin chào, User</Text>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Số tiền đã chi</Text>
+
           </View>
         </View>
 
@@ -377,8 +377,8 @@ const AddSpendScreen = ({ navigation }: any) => {
           </View>
 
           <InputInfo title="Số tiền chi" placeholder="Số tiền" onChangeText = {setAmount}/>
-          <View style={{ flexDirection: 'row', flex: 2 }}>
-            <ButtonUpdateGet onPress={Get} />
+          <View style={{ flexDirection: 'row', flex: 2,justifyContent:'center' }}>
+            
             <ButtonUpdatePay onPress={Pay} />
           </View>
         </View>
