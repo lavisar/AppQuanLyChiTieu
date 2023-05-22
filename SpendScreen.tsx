@@ -99,8 +99,16 @@ const InputFind = ({ placeholder }: any) => {
 const TotalSpendScreen = ({ navigation }: any) => {
   const [data, setData] = useState<Props[]>([]);
   const [refreshControl, setRefreshControl] = useState(false);
+  const currentDate = new Date();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = currentDate.getFullYear().toString();
+  
+  const currentMonthYear = `${month}-${year}`;
+  const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
+  
   useEffect(() => {
     getDataFromDatabase();
+    calculateSpendingOfCurrentMonth();
   }, [])
 
 const getDataFromDatabase = () => {
@@ -231,14 +239,23 @@ const getDataFromDatabase = () => {
   } catch (error) {
       console.log(error);
   }
-} 
+}
+
+const calculateSpendingOfCurrentMonth = () =>{
+  if (data[0].month === currentMonthYear){
+    let result = 0;
+    data[0].value.map(d =>{
+      result += parseInt(d.amount);
+    })
+    setCurrentMonthSpending(result);
+  }
+}
 
 const renderItem=({ item }: { item: Props }) => {
   return (
     <View>
       <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
       {item.value.map(pointer => (
-        // <ListValuePay src = {pointer.src} purpose = {pointer.purpose} date = {pointer.date} amount = {pointer.amount}/>
         <View>
         <TouchableOpacity style={styles.MoneyTypeContainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
@@ -274,7 +291,7 @@ const renderItem=({ item }: { item: Props }) => {
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
             <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>8000 </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{currentMonthSpending} </Text>
           </View>
         </View>
       </View>
