@@ -296,7 +296,8 @@ const renderItem=({ item }: { item: Props }) => {
           refreshControl={
             <RefreshControl refreshing={refreshControl} onRefresh={() => {
               setRefreshControl(true);
-              getDataFromDatabase();
+              // setData([]);
+              useEffect
               
               setRefreshControl(false);
             }}/>
