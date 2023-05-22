@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Alert,
   Image,
@@ -58,6 +58,7 @@ const InputInfo = ({ title, value, onChangeText, placeholder }: ItemProps) => {
   )
 }
 
+
 const UserScreen = ({ navigation }: any) => {
   // access userName in global variables
   const { userName } = useContext(UserContext); // get global variable
@@ -75,8 +76,10 @@ const UserScreen = ({ navigation }: any) => {
   const [newFullname, setNewFullname] = React.useState('');
   const [newEmail, setNewEmail] = React.useState('');
   const [newBirthday, setNewBirthday] = React.useState('');
-
-  const [text, onChangeText] = React.useState('');
+  const [hide, setHide] = useState(true);
+  const Hide = () => {
+    setHide(!hide)
+  }
 
   // log out
   const Logout = () => {
@@ -159,12 +162,28 @@ const UserScreen = ({ navigation }: any) => {
           />
         </View>
 
-        <InputInfo
+        <View>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Mật Khẩu</Text>
+          <TextInput
+            style={styles.textInput}
+            value={newPassword}
+            onChangeText={setNewPassword}
+            placeholder='Please enter your new password'
+            placeholderTextColor='black'
+            secureTextEntry={hide}
+          />
+          <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
+            <Image source={require('./assets/src/img/showhide.png')}></Image>
+          </TouchableOpacity>
+        </View>
+
+        {/* <InputInfo
           title="Mật khẩu"
           value={newPassword}
           onChangeText={setNewPassword}
           placeholder={"************"}
-        />
+          secureTextEntry={hide}
+        /> */}
 
         <ButtonUpdate onPress={HandleUpdate} />
         <ButtonLogout onPress={Logout} />
