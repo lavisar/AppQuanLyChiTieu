@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
@@ -35,6 +35,7 @@ import StockScreen from './StockScreen';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import SQLite from 'react-native-sqlite-storage';
+import { UserContext } from './UserContext';
 const db = SQLite.openDatabase(
   {
       name: 'QuanLiChiTieu',
@@ -262,6 +263,7 @@ const AddSpendScreen = ({ navigation }: any) => {
   const [yearIndex, setYearIndex] = useState('');
   const [amount, setAmount] = useState(0);
   const [purpose, setPurpose] = useState('');
+  const { fullname } = useContext(UserContext);
 
   const [show, setShow] = React.useState(false);
   const Pay = async () => {
@@ -314,24 +316,25 @@ const AddSpendScreen = ({ navigation }: any) => {
 
 
   return (
-
+    
     <KeyboardAvoidingView style={{ flex: 1 }} enabled={true} behavior="padding">
 
       <View style={{ backgroundColor: '#00977E', height: 100, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}> THÊM GIAO DỊCH</Text>
       </View>
+      {/* <ScrollView> */}
       <View style={{ flex: 11, marginHorizontal: 20 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 20, flex: 0.5, marginBottom: 20 }}>
           <View style={{ width: 60, height: 60, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, flex: 1 }}>
             <Image resizeMode='cover' source={require('./assets/src/img/icon-account.png')} />
           </View>
           <View style={{ marginLeft: 50, flex: 3.3 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Xin chào, User</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Xin chào, {fullname}</Text>
 
           </View>
         </View>
 
-
+         
         <View style={{ borderTopWidth: 0.5, borderBottomWidth: 0.5, height: 100, marginTop: 5, paddingTop: 5, borderColor: 'rgba(0, 0, 0, 0.51)', flex: 1 }}>
           <FlatList
             horizontal={true}
@@ -344,7 +347,7 @@ const AddSpendScreen = ({ navigation }: any) => {
 
         </View>
 
-
+        
         <View style={{ flex: 4 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#00977E', marginLeft: 10, marginTop: 10 }}>Loại chi tiêu</Text>
           <View style={{ justifyContent: 'center', borderTopWidth: 1, borderRightWidth: 1, borderLeftWidth: 4, borderBottomWidth: 4, borderRadius: 15, height: 35, flex: 0.45 }}>
@@ -383,12 +386,12 @@ const AddSpendScreen = ({ navigation }: any) => {
           </View>
         </View>
 
-
+        
       </View>
-
+      {/* </ScrollView> */}
     </KeyboardAvoidingView>
 
-
+    
 
   )
 }
