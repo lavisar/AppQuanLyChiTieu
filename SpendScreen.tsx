@@ -105,10 +105,21 @@ const TotalSpendScreen = ({ navigation }: any) => {
   
   const currentMonthYear = `${month}-${year}`;
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
+  // var currentMonthSpending = 0;
   
   useEffect(() => {
+    
+    const currentDate = new Date();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate.getFullYear().toString();
+    
+    const currentMonthYear = `${month}-${year}`;
     getDataFromDatabase();
-    calculateSpendingOfCurrentMonth();
+    
+    // const sum = data
+    // .filter(item => item.month.includes(currentMonthYear))
+    // .reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.value.map(d => d {}), 0));
+    // Alert.alert(currentMonthYear);
   }, [])
 
 const getDataFromDatabase = () => {
@@ -127,6 +138,11 @@ const getDataFromDatabase = () => {
                 id: i,
                 value: []
               }
+              // const currentDate = new Date();
+              // const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+              // const currentYear = currentDate.getFullYear().toString();
+              // let sum = 0;
+              // const currentMonthYear = `${currentMonth}-${currentYear}`;
               
                 tx.executeSql(
                   "SELECT * FROM Spending WHERE date LIKE ? ORDER by date DESC",
@@ -225,30 +241,81 @@ const getDataFromDatabase = () => {
                           src: path,
                         }
                       )
+                      // if (newData.month === currentMonthYear){
+                      //   sum += result2.rows.item(j).amount;
+                      // }
                     }
                   }
                 )
-                
+              // setCurrentMonthSpending(sum);
                 setData(prevData => [...prevData, newData]);
+              // if (month == currentMonthYear){
+              //   currentMonthSpending += result.rows.item(j).amount;
+              // }
+              
             }
             
           }
       )
-     
-  })
+    }
+    )
+  calculateSpendingOfCurrentMonth();
   } catch (error) {
       console.log(error);
   }
+  // setCurrentMonthSpending(calculateSpendingOfCurrentMonth());
+  // Alert.alert(currentMonthSpending.toString());
+  
 }
 
 const calculateSpendingOfCurrentMonth = () =>{
-  if (data[0].month === currentMonthYear){
-    let result = 0;
-    data[0].value.map(d =>{
-      result += parseInt(d.amount);
-    })
-    setCurrentMonthSpending(result);
+  let result = 0;
+  const currentDate = new Date();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate.getFullYear().toString();
+    
+    const currentMonthYear = `${month}-${year}`;
+  for (let i = 0; i < data.length; i++) {
+    if (currentMonthYear == data[i].month){
+      for (let j = 0; j < data[i].value.length; j++){
+        result += data[i].value[j].amount;
+      }
+    }
   }
+  setCurrentMonthSpending(result);
+  // Alert.alert(result.toString());
+  // data.map(d => {
+  //   if (d.month == currentMonthYear){
+      
+  //     d.value.map(j =>{
+  //       result += parseInt(j.amount);
+  //     })
+  //     setCurrentMonthSpending(result);
+  //   }
+  // })
+  
+
+  
+  // for (let i = 0; i < data.length; i++) {
+  //   if (data[i].month == currentMonthYear){
+  //     Alert.alert("Same month");
+  //     data[i].value.map(j =>{
+  //       result == result + parseInt(j.amount);
+  //     })
+  //     Alert.alert(result.toString());
+  //     setCurrentMonthSpending(result);
+  //     break;
+  //   }
+  // }
+
+
+  // if (data[0].month == currentMonthYear){
+  //   data[0].value.map(d =>{
+  //     result += parseInt(d.amount);
+  //   })
+  //   setCurrentMonthSpending(result);
+  // }
+  // return result;
 }
 
 const renderItem=({ item }: { item: Props }) => {
@@ -282,7 +349,6 @@ const renderItem=({ item }: { item: Props }) => {
 };
 
   return (
-
     <View style={{ flex: 3, marginHorizontal: 20 }}>
       <View style={{ flex: 1, }} >
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
