@@ -319,44 +319,83 @@ const calculateSpendingOfCurrentMonth = () =>{
   // return result;
 }
 
-const renderItem=({ item }: { item: Props }) => {
-  // const handleLongPress = (pointer : Props) => {
-  //   (event: HandlerStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
-  //     if (event.nativeEvent.state === State.ACTIVE) {
-  //       // Perform actions on long press
-  //       console.log('Long press detected on item:', pointer.month);
-  //     }
-  //   }
-  // }
-  return (
-    <View>
-      <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
-      {item.value.map(pointer => (
-        <View>
-          {/* <LongPressGestureHandler onHandlerStateChange={handleLongPress(pointer)}> */}
-        <TouchableOpacity style={styles.MoneyTypeContainer}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-          <View style={{ borderRadius: 45, borderWidth: 4, justifyContent: 'center', alignItems: 'center', width: 70, height: 70, backgroundColor: 'white' }}>
-            <Image style={{ height: 45, width: 45 }} source={pointer.src}></Image>
-          </View>
-          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
-            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2, }}>
-              <Text style={styles.textBigger}>{pointer.purpose}</Text>
-              <Text style={styles.textBigger}>{pointer.date}</Text>
+  const deleteSpendingRecord = async (item  : any) =>{
+    // Alert.alert(item.toString())
+    Alert.alert(
+      'Xác nhận',
+      'Bạn có muốn xóa dữ liệu này?',
+      [
+        {
+          text: 'Hủy',
+          style: 'cancel',
+        },
+        {
+          text: 'Xóa',
+          onPress: () =>{
+            try {
+              db.transaction((tx) =>{
+                tx.executeSql(
+                  "DELETE FROM Spending WHERE id = ?",
+                  [item],
+                  (tx, results) => {
+                    if (results.rowsAffected > 0){
+                      Alert.alert('Xóa thành công');
+                      setData([])
+                      getDataFromDatabase();
+                      calculateSpendingOfCurrentMonth();
+                    }
+                  }
+                )
+              })
+            }
+            catch (error) {
+              console.log(error);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  const renderItem=({ item }: { item: Props }) => {
+    // const handleLongPress = (pointer : Props) => {
+    //   (event: HandlerStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
+    //     if (event.nativeEvent.state === State.ACTIVE) {
+    //       // Perform actions on long press
+    //       console.log('Long press detected on item:', pointer.month);
+    //     }
+    //   }
+    // }
+    return (
+      <View>
+        <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
+        {item.value.map(pointer => (
+          <View>
+            {/* <LongPressGestureHandler onHandlerStateChange={handleLongPress(pointer)}> */}
+          <TouchableOpacity style={styles.MoneyTypeContainer} onLongPress={() => deleteSpendingRecord(pointer.id)}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+            <View style={{ borderRadius: 45, borderWidth: 4, justifyContent: 'center', alignItems: 'center', width: 70, height: 70, backgroundColor: 'white' }}>
+              <Image style={{ height: 45, width: 45 }} source={pointer.src}></Image>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
-              <Text style={styles.text}>Số tiền: {pointer.amount}</Text>
+              <View style={{ justifyContent: 'center', alignItems: 'center', flex: 2, }}>
+                <Text style={styles.textBigger}>{pointer.purpose}</Text>
+                <Text style={styles.textBigger}>{pointer.date}</Text>
+              </View>
+              <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
+                <Text style={styles.text}>Số tiền: {pointer.amount}</Text>
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-      {/* </LongPressGestureHandler> */}
-    </View>
-      ))}
+        </TouchableOpacity>
+        {/* </LongPressGestureHandler> */}
+      </View>
+        ))}
 
-    </View>
-  );
-};
+      </View>
+    );
+  };
 
   return (
     <View style={{ flex: 3, marginHorizontal: 20 }}>
