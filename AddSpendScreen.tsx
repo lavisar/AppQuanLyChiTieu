@@ -220,13 +220,14 @@ const ButtonUpdatePay = ({ onPress }: any) => {
 //   events?: (() => void) | null;
 // };
 
-const InputInfo = ({ title, placeholder, onChangeText }: any) => {
+const InputInfo = ({ title, placeholder, value, onChangeText }: any) => {
   return (
     <View>
       <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10 }}>{title}</Text>
       <TextInput
         placeholder={placeholder}
         placeholderTextColor='black'
+        value={value}
         style={styles.textInput}
         onChangeText={onChangeText}
       />
@@ -253,23 +254,22 @@ const IconButton = ({ title, src, onPress }: ItemProps) => {
 
 
 const AddSpendScreen = ({ navigation }: any) => {
-  const [type, setType] = React.useState('');
-  const [text, setText] = React.useState('');
-  const [selected, setSelected] = React.useState(false);
-  const [date, setDate] = React.useState(new Date());
+  const [type, setType] = useState('');
+  const [text, setText] = useState('');
+  const [selected, setSelected] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateIndex, setDateIndex] = useState('');
   const [monthIndex, setMonthIndex] = useState('');
   const [yearIndex, setYearIndex] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState('');
   const [purpose, setPurpose] = useState('');
   const { fullname } = useContext(UserContext);
 
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const Pay = async () => {
     let dateString = dateIndex.toString();
     let monthIndexString = monthIndex.toString();
-    let AmountIndex = amount;
     if (monthIndexString.length < 2){
       monthIndexString = '0'+monthIndexString;
     }
@@ -279,10 +279,14 @@ const AddSpendScreen = ({ navigation }: any) => {
         db.transaction((tx) => {
           tx.executeSql(
             "INSERT INTO Spending (type, amount, date, purpose) VALUES (?,?,?,?)",
-            [type, amount, string, purpose],
+            [type, parseInt(amount), string, purpose],
             (tx, results) => {
               if (results.rowsAffected > 0) {
                 Alert.alert("Thêm chi tiêu thành công!");
+                setAmount('');
+                setType('');
+                setText('');
+                setPurpose('');
               }
               else {
                 Alert.alert("Thêm chi tiêu thất bại! Hãy thử lại");
@@ -353,7 +357,7 @@ const AddSpendScreen = ({ navigation }: any) => {
           <View style={{ justifyContent: 'center', borderTopWidth: 1, borderRightWidth: 1, borderLeftWidth: 4, borderBottomWidth: 4, borderRadius: 15, height: 35, flex: 0.45 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#00977E', marginLeft: 10, }}>{type}</Text>
           </View>
-          <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" onChangeText = {setPurpose}/>
+          <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" value={purpose} onChangeText = {setPurpose}/>
 
           <View style={{ flexDirection: 'row' }}>
             <View style={{ flex: 3 }}>
@@ -379,7 +383,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             </View>
           </View>
 
-          <InputInfo title="Số tiền chi" placeholder="Số tiền" onChangeText = {setAmount}/>
+          <InputInfo title="Số tiền chi" placeholder="Số tiền" value={amount} onChangeText = {setAmount}/>
           <View style={{ flexDirection: 'row', flex: 2,justifyContent:'center' }}>
             
             <ButtonUpdatePay onPress={Pay} />
