@@ -96,7 +96,6 @@ const InputFind = ({ placeholder }: any) => {
 //   )
 // }
 
-
 const TotalSpendScreen = ({ navigation }: any) => {
   const [data, setData] = useState<Props[]>([]);
   const [refreshControl, setRefreshControl] = useState(false);
@@ -293,15 +292,21 @@ const renderItem=({ item }: { item: Props }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
+
+
           refreshControl={
             <RefreshControl refreshing={refreshControl} onRefresh={() => {
+              setData([])
+              getDataFromDatabase();
               setRefreshControl(true);
-              // setData([]);
-              useEffect
+              setTimeout(()=>{
+                setRefreshControl(false);  
+              },500)
               
-              setRefreshControl(false);
             }}/>
           }
+          extraData={data}
+          // refreshing={refreshControl}
         />
       </View>
     </View>
