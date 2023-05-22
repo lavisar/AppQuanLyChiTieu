@@ -29,6 +29,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import SQLite from 'react-native-sqlite-storage';
+import { HandlerStateChangeEvent, LongPressGestureHandler, LongPressGestureHandlerEventPayload, State } from 'react-native-gesture-handler';
 const db = SQLite.openDatabase(
   {
     name: 'QuanLiChiTieu',
@@ -319,11 +320,20 @@ const calculateSpendingOfCurrentMonth = () =>{
 }
 
 const renderItem=({ item }: { item: Props }) => {
+  // const handleLongPress = (pointer : Props) => {
+  //   (event: HandlerStateChangeEvent<LongPressGestureHandlerEventPayload>) => {
+  //     if (event.nativeEvent.state === State.ACTIVE) {
+  //       // Perform actions on long press
+  //       console.log('Long press detected on item:', pointer.month);
+  //     }
+  //   }
+  // }
   return (
     <View>
       <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
       {item.value.map(pointer => (
         <View>
+          {/* <LongPressGestureHandler onHandlerStateChange={handleLongPress(pointer)}> */}
         <TouchableOpacity style={styles.MoneyTypeContainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
           <View style={{ borderRadius: 45, borderWidth: 4, justifyContent: 'center', alignItems: 'center', width: 70, height: 70, backgroundColor: 'white' }}>
@@ -340,7 +350,7 @@ const renderItem=({ item }: { item: Props }) => {
           </View>
         </View>
       </TouchableOpacity>
-
+      {/* </LongPressGestureHandler> */}
     </View>
       ))}
 
