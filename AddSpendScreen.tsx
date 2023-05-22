@@ -275,6 +275,7 @@ const AddSpendScreen = ({ navigation }: any) => {
     }
     let yearIndexString = yearIndex.toString();
     let string = yearIndexString + "-" + monthIndexString + "-" + dateString;
+    if (type && amount && purpose && text){
       try {
         db.transaction((tx) => {
           tx.executeSql(
@@ -297,6 +298,11 @@ const AddSpendScreen = ({ navigation }: any) => {
       } catch (error) {
           console.log(error);
       }
+    }
+    else {
+      Alert.alert("Vui lòng điền đầy đủ thông tin");
+    }
+      
   }
   const Get = () => {
     Alert.alert(date.toString());
