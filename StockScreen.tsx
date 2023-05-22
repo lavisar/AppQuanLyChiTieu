@@ -7,17 +7,19 @@ type StockData = {
   title: string;
   name: string;
   value: number;
+  changePercent?: string; // Thêm dấu ? để cho phép trường 'changePercent' có thể không có
 };
 
 type ItemProps = {
   title: string;
   name: string;
   value: number;
+  onPress: () => void;
 };
 
-const StockButton = ({ title, name, value }: ItemProps) => {
+const StockButton = ({ title, name, value, onPress }: ItemProps) => {
   return (
-    <TouchableOpacity style={styles.btn}>
+    <TouchableOpacity style={styles.btn} onPress={onPress}>
       <View style={styles.titleBtn}>
         <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>{title}</Text>
       </View>
@@ -31,6 +33,7 @@ const StockButton = ({ title, name, value }: ItemProps) => {
 
 const StockScreen = ({ navigation }: any) => {
   const [stockData, setStockData] = useState<StockData[]>([]);
+  const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
 
   useEffect(() => {
     const apiKey = 'IK88DT3BVNVQH2SE';
@@ -50,13 +53,17 @@ const StockScreen = ({ navigation }: any) => {
         const fetchedStockData = await Promise.all(stockDataPromises);
         // console.log("Fetched stock data:", fetchedStockData);
 
-        const formattedStockData: StockData[] = fetchedStockData.map((data, index) => ({
-          id: index,
-          title: data['Global Quote']['01. symbol'],
-          name: data['Global Quote']['02. open'],
-          value: parseFloat(data['Global Quote']['05. price']),
-        }));
-        // console.log("Formatted stock data:", formattedStockData);
+        const formattedStockData: StockData[] = fetchedStockData.map((data, index) => {
+          const changePercent = data['Global Quote']['10. change percent'];
+
+          return {
+            id: index,
+            title: data['Global Quote']['01. symbol'],
+            name: data['Global Quote']['02. open'],
+            value: parseFloat(data['Global Quote']['05. price']),
+            changePercent: changePercent ? changePercent : '', // Gán giá trị 'changePercent' nếu có, nếu không thì gán là chuỗi rỗng
+          };
+        });
 
         setStockData(formattedStockData);
       } catch (error) {
@@ -67,20 +74,38 @@ const StockScreen = ({ navigation }: any) => {
     fetchStockData();
   }, []);
 
+  const handleStockPress = (stock: StockData) => {
+    setSelectedStock(stock);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={styles.panel} source={require('./assets/src/img/stock-bg.jpg')} resizeMode='cover'>
         <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Tên</Text>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Tên: {selectedStock ? selectedStock.title : ''}</Text>
         </View>
 
         <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>GIá trị</Text>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>GIá trị: {selectedStock ? selectedStock.name : ''}</Text>
         </View>
 
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>% TĂNG HAY GIẢM</Text>
+        <View style={{
+          borderWidth: 4,
+          borderColor: 'white',
+          borderRadius: 15,
+          marginBottom: 10,
+          backgroundColor: selectedStock && selectedStock.changePercent ? (selectedStock.changePercent.includes('-') ? 'red' : 'green') : 'white',
+        }}>
+          <Text style={{
+            fontSize: 30,
+            fontWeight: 'bold',
+            color: selectedStock && selectedStock.changePercent ? (selectedStock.changePercent.includes('-') ? 'yellow' : 'white') : 'rgba(214, 149, 0, 1)',
+          }}>
+            {selectedStock ? selectedStock.changePercent : ''}
+          </Text>
         </View>
+
+
       </ImageBackground>
 
       <View style={{ flex: 1, marginBottom: 40 }}>
@@ -90,7 +115,7 @@ const StockScreen = ({ navigation }: any) => {
             <FlatList
               data={stockData}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => <StockButton title={item.title} name={item.name} value={item.value} />}
+              renderItem={({ item }) => <StockButton title={item.title} name={item.name} value={item.value} onPress={() => handleStockPress(item)} />}
             />
           ) : (
             <Text>Không có dữ liệu</Text>

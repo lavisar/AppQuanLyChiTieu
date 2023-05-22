@@ -177,14 +177,6 @@ const UserScreen = ({ navigation }: any) => {
           </TouchableOpacity>
         </View>
 
-        {/* <InputInfo
-          title="Mật khẩu"
-          value={newPassword}
-          onChangeText={setNewPassword}
-          placeholder={"************"}
-          secureTextEntry={hide}
-        /> */}
-
         <ButtonUpdate onPress={HandleUpdate} />
         <ButtonLogout onPress={Logout} />
 
