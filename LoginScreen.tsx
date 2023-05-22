@@ -54,19 +54,10 @@ function LoginScreen({ navigation }: any): JSX.Element {
       createUsersTable();
       createTypeTable();
       createSpendingTable();
-      createReceivingTable();
       insertTypes();
-      createTable();
+      
     });
-    const createTable = () => {
-        db.transaction((tx) => {
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS "
-                + "Users "
-                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
-            )
-        })
-    }
+    
     const createUsersTable = () => {
         db.transaction((tx) =>{
             tx.executeSql(
@@ -92,13 +83,7 @@ function LoginScreen({ navigation }: any): JSX.Element {
             )
         })
     }
-    const createReceivingTable = () => {
-        db.transaction((tx) =>{
-            tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS Receiving (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT, FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
-            )
-        })
-    }
+    
     const typeArray = ["Quà tặng","Xã giao","Mua sắm","Gửi tiền","Nhận tiền","Hóa đơn","Tiết kiệm","Tiền nhà","Hẹn hò","Học tập","Mua Online","CH Tiện Lợi","Du lịch","Sức khỏe","Tiền nước","Tiền điện","Ăn uống","Thú cưng","Trẻ nhỏ","Ăn vặt","Quần áo","Sửa chữa","Đi chơi","Nhiên liệu","Chăm sóc","Khác"]
     const insertTypes = () => {
         db.transaction((tx) =>{
