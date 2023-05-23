@@ -168,7 +168,7 @@ const UserScreen = ({ navigation }: any) => {
             style={styles.textInput}
             value={newPassword}
             onChangeText={setNewPassword}
-            placeholder='Please enter your new password'
+            placeholder='Hãy nhập mật khẩu mới'
             placeholderTextColor='black'
             secureTextEntry={hide}
           />

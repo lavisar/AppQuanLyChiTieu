@@ -8,6 +8,8 @@ type StockData = {
   name: string;
   value: number;
   changePercent?: string; // Thêm dấu ? để cho phép trường 'changePercent' có thể không có
+  highValue?: string;
+  lowValue?: string;
 };
 
 type ItemProps = {
@@ -55,6 +57,8 @@ const StockScreen = ({ navigation }: any) => {
 
         const formattedStockData: StockData[] = fetchedStockData.map((data, index) => {
           const changePercent = data['Global Quote']['10. change percent'];
+          const highValue = data['Global Quote']['03. high'];
+          const lowValue = data['Global Quote']['04. low'];
 
           return {
             id: index,
@@ -62,6 +66,8 @@ const StockScreen = ({ navigation }: any) => {
             name: data['Global Quote']['02. open'],
             value: parseFloat(data['Global Quote']['05. price']),
             changePercent: changePercent ? changePercent : '', // Gán giá trị 'changePercent' nếu có, nếu không thì gán là chuỗi rỗng
+            highValue: highValue ? highValue : '',
+            lowValue: lowValue ? lowValue : '',
           };
         });
 
@@ -81,14 +87,26 @@ const StockScreen = ({ navigation }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={styles.panel} source={require('./assets/src/img/stock-bg.jpg')} resizeMode='cover'>
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
+
+        {/* View for stock title */}
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
           <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Tên: {selectedStock ? selectedStock.title : ''}</Text>
         </View>
 
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>GIá trị: {selectedStock ? selectedStock.name : ''}</Text>
+        {/* View for stock open value */}
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Giá Sàn: {selectedStock ? selectedStock.name : ''}</Text>
         </View>
 
+        {/* View for High & Low value */}
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
+          <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>
+            High: {selectedStock ? selectedStock.highValue : ''} {"\n"}
+            Low: {selectedStock ? selectedStock.lowValue : ''}
+          </Text>
+        </View>
+
+        {/* View for stock change percent */}
         <View style={{
           borderWidth: 4,
           borderColor: 'white',
@@ -101,9 +119,11 @@ const StockScreen = ({ navigation }: any) => {
             fontWeight: 'bold',
             color: selectedStock && selectedStock.changePercent ? (selectedStock.changePercent.includes('-') ? 'yellow' : 'white') : 'rgba(214, 149, 0, 1)',
           }}>
-            {selectedStock ? selectedStock.changePercent : ''}
+            {selectedStock ? selectedStock.changePercent : '%'}
           </Text>
         </View>
+
+
 
 
       </ImageBackground>
