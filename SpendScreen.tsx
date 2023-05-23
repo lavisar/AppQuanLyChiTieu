@@ -432,7 +432,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
             <Image source={require('./assets/src/img/wallet.png')} style={{ margin: 10 }} />
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng {month} này: </Text>
             <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull == true ? currentMonthSpending : "*********"} </Text>
           </View>
         </View>
