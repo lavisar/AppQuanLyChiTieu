@@ -109,12 +109,12 @@ const TotalSpendScreen = ({ navigation }: any) => {
   
   useEffect(() => {
     
-    // const currentDate = new Date();
-    // const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    // const year = currentDate.getFullYear().toString();
+    const currentDate = new Date();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = currentDate.getFullYear().toString();
     
-    // const currentMonthYear = `${month}-${year}`;
-    // getDataFromDatabase();
+    const currentMonthYear = `${month}-${year}`;
+    getDataFromDatabase();
     
     // const sum = data
     // .filter(item => item.month.includes(currentMonthYear))
@@ -282,8 +282,7 @@ const calculateSpendingOfCurrentMonth = () =>{
       }
     }
   }
-  return result;
-  // setCurrentMonthSpending(result);
+  setCurrentMonthSpending(result);
   // Alert.alert(result.toString());
   // data.map(d => {
   //   if (d.month == currentMonthYear){
@@ -317,29 +316,6 @@ const calculateSpendingOfCurrentMonth = () =>{
   //   setCurrentMonthSpending(result);
   // }
   // return result;
-}
-const displayFlatList = () => {
-  getDataFromDatabase();
-  let spendIndex = calculateSpendingOfCurrentMonth();
-  return(
-<FlatList
-    data={data}
-    renderItem={renderItem}
-    keyExtractor={item => item.id}
-    refreshControl={
-      <RefreshControl refreshing={refreshControl} onRefresh={() => {
-        setData([])
-        getDataFromDatabase();
-        setRefreshControl(true);
-        setTimeout(()=>{
-          setRefreshControl(false);  
-        },500)        
-      }}/>
-    }
-    extraData={data}
-          // refreshing={refreshControl}
-  />
-  )
 }
 
 const renderItem=({ item }: { item: Props }) => {
@@ -395,7 +371,26 @@ const renderItem=({ item }: { item: Props }) => {
       </KeyboardAvoidingView>
       <View style={{ flex: 6, marginBottom: 30 }}>
 
-        {displayFlatList()}
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+
+
+          refreshControl={
+            <RefreshControl refreshing={refreshControl} onRefresh={() => {
+              setData([])
+              getDataFromDatabase();
+              setRefreshControl(true);
+              setTimeout(()=>{
+                setRefreshControl(false);  
+              },500)
+              
+            }}/>
+          }
+          extraData={data}
+          // refreshing={refreshControl}
+        />
       </View>
     </View>
 
