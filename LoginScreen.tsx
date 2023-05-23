@@ -79,7 +79,7 @@ function LoginScreen({ navigation }: any): JSX.Element {
     const createSpendingTable = () => {
         db.transaction((tx) =>{
             tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS Spending (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT,FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
+                "CREATE TABLE IF NOT EXISTS Spending (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT, spendUsername TEXT, FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
             )
         })
     }
