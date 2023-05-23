@@ -40,10 +40,10 @@ const db = SQLite.openDatabase(
 
 function LoginScreen({ navigation }: any): JSX.Element {
     const userContext = useContext(UserContext);
-    const { setUserName, setUserPassword, setUserFullname, setUserBirthday, setUserEmail } = userContext;
+    const { setUserName, setUserPassword, setUserFullname, setUserBirthday, setUserEmail, setCurrentSpending } = userContext;
 
 
-
+    // const [currentSpending, setCurrentspending] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [hide,setHide] = useState(true);
@@ -125,7 +125,22 @@ function LoginScreen({ navigation }: any): JSX.Element {
                                 console.log("- đang kiểm tra thông tin đăng nhập...\n");
                                 if (results.rows.item(0).password == password) {
                                     console.log(">> đăng nhập thành công\n");
-                                    navigation.navigate("HomeScreen");
+                                    const currentDate = new Date();
+                                    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                                    const year = currentDate.getFullYear().toString();
+                                    
+                                    const currentMonthYear = `${year}-${month}`;
+                                    tx.executeSql(
+                                        "SELECT sum(amount) as SUM FROM Spending WHERE date LIKE ? ORDER by date DESC",
+                                        [`${currentMonthYear}%`],
+                                        (tx, result2) => {
+                                            const sum = result2.rows.item(0).SUM;
+                                            setCurrentSpending(sum);
+                                            console.log("lấy được spending: " + sum);
+                                            navigation.navigate("HomeScreen");
+                                        }
+                                    )
+                                    // navigation.navigate("HomeScreen");
                                 }
                                 else {
                                     Alert.alert("Mật khẩu không chính xác! Hãy thử lại");

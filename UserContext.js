@@ -10,6 +10,7 @@ export const UserProvider = ({children}) => {
   const [fullname, setUserFullname] = useState(null);
   const [birthday, setUserBirthday] = useState(null);
   const [email, setUserEmail] = useState(null);
+  const [currentSpending, setCurrentSpending] = useState(null);
 
   return (
     <UserContext.Provider
@@ -19,11 +20,13 @@ export const UserProvider = ({children}) => {
         fullname,
         birthday,
         email,
+        currentSpending,
         setUserName,
         setUserPassword,
         setUserFullname,
         setUserBirthday,
         setUserEmail,
+        setCurrentSpending
       }}>
       {children}
     </UserContext.Provider>

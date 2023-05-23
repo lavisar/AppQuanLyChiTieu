@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState , useEffect} from 'react';
+import React, {useState , useEffect, useContext} from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
@@ -28,6 +28,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { UserContext } from './UserContext';
 import SQLite from 'react-native-sqlite-storage';
 const db = SQLite.openDatabase(
   {
@@ -97,6 +98,9 @@ const InputFind = ({ placeholder }: any) => {
 // }
 
 const TotalSpendScreen = ({ navigation }: any) => {
+  const { currentSpending } = useContext(UserContext);
+  const { setCurrentSpending } = useContext(UserContext);
+
   const [data, setData] = useState<Props[]>([]);
   const [refreshControl, setRefreshControl] = useState(false);
   const currentDate = new Date();
@@ -108,12 +112,8 @@ const TotalSpendScreen = ({ navigation }: any) => {
   // var currentMonthSpending = 0;
   
   useEffect(() => {
-    
-    const currentDate = new Date();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const year = currentDate.getFullYear().toString();
-    
-    const currentMonthYear = `${month}-${year}`;
+    // loadSpending();
+    // Alert.alert(currentSpending.toString());
     getDataFromDatabase();
     
     // const sum = data
@@ -121,11 +121,34 @@ const TotalSpendScreen = ({ navigation }: any) => {
     // .reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.value.map(d => d {}), 0));
     // Alert.alert(currentMonthYear);
   }, [])
-
+const loadSpending = () => {
+  try {
+    db.transaction((tx) =>
+      tx.executeSql(
+        "SELECT sum(amount) as SUM FROM Spending WHERE date LIKE ? ORDER by date DESC",
+        [`${currentMonthYear}%`],
+        (tx, result2) => {
+            const sum = result2.rows.item(0).SUM;
+            setCurrentSpending(sum);
+        }
+      )
+    )
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
 const getDataFromDatabase = () => {
   try {
     db.transaction((tx) => {
-      
+      // tx.executeSql(
+      //   "SELECT sum(amount) as SUM FROM Spending WHERE date LIKE ? ORDER by date DESC",
+      //   [`${currentMonthYear}%`],
+      //   (tx, result2) => {
+      //       const sum = result2.rows.item(0).SUM;
+      //       setCurrentSpending(sum);
+      //   }
+      // )
       tx.executeSql(
           "SELECT strftime('%Y-%m', date) AS formattedDate FROM Spending GROUP BY formattedDate ORDER BY formattedDate DESC;",
           [],
@@ -259,7 +282,7 @@ const getDataFromDatabase = () => {
       )
     }
     )
-  calculateSpendingOfCurrentMonth();
+  // calculateSpendingOfCurrentMonth();
   } catch (error) {
       console.log(error);
   }
@@ -282,7 +305,7 @@ const calculateSpendingOfCurrentMonth = () =>{
       }
     }
   }
-  setCurrentMonthSpending(result);
+  setCurrentSpending(result);
   // Alert.alert(result.toString());
   // data.map(d => {
   //   if (d.month == currentMonthYear){
@@ -356,8 +379,8 @@ const renderItem=({ item }: { item: Props }) => {
             <Image source={require('./assets/src/img/wallet.png')} style={{margin:10}} />
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{currentMonthSpending} </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng này: </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{currentSpending} </Text>
           </View>
         </View>
       </View>
@@ -379,12 +402,16 @@ const renderItem=({ item }: { item: Props }) => {
 
           refreshControl={
             <RefreshControl refreshing={refreshControl} onRefresh={() => {
-              setData([])
+              
+              setData([]);
+              
               getDataFromDatabase();
+              calculateSpendingOfCurrentMonth()
+              // loadSpending();
               setRefreshControl(true);
               setTimeout(()=>{
                 setRefreshControl(false);  
-              },500)
+              },2000)
               
             }}/>
           }
