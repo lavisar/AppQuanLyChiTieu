@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
@@ -27,7 +27,17 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import SQLite from 'react-native-sqlite-storage';
+import { UserContext } from './UserContext';
 
+const db = SQLite.openDatabase(
+  {
+    name: 'QuanLiChiTieu',
+    location: 'default',
+  },
+  () => { },
+  error => { console.log(error) }
+);
 
 const DATA = [
   {
@@ -98,6 +108,7 @@ const InputFind = ({ placeholder,color }: any) => {
 }
 
 const TotalSpendScreen = ({ navigation }:any) => {
+  const { userName } = useContext(UserContext);
   return (
 
     <View style={{ flex: 1, marginHorizontal: 20 }}>
