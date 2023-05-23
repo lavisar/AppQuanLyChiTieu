@@ -269,6 +269,9 @@ const AddSpendScreen = ({ navigation }: any) => {
   const [show, setShow] = useState(false);
   const Pay = async () => {
     let dateString = dateIndex.toString();
+    if (dateString.length < 2){
+      dateString = '0'+dateString;
+    }
     let monthIndexString = monthIndex.toString();
     if (monthIndexString.length < 2){
       monthIndexString = '0'+monthIndexString;

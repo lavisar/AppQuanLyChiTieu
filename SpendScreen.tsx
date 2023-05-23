@@ -406,10 +406,12 @@ const renderItem=({ item }: { item: Props }) => {
               setData([]);
               
               getDataFromDatabase();
-              calculateSpendingOfCurrentMonth()
+              // calculateSpendingOfCurrentMonth()
+              
               // loadSpending();
               setRefreshControl(true);
               setTimeout(()=>{
+                loadSpending();
                 setRefreshControl(false);  
               },2000)
               
