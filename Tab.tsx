@@ -59,8 +59,8 @@ const Tabs = () => {
                         <Image source={require('./assets/src/img/icon-chitieu.png')}
                             resizeMode='contain'
                             style={{
-                                width: 40,
-                                height: 40,
+                                width: focused ? 50 : 40,
+                                height: focused ? 50 : 40,
 
                             }}
                         />
@@ -80,8 +80,8 @@ const Tabs = () => {
                         <Image source={require('./assets/src/img/icon-baocao.png')}
                             resizeMode='contain'
                             style={{
-                                width: 40,
-                                height: 40,
+                                width: focused ? 50 : 40,
+                                height: focused ? 50 : 40,
                             }}
                         />
                         <Text style={{ color: focused ? '#D69500' : '#00977E', fontSize: 13, fontWeight: 'bold' }}>Báo cáo</Text>
@@ -94,9 +94,11 @@ const Tabs = () => {
                         <Image source={require('./assets/src/img/icon-add.png')}
                             resizeMode='contain'
                             style={{
-                                width: 70,
-                                height: 70,
-                                top: -30
+                                width: focused ? 75 : 65,
+                                height: focused ? 75 : 65,
+                                top: focused ? -30 : -20,
+                                
+                                
                             }}
                         />
                     </View>
@@ -114,8 +116,8 @@ const Tabs = () => {
                         <Image source={require('./assets/src/img/icon-ck.png')}
                             resizeMode='contain'
                             style={{
-                                width: 40,
-                                height: 40,
+                                width: focused ? 50 : 40,
+                                height: focused ? 50 : 40,
 
                             }}
                         />
@@ -135,8 +137,8 @@ const Tabs = () => {
                         <Image source={require('./assets/src/img/icon-user.png')}
                             resizeMode='contain'
                             style={{
-                                width: 40,
-                                height: 40,
+                                width: focused ? 50 : 40,
+                                height: focused ? 50 : 40,
 
                             }}
                         />
@@ -151,7 +153,9 @@ const styles = StyleSheet.create({
     containerSelect: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: 60, height: 60,
+        width: 60, height: 10,
+        
+        
     },
     shadow: {
         shadowColor: 'black',

@@ -231,6 +231,7 @@ const InputInfo = ({ title, placeholder, value, onChangeText }: any) => {
         style={styles.textInput}
         onChangeText={onChangeText}
         keyboardType={placeholder != "Số tiền" ? 'default' :'phone-pad'}
+        
       />
     </View>
   )
@@ -330,8 +331,8 @@ const AddSpendScreen = ({ navigation }: any) => {
     
     <KeyboardAvoidingView style={{ flex: 1 }} enabled={true} behavior="padding">
 
-      <View style={{ backgroundColor: '#00977E', height: 100, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}> THÊM GIAO DỊCH</Text>
+      <View style={{ backgroundColor: '#00977E', height: 100, flex: 1.5, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white' }}>THÊM GIAO DỊCH</Text>
       </View>
       {/* <ScrollView> */}
       <View style={{ flex: 11, marginHorizontal: 20 }}>
@@ -361,7 +362,7 @@ const AddSpendScreen = ({ navigation }: any) => {
         
         <View style={{ flex: 4 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#00977E', marginLeft: 10, marginTop: 10 }}>Loại chi tiêu</Text>
-          <View style={{ justifyContent: 'center', borderTopWidth: 1, borderRightWidth: 1, borderLeftWidth: 4, borderBottomWidth: 4, borderRadius: 15, height: 35, flex: 0.45 }}>
+          <View style={{ justifyContent: 'center', borderTopWidth: 1,  borderRightWidth: 1, borderLeftWidth: 4, borderBottomWidth: 4, borderRadius: 15, height: 50, flex: 0.48 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#00977E', marginLeft: 10, }}>{type}</Text>
           </View>
           <InputInfo title="Tên chi tiêu" placeholder="Tên chi tiêu" value={purpose} onChangeText = {setPurpose}/>
@@ -370,12 +371,12 @@ const AddSpendScreen = ({ navigation }: any) => {
             <View style={{ flex: 3 }}>
               <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10, marginBottom: 2 }}>Ngày tháng năm</Text>
               <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
-                <Text style={{ fontSize: 14, color: 'black' }}>{text}</Text>
+                <Text style={{ fontSize: 18, color: 'black',fontWeight:'bold' }}>{text}</Text>
               </View>
             </View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <ButtonDateTime onPress={() => showDateTime()}></ButtonDateTime>
-              {show && (
+              {show == true ? (
                 <View>
                   <DateTimePicker
                     testID='dateTimePicker'
@@ -383,8 +384,12 @@ const AddSpendScreen = ({ navigation }: any) => {
                     mode={'date'}
                     display='spinner'
                     onChange={onChangeDate}
+                    textColor='black'
+                    placeholderText='black'
+                    style={styles.dateTimePicker}
+                    // maximumDate={}
                   />
-                </View>)
+                </View>) : null
 
               }
             </View>
@@ -414,6 +419,14 @@ export default AddSpendScreen
 
 
 const styles = StyleSheet.create({
+  dateTimePicker: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    borderColor: '#C5C5C5',
+    borderWidth: 1,
+    marginVertical: 10,
+    height: 43,
+   },
   btn: {
     marginTop: 30,
     borderTopWidth: 1,
@@ -457,6 +470,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderRadius: 15,
     paddingLeft: 15,
+    fontWeight:'bold',
+    fontSize: 18
   },
   textSelected: {
     fontWeight: 'bold', fontSize: 18, color: '#D69500',

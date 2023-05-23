@@ -105,7 +105,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
   const year = currentDate.getFullYear().toString();
   const [pull, setPull] = useState(false);
   const currentMonthYear = `${month}-${year}`;
-  const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
+  const [currentMonthSpending, setCurrentMonthSpending] = useState("0");
   // var currentMonthSpending = 0;
 
   const isFocused = useIsFocused();
@@ -113,6 +113,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
   useEffect(() => {
     setData([])
     getDataFromDatabase();
+    
 
   }, [isFocused]);
 
@@ -276,41 +277,9 @@ const TotalSpendScreen = ({ navigation }: any) => {
         }
       }
     }
-    setCurrentMonthSpending(result);
+    setCurrentMonthSpending(result.toString());
   }
-  // Alert.alert(result.toString());
-  // data.map(d => {
-  //   if (d.month == currentMonthYear){
-      
-  //     d.value.map(j =>{
-  //       result += parseInt(j.amount);
-  //     })
-  //     setCurrentMonthSpending(result);
-  //   }
-  // })
-  
 
-  
-  // for (let i = 0; i < data.length; i++) {
-  //   if (data[i].month == currentMonthYear){
-  //     Alert.alert("Same month");
-  //     data[i].value.map(j =>{
-  //       result == result + parseInt(j.amount);
-  //     })
-  //     Alert.alert(result.toString());
-  //     setCurrentMonthSpending(result);
-  //     break;
-  //   }
-  // }
-
-
-  // if (data[0].month == currentMonthYear){
-  //   data[0].value.map(d =>{
-  //     result += parseInt(d.amount);
-  //   })
-  //   setCurrentMonthSpending(result);
-  // }
-  // return result;
 
 
   const deleteSpendingRecord = async (item  : any) =>{
@@ -336,7 +305,8 @@ const TotalSpendScreen = ({ navigation }: any) => {
                       Alert.alert('Xóa thành công');
                       setData([])
                       getDataFromDatabase();
-                      calculateSpendingOfCurrentMonth();
+                      // calculateSpendingOfCurrentMonth();
+                      
                     }
                   }
                 )
@@ -363,7 +333,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
     // }
     return (
       <View>
-        <Text style={[styles.textBigger, { marginTop: 10 }]}>{item.month}</Text>
+        <Text style={[styles.textBigger, { marginTop: 10 }]}>Tháng {item.month}</Text>
         {item.value.map(pointer => (
           <View>
             {/* <LongPressGestureHandler onHandlerStateChange={handleLongPress(pointer)}> */}
@@ -390,65 +360,41 @@ const TotalSpendScreen = ({ navigation }: any) => {
       </View>
     );
   };
-  const ListHeader = () => {
-    return (
-      <View style={{ flex: 3, marginHorizontal: 20 }}>
-        <View style={{ flex: 1, }} >
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
-            <View style={{ flex: 3, width: 70, height: 70, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, marginVertical: 20, }}>
-              <Image source={require('./assets/src/img/wallet.png')} style={{ margin: 10 }} />
-            </View>
-            <View style={{ flex: 9, alignItems: 'center' }}>
-              <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
-              <Text style={[styles.textBigger, { marginLeft: 10 }]}>{currentMonthSpending} </Text>
-            </View>
-          </View>
-        </View>
 
-        <View>
-          <ScrollView>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40 }}>
-              <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
-            </View>
-          </ScrollView>
-        </View>
-      </View>
-    )
-  }
   const Hide = () =>{
     setPull(true)
   }
   return (
     <View style={{ flex: 3, marginHorizontal: 20 }}>
       <View style={{ flex: 1, }} >
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', }}>
           <View style={{ flex: 3, width: 70, height: 70, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, marginVertical: 20, }}>
             <Image source={require('./assets/src/img/wallet.png')} style={{ margin: 10 }} />
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng 4 này: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull == true ? currentMonthSpending : "*********"} </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Tiền chi tiêu tháng {currentMonthYear}: </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull==true ? currentMonthSpending : "*********"} </Text>
           </View>
         </View>
       </View>
 
-      <View>
-
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40 }}>
-            <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
-            
-          </View>
-
-      </View>
-        <View style={{ flex: 6, marginBottom: 30 }}>
-        {pull == false ? 
+      <View style={{ flex: 1,marginBottom:10}}>
+      {pull == false ? 
         <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-          <Text style={[styles.textBigger,{fontSize:25,color:'#00977E'}]}>Vuốt xuống để mở khóa</Text>
-          <View style={{  height: 60, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={[styles.textBigger,{fontSize:20,color:'#00977E'}]}>Vuốt xuống để mở khóa hoặc để refresh</Text>
+          <View style={{  height: 30, justifyContent: 'center', alignItems: 'center' }}>
           <Image style={{ width: 40, height: 40 }} source={require('./assets/src/img/icons8-here-48.png')}></Image>
         </View>
         </View>
-        : null}
+        :
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 2, backgroundColor: '#00977E', height: 40,borderRadius:15 }}>
+            <Text style={[styles.textBigger,{fontSize:25}]}>DANH SÁCH CHI TIÊU</Text>
+            
+          </View>
+        }
+      </View>
+        <View style={{ flex: 6, marginBottom: 30 }}>
+
           <FlatList
             data={pull == true ? data : null}
             renderItem={renderItem}
