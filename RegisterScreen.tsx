@@ -148,6 +148,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                                     if (results.rowsAffected > 0) {
                                         Alert.alert("Đăng ký tài khoản thành công!");
                                         Register;
+                                        navigation.goBack()
                                     }
                                     else {
                                         Alert.alert("Đăng ký tài khoản không thành công! Hãy thử lại");
