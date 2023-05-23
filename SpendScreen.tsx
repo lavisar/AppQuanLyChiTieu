@@ -18,7 +18,7 @@ import {
   FlatList,
   RefreshControl
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer,useIsFocused } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -108,16 +108,14 @@ const TotalSpendScreen = ({ navigation }: any) => {
   const [currentMonthSpending, setCurrentMonthSpending] = useState(0);
   // var currentMonthSpending = 0;
 
-  useLayoutEffect(() => {
-
+  const isFocused = useIsFocused();
+ 
+  useEffect(() => {
+    setData([])
     getDataFromDatabase();
 
-  }, [])
-  useLayoutEffect(() => {
+  }, [isFocused]);
 
-    calculateSpendingOfCurrentMonth()
-
-  }, [])
   const getDataFromDatabase = () => {
     try {
       db.transaction((tx) => {

@@ -230,6 +230,7 @@ const InputInfo = ({ title, placeholder, value, onChangeText }: any) => {
         value={value}
         style={styles.textInput}
         onChangeText={onChangeText}
+        keyboardType={placeholder != "Số tiền" ? 'default' :'phone-pad'}
       />
     </View>
   )
