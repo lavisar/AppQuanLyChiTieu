@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
@@ -28,6 +28,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { UserContext } from './UserContext';
 import SQLite from 'react-native-sqlite-storage';
 import { HandlerStateChangeEvent, LongPressGestureHandler, LongPressGestureHandlerEventPayload, State } from 'react-native-gesture-handler';
 const db = SQLite.openDatabase(
@@ -98,6 +99,9 @@ const InputFind = ({ placeholder }: any) => {
 // }
 
 const TotalSpendScreen = ({ navigation }: any) => {
+
+  const { userName } = useContext(UserContext);
+
   const [data, setData] = useState<Props[]>([]);
   const [refreshControl, setRefreshControl] = useState(false);
   const currentDate = new Date();
@@ -123,8 +127,8 @@ const TotalSpendScreen = ({ navigation }: any) => {
       db.transaction((tx) => {
 
         tx.executeSql(
-          "SELECT strftime('%Y-%m', date) AS formattedDate FROM Spending GROUP BY formattedDate ORDER BY formattedDate DESC;",
-          [],
+          "SELECT strftime('%Y-%m', date) AS formattedDate FROM Spending WHERE spendUsername = ? GROUP BY formattedDate ORDER BY formattedDate DESC;",
+          [userName],
           (tx, result1) => {
             for (let i = 0; i < result1.rows.length; i++) {
               let path: any;
@@ -141,8 +145,8 @@ const TotalSpendScreen = ({ navigation }: any) => {
               // const currentMonthYear = `${currentMonth}-${currentYear}`;
 
               tx.executeSql(
-                "SELECT * FROM Spending WHERE date LIKE ? ORDER by date DESC",
-                [`${result1.rows.item(i).formattedDate}%`],
+                "SELECT * FROM Spending WHERE date LIKE ? AND spendUsername = ? ORDER by date DESC",
+                [`${result1.rows.item(i).formattedDate}%`, userName],
                 (tx, result2) => {
                   for (let j = 0; j < result2.rows.length; j++) {
 
