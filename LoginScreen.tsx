@@ -254,7 +254,9 @@ const styles = StyleSheet.create({
         borderColor: '#000000',
         borderBottomWidth: 1,
         marginBottom: 30,
-        flex:4
+        flex:4,
+        fontWeight:'bold',
+        fontSize:15
 
     },
     btnLogin: {
