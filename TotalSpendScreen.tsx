@@ -43,29 +43,7 @@ type Props = {
   spendingCount: any;
   amountSpent: any;
 };
-// const DATA = [
-//   {
-//     date: "4/2023",
-//     moneyMustSave: 10000,
-//     moneyPay: 8000,
-//     moneySaved: 2000,
-//   },
-//   {
-//     date: "3/2023",
-//     moneyMustSave: 4000,
-//     moneyPay: 9000,
-//     moneySaved: -5000
-//   },
-//   {
-//     date: "2/2023",
-//     moneyMustSave: 6000,
-//     moneyPay: 6000,
-//     moneySaved: 0
-//   },
-// ]
 
-
-// type ItemProps = { date: any, moneyMustSave: any, moneyPay: any, moneySaved: any }
 const MoneySaveList = ({ month, spendingCount, amountSpent }: Props) => {
   return (
     <View style={styles.container}>
@@ -167,26 +145,7 @@ const TotalSpendScreen = ({ navigation }:any) => {
       console.log(error);
     }
   }
-  // SELECT count(id) as count FROM Spending WHERE date like '2023-05%' and spendUsername = 'trung1'
 
-
-
-  // const loadSpendingRecords = () => {
-  //   try {
-  //     db.transaction((tx) =>
-  //       tx.executeSql(
-  //         "SELECT * FROM Spending WHERE date LIKE? AND spendUsername =? ORDER by date DESC",
-  //         [`${currentMonthYear}%`, userName],
-  //         (tx, result) => {
-  //           setData(result.rows);
-  //         }
-  //       )
-  //     )
-  //   }
-  //   catch (error) {
-  //     console.log(error);
-  //   }
-  // }
   return (
 
     <View style={{ flex: 1, marginHorizontal: 20 }}>
