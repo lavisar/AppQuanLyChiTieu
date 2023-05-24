@@ -75,13 +75,17 @@ const InputAdd = ({ placeholder }: any) => {
     </View>
   )
 }
-const InputFind = ({ placeholder, color }: any) => {
+const InputFind = ({ placeholder, color,onPress }: any) => {
+    const event = () => {
+    onPress();
+  }
   return (
     <View style={{ flexDirection: 'row' }}>
       <TextInput
         placeholder={placeholder}
         placeholderTextColor='black'
         style={styles.textInput}
+        keyboardType='number-pad'
       />
       <TouchableOpacity style={[styles.btn, { borderColor: '#00977E' }]}>
         <Text style={[styles.titleBtn, { color: '#00977E' }]}>TÌM</Text>
@@ -89,7 +93,17 @@ const InputFind = ({ placeholder, color }: any) => {
     </View>
   )
 }
+const ButtonDateTime = ({ onPress }: any) => {
 
+  const event = () => {
+    onPress();
+  }
+  return (
+    <TouchableOpacity style={[styles.btn, { borderColor: '#D69500' }]} onPress={event}>
+      <Text style={[styles.titleBtn, { color: '#D69500' }]}>CHỌN</Text>
+    </TouchableOpacity>
+  );
+}
 const TotalSpendScreen = ({ navigation }: any) => {
   const { userName } = useContext(UserContext);
   const [currentSpending, setCurrentSpending] = useState(0);
@@ -101,11 +115,33 @@ const TotalSpendScreen = ({ navigation }: any) => {
   const [pull, setPull] = useState(false);
   const currentMonthYear = `${year}-${month}`;
   const currentMonthYearTitle = `${month}-${year}`;
+  const [dateIndex, setDateIndex] = useState('');
+  const [monthIndex, setMonthIndex] = useState('');
+  const [yearIndex, setYearIndex] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('');
   useLayoutEffect(() => {
     getDataFromDatabase();
     calculateSpending();
 
   }, [])
+  const onChangeDate = (event: Event, value?: Date) => {
+    const curDate = value || date;
+    setDate(curDate);
+    let tempDate = new Date(curDate);
+    let fDate = tempDate.getDate() + "/" +(tempDate.getMonth()+1) + "/" + tempDate.getFullYear();
+    setDateIndex(tempDate.getDate().toString());
+    setMonthIndex((tempDate.getMonth()+1).toString());
+    setYearIndex(tempDate.getFullYear().toString());
+    setShow(!show);
+    setText(fDate);
+    setShowDatePicker(false);
+  }
+  const showDateTime = () => {
+    setShow(true);
+  }
   const calculateSpending = () => {
     try {
       db.transaction((tx) =>
@@ -172,7 +208,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
             :
             <View style={{flex:1,borderTopWidth:1}}>      
             <Text style={styles.textBigger}>Tháng cần tìm:</Text>
-            <InputFind placeholder="Tháng/Năm" />
+            <InputFind placeholder="Tháng" />
             <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40, marginTop: 20, }}>
               <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
             </View>
@@ -195,7 +231,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
 
 
 
-      <View style={{ flex: 10, marginBottom: 35, paddingTop: 5, marginTop: 40 }}>
+      <View style={{ flex: 10, marginBottom: 30, paddingTop: 5, marginTop: 45 }}>
 
         <FlatList
           data={pull == true ? data : null}
@@ -207,6 +243,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
             <RefreshControl refreshing={refreshControl} onRefresh={() => {
               setData([])
               getDataFromDatabase();
+              calculateSpending();
               setRefreshControl(true);
               setPull(true)
               setTimeout(() => {
