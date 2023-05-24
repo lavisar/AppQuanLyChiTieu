@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState, useContext, useEffect, useLayoutEffect} from 'react';
+import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
@@ -15,7 +15,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  FlatList
+  FlatList,
+  RefreshControl
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -74,7 +75,7 @@ const InputAdd = ({ placeholder }: any) => {
     </View>
   )
 }
-const InputFind = ({ placeholder,color }: any) => {
+const InputFind = ({ placeholder, color }: any) => {
   return (
     <View style={{ flexDirection: 'row' }}>
       <TextInput
@@ -89,16 +90,17 @@ const InputFind = ({ placeholder,color }: any) => {
   )
 }
 
-const TotalSpendScreen = ({ navigation }:any) => {
+const TotalSpendScreen = ({ navigation }: any) => {
   const { userName } = useContext(UserContext);
   const [currentSpending, setCurrentSpending] = useState(0);
   const [data, setData] = useState<Props[]>([]);
-
+  const [refreshControl, setRefreshControl] = useState(false);
   const currentDate = new Date();
   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
   const year = currentDate.getFullYear().toString();
   const [pull, setPull] = useState(false);
   const currentMonthYear = `${year}-${month}`;
+  const currentMonthYearTitle = `${month}-${year}`;
   useLayoutEffect(() => {
     getDataFromDatabase();
     calculateSpending();
@@ -130,7 +132,7 @@ const TotalSpendScreen = ({ navigation }:any) => {
           [userName],
           (tx, result) => {
             for (let i = 0; i < result.rows.length; i++) {
-              const newData : Props = {
+              const newData: Props = {
                 month: result.rows.item(i).Month,
                 spendingCount: result.rows.item(i).RowsCount,
                 amountSpent: result.rows.item(i).TotalAmount,
@@ -148,41 +150,72 @@ const TotalSpendScreen = ({ navigation }:any) => {
 
   return (
 
-    <View style={{ flex: 1, marginHorizontal: 20 }}>
-      <View style={{ flex: 2, }} >
+    <View style={{ flex: 4, marginHorizontal: 20 }}>
+      <View style={{ flex: 4, }} >
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
           <View style={{ flex: 3, width: 70, height: 70, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, marginVertical: 20 }}>
             <Image source={require('./assets/src/img/wallet.png')} />
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng này: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{currentSpending} </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng {currentMonthYearTitle}: </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull == true ? currentSpending : "*******"} </Text>
           </View>
+        </View>
+        <View style={{ flex: 1 }}>
+          {pull == false ?
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center',borderTopWidth:1 }}>
+              <Text style={[styles.textBigger, { fontSize: 25, color: '#00977E' }]}>Vuốt xuống để mở khóa</Text>
+              <View style={{ height: 60, justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ width: 40, height: 40 }} source={require('./assets/src/img/icons8-here-48.png')}></Image>
+              </View>
+            </View>
+            :
+            <View style={{flex:1,borderTopWidth:1}}>      
+            <Text style={styles.textBigger}>Tháng cần tìm:</Text>
+            <InputFind placeholder="Tháng/Năm" />
+            <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40, marginTop: 20, }}>
+              <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
+            </View>
+            </View>}
+
         </View>
       </View>
 
-      
 
-      <KeyboardAvoidingView style={{ flex: 1, }} enabled={true} behavior='padding'>
-        <View style={{ flex: 6, }}>
-          <View style={{ flex: 4, marginTop: 10, }}>
-            <Text style={styles.textBigger}>Số tiền cần được tiết kiệm tháng hiện tại: (Tháng 4)</Text>
 
-            <InputAdd placeholder="Số tiền" />
 
-            <Text style={styles.textBigger}>Tháng cần tìm:</Text>
 
+
+      {/* <Text style={styles.textBigger}>Tháng cần tìm:</Text>
             <InputFind placeholder="Tháng/Năm" />
+            <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40 }}>
+              <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
+            </View> */}
 
-          </View>
-        </View>
-      </KeyboardAvoidingView>
 
-      <View style={{ flex: 6, marginBottom: 40, marginTop: 160, borderTopWidth: 1, paddingTop: 10 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', alignSelf: 'center' }}> DANH SÁCH</Text>
+
+
+      <View style={{ flex: 10, marginBottom: 35, paddingTop: 5, marginTop: 40 }}>
+
         <FlatList
-          data={data}
-          renderItem={({ item }: { item: Props }) => <MoneySaveList month={item.month} spendingCount={item.spendingCount} amountSpent={item.amountSpent}/>}
+          data={pull == true ? data : null}
+          renderItem={({ item }: { item: Props }) => <MoneySaveList month={item.month} spendingCount={item.spendingCount} amountSpent={item.amountSpent} />}
+          keyExtractor={item => item.month}
+
+
+          refreshControl={
+            <RefreshControl refreshing={refreshControl} onRefresh={() => {
+              setData([])
+              getDataFromDatabase();
+              setRefreshControl(true);
+              setPull(true)
+              setTimeout(() => {
+                setRefreshControl(false);
+              }, 500)
+
+            }} />
+          }
+          extraData={pull == true ? data : null}
         />
       </View>
     </View>
@@ -207,7 +240,7 @@ const styles = StyleSheet.create({
 
   },
   textBigger: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 'bold',
     color: 'black'
   },
@@ -250,7 +283,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     marginTop: 10,
     width: 250,
-    marginBottom: 10
+
   },
   btn: {
     marginLeft: 10,
