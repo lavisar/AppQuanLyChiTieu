@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect, useLayoutEffect} from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
@@ -109,6 +109,36 @@ const InputFind = ({ placeholder,color }: any) => {
 
 const TotalSpendScreen = ({ navigation }:any) => {
   const { userName } = useContext(UserContext);
+  const [currentSpending, setCurrentSpending] = useState(0);
+
+  const currentDate = new Date();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = currentDate.getFullYear().toString();
+  const [pull, setPull] = useState(false);
+  const currentMonthYear = `${year}-${month}`;
+  useLayoutEffect(() => {
+
+    loadSpending();
+
+  }, [])
+  const loadSpending = () => {
+    try {
+      db.transaction((tx) =>
+        tx.executeSql(
+          "SELECT sum(amount) as SUM FROM Spending WHERE date LIKE ? AND spendUsername = ? ORDER by date DESC",
+          [`${currentMonthYear}%`, userName],
+          (tx, result2) => {
+            const sum = result2.rows.item(0).SUM;
+            setCurrentSpending(sum);
+            console.log(sum);
+          }
+        )
+      )
+    }
+    catch (error) {
+      console.log(error);
+    }
+}
   return (
 
     <View style={{ flex: 1, marginHorizontal: 20 }}>
@@ -119,7 +149,7 @@ const TotalSpendScreen = ({ navigation }:any) => {
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
             <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng này: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>8000 </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{currentSpending} </Text>
           </View>
         </View>
       </View>
