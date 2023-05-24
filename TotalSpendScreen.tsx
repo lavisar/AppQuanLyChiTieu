@@ -38,43 +38,47 @@ const db = SQLite.openDatabase(
   () => { },
   error => { console.log(error) }
 );
+type Props = {
+  month: any;
+  spendingCount: any;
+  amountSpent: any;
+};
+// const DATA = [
+//   {
+//     date: "4/2023",
+//     moneyMustSave: 10000,
+//     moneyPay: 8000,
+//     moneySaved: 2000,
+//   },
+//   {
+//     date: "3/2023",
+//     moneyMustSave: 4000,
+//     moneyPay: 9000,
+//     moneySaved: -5000
+//   },
+//   {
+//     date: "2/2023",
+//     moneyMustSave: 6000,
+//     moneyPay: 6000,
+//     moneySaved: 0
+//   },
+// ]
 
-const DATA = [
-  {
-    date: "4/2023",
-    moneyMustSave: 10000,
-    moneyPay: 8000,
-    moneySaved: 2000,
-  },
-  {
-    date: "3/2023",
-    moneyMustSave: 4000,
-    moneyPay: 9000,
-    moneySaved: -5000
-  },
-  {
-    date: "2/2023",
-    moneyMustSave: 6000,
-    moneyPay: 6000,
-    moneySaved: 0
-  },
-]
 
-
-type ItemProps = { date: any, moneyMustSave: any, moneyPay: any, moneySaved: any }
-const MoneySaveList = ({ date, moneyMustSave, moneyPay, moneySaved }: ItemProps) => {
+// type ItemProps = { date: any, moneyMustSave: any, moneyPay: any, moneySaved: any }
+const MoneySaveList = ({ month, spendingCount, amountSpent }: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>THÁNG: {date}</Text>
+      <Text style={styles.text}>THÁNG: {month}</Text>
       <View style={styles.border}>
-        <Text style={styles.text}>Số tiền phải tiết kiệm: {moneyMustSave}</Text>
+        <Text style={styles.text}>Số lần chi tiêu trong tháng: {spendingCount} lần</Text>
       </View>
       <View style={styles.border}>
-        <Text style={[styles.textPayed]}>Số tiền đã chi trong tháng: {moneyPay}</Text>
+        <Text style={[styles.textPayed]}>Số tiền đã chi trong tháng: {amountSpent}đ</Text>
       </View>
-      <View style={styles.border}>
+      {/* <View style={styles.border}>
         <Text style={[styles.textSaved, { color: moneySaved > 0 ? "#00D62F" : "#C51515" }]}>Số tiền đã tiết kiệm được: {moneySaved}</Text>
-      </View>
+      </View> */}
     </View>
   )
 }
@@ -110,6 +114,7 @@ const InputFind = ({ placeholder,color }: any) => {
 const TotalSpendScreen = ({ navigation }:any) => {
   const { userName } = useContext(UserContext);
   const [currentSpending, setCurrentSpending] = useState(0);
+  const [data, setData] = useState<Props[]>([]);
 
   const currentDate = new Date();
   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
@@ -117,18 +122,18 @@ const TotalSpendScreen = ({ navigation }:any) => {
   const [pull, setPull] = useState(false);
   const currentMonthYear = `${year}-${month}`;
   useLayoutEffect(() => {
-
-    loadSpending();
+    getDataFromDatabase();
+    calculateSpending();
 
   }, [])
-  const loadSpending = () => {
+  const calculateSpending = () => {
     try {
       db.transaction((tx) =>
         tx.executeSql(
           "SELECT sum(amount) as SUM FROM Spending WHERE date LIKE ? AND spendUsername = ? ORDER by date DESC",
           [`${currentMonthYear}%`, userName],
-          (tx, result2) => {
-            const sum = result2.rows.item(0).SUM;
+          (tx, result) => {
+            const sum = result.rows.item(0).SUM;
             setCurrentSpending(sum);
             console.log(sum);
           }
@@ -138,7 +143,50 @@ const TotalSpendScreen = ({ navigation }:any) => {
     catch (error) {
       console.log(error);
     }
-}
+  }
+  const getDataFromDatabase = () => {
+    try {
+      db.transaction((tx) =>
+        tx.executeSql(
+          "SELECT strftime('%m-%Y', date) AS Month, COUNT(*) AS RowsCount, SUM(amount) AS TotalAmount FROM Spending WHERE spendUsername = ? GROUP BY Month ORDER by Month DESC;",
+          [userName],
+          (tx, result) => {
+            for (let i = 0; i < result.rows.length; i++) {
+              const newData : Props = {
+                month: result.rows.item(i).Month,
+                spendingCount: result.rows.item(i).RowsCount,
+                amountSpent: result.rows.item(i).TotalAmount,
+              }
+              setData(prevData => [...prevData, newData]);
+            }
+          }
+        )
+      )
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+  // SELECT count(id) as count FROM Spending WHERE date like '2023-05%' and spendUsername = 'trung1'
+
+
+
+  // const loadSpendingRecords = () => {
+  //   try {
+  //     db.transaction((tx) =>
+  //       tx.executeSql(
+  //         "SELECT * FROM Spending WHERE date LIKE? AND spendUsername =? ORDER by date DESC",
+  //         [`${currentMonthYear}%`, userName],
+  //         (tx, result) => {
+  //           setData(result.rows);
+  //         }
+  //       )
+  //     )
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   return (
 
     <View style={{ flex: 1, marginHorizontal: 20 }}>
@@ -174,8 +222,8 @@ const TotalSpendScreen = ({ navigation }:any) => {
       <View style={{ flex: 6, marginBottom: 40, marginTop: 160, borderTopWidth: 1, paddingTop: 10 }}>
         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', alignSelf: 'center' }}> DANH SÁCH</Text>
         <FlatList
-          data={DATA}
-          renderItem={({ item }) => <MoneySaveList moneyMustSave={item.moneyMustSave} moneyPay={item.moneyPay} moneySaved={item.moneySaved} date={item.date} />}
+          data={data}
+          renderItem={({ item }: { item: Props }) => <MoneySaveList month={item.month} spendingCount={item.spendingCount} amountSpent={item.amountSpent}/>}
         />
       </View>
     </View>
