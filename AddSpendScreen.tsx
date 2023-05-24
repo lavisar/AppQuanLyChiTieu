@@ -265,6 +265,7 @@ const AddSpendScreen = ({ navigation }: any) => {
   const [amount, setAmount] = useState('');
   const [purpose, setPurpose] = useState('');
   const { fullname } = useContext(UserContext);
+  const { userName } = useContext(UserContext);
 
   const [show, setShow] = useState(false);
   const Pay = async () => {
@@ -279,8 +280,8 @@ const AddSpendScreen = ({ navigation }: any) => {
       try {
         db.transaction((tx) => {
           tx.executeSql(
-            "INSERT INTO Spending (type, amount, date, purpose) VALUES (?,?,?,?)",
-            [type, parseInt(amount), string, purpose],
+            "INSERT INTO Spending (type, amount, date, purpose, spendUsername) VALUES (?,?,?,?,?)",
+            [type, parseInt(amount), string, purpose, userName],
             (tx, results) => {
               if (results.rowsAffected > 0) {
                 Alert.alert("Thêm chi tiêu thành công!");
