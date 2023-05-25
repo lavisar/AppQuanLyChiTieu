@@ -171,10 +171,10 @@ function RegisterScreen({ navigation }: any): JSX.Element {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: "red" }}>
-            <ImageBackground style={styles.panel} resizeMode='cover' source={require('./assets/src/img/panel-login.png')}>
+        <View style={{ flex: 1}}>
+            <ImageBackground style={styles.panel}  source={require('./assets/src/img/panel-login.png')}>
 
-                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} behavior='height'>
+                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} >
 
                     <Text style={styles.header}>TẠO TÀI KHOẢN MỚI</Text>
 
@@ -186,7 +186,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                             <Image source={require('./assets/src/img/icon-back.png')}></Image>
                         </TouchableOpacity>
                         <ScrollView style={{ flex: 1 }}>
-                            <Text style={styles.titleInput}>Tên đăng nhập:</Text>
+                            <Text style={[styles.titleInput,{fontWeight:'bold'}]}>Tên đăng nhập:</Text>
                             <TextInput
                                 placeholder="Tên đăng nhập"
                                 style={styles.textInput}
@@ -202,7 +202,7 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                             />
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ flex: 3 }}>
-                                    <Text style={styles.titleInput}>Ngày tháng năm:</Text>
+                                    <Text style={styles.titleInput}>Ngày tháng năm sinh:</Text>
                                     <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
                                         <Text style={{ color: 'black' }}>{birthday}</Text>
                                     </View>
@@ -322,11 +322,13 @@ const styles = StyleSheet.create({
         color: 'rgba(214, 149, 0, 1)',
     },
     textInput: {
-        height: 35,
+        height: 40,
         borderColor: '#000000',
         borderBottomWidth: 1,
-        marginBottom: 25,
-        flex:5
+        marginBottom: 20,
+        flex:5,
+        fontWeight:'bold',
+        fontSize:16
 
     },
     btnRegister: {
