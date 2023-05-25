@@ -30,7 +30,6 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { UserContext } from './UserContext';
 import SQLite from 'react-native-sqlite-storage';
-import { HandlerStateChangeEvent, LongPressGestureHandler, LongPressGestureHandlerEventPayload, State } from 'react-native-gesture-handler';
 const db = SQLite.openDatabase(
   {
     name: 'QuanLiChiTieu',
