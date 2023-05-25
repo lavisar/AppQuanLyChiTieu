@@ -18,7 +18,7 @@ import {
   FlatList,
   RefreshControl
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -304,6 +304,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
               setData([])
               getDataFromDatabase();
               calculateSpending();
+              setSearchInput('');
               setRefreshControl(true);
               setPull(true)
               setTimeout(() => {
