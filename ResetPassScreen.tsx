@@ -1,54 +1,72 @@
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-import 'react-native-gesture-handler';
-import React from 'react';
-import type { PropsWithChildren } from 'react';
+import React, { useState } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
     View,
-    KeyboardAvoidingView,
-    Image,
-    ImageBackground,
+    Text,
     TextInput,
     TouchableOpacity,
     Alert,
-    Button,
+    KeyboardAvoidingView,
+    Image,
+    ImageBackground,
+    StyleSheet,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import SQLite from 'react-native-sqlite-storage';
 
-
-function ResetPassScreen({ navigation }: any): JSX.Element {
-
-    const [text, onChangeText] = React.useState('');
-    const [confirm, setConfirm] = React.useState(false)
-    const Reset = () => (
-        navigation.goBack()
-    )
-    const BackTo = () => (
-        navigation.goBack()
-    )
-    const KeyGmail = () => {
-        Alert.alert("Đã gửi lại mã")
+const db = SQLite.openDatabase(
+    {
+        name: 'QuanLiChiTieu',
+        location: 'default',
+    },
+    () => { },
+    (error) => {
+        console.log(error);
     }
+);
+
+function ResetPassScreen({ navigation }: any) {
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleResetPassword = () => {
+        if (username.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
+            Alert.alert('Thông báo', 'Vui lòng nhập đủ thông tin');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Thông báo', 'Mật khẩu không khớp, vui lòng kiểm tra lại');
+            return;
+        }
+
+        db.transaction((tx) => {
+            tx.executeSql(
+                'SELECT * FROM users WHERE username = ? AND email = ?',
+                [username, email],
+                (tx, results) => {
+                    if (results.rows.length > 0) {
+                        db.transaction((tx) => {
+                            tx.executeSql(
+                                'UPDATE users SET password = ? WHERE username = ?',
+                                [password, username],
+                                (tx, results) => {
+                                    if (results.rowsAffected > 0) {
+                                        Alert.alert('Thông báo', 'Mật khẩu đã được đặt lại thành công');
+                                        navigation.goBack();
+                                    } else {
+                                        Alert.alert('Thông báo', 'Đã xảy ra lỗi, vui lòng thử lại sau');
+                                    }
+                                }
+                            );
+                        });
+                    } else {
+                        Alert.alert('Thông báo', 'Thông tin không khớp, vui lòng kiểm tra lại');
+                    }
+                }
+            );
+        });
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -57,51 +75,48 @@ function ResetPassScreen({ navigation }: any): JSX.Element {
                     <Text style={styles.header}>QUÊN MẬT KHẨU</Text>
 
                     <View style={styles.loginContainer}>
-                        <TouchableOpacity style={{ marginLeft: -30, marginBottom: 20 }} onPress={BackTo}>
-                            <Image source={require('./assets/src/img/icon-back.png')}></Image>
+                        <TouchableOpacity
+                            style={{ marginLeft: -30, marginBottom: 20 }}
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Image source={require('./assets/src/img/icon-back.png')} />
                         </TouchableOpacity>
 
-                        <ScrollView style={{ flex: 1,marginBottom:10 }}>
-                            <Text style={styles.titleInput}>Gmail:</Text>
-                            <TextInput
-                                placeholder="Gmail"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                            />
-                            <Text style={styles.titleInput}>Mã xác nhận:</Text>
-                            <TextInput
-                                placeholder="Mã xác nhận"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                            />
-                            <Text style={styles.titleInput}>Nhập mật khẩu mới</Text>
-                            <TextInput
-                                placeholder="Nhập mật khẩu mới"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                            />
-                            <Text style={styles.titleInput}>Nhập lại mật khẩu</Text>
-                            <TextInput
-                                placeholder="Nhập lại mật khẩu"
-                                style={styles.textInput}
-                                placeholderTextColor='black'
-                            />
-                        </ScrollView>
+                        <TextInput
+                            placeholder="Tên đăng nhâp"
+                            style={styles.textInput}
+                            placeholderTextColor="black"
+                            value={username}
+                            onChangeText={(text) => setUsername(text)}
+                        />
+                        <TextInput
+                            placeholder="Email"
+                            style={styles.textInput}
+                            placeholderTextColor="black"
+                            value={email}
+                            onChangeText={(text) => setEmail(text)}
+                        />
+                        <TextInput
+                            placeholder="Mật khẩu mới"
+                            style={styles.textInput}
+                            placeholderTextColor="black"
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
+                            secureTextEntry
+                        />
+                        <TextInput
+                            placeholder="Xác nhận mật khẩu"
+                            style={styles.textInput}
+                            placeholderTextColor="black"
+                            value={confirmPassword}
+                            onChangeText={(text) => setConfirmPassword(text)}
+                            secureTextEntry
+                        />
 
-                            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                                <Text>Bạn chưa nhận được ?</Text>
-                                <TouchableOpacity onPress={KeyGmail}>
-                                    <Text style={{ color: 'rgba(0, 151, 126, 1)' }}> Gửi lại mã</Text>
-                                </TouchableOpacity>
-                            </View>
-
-
-                            <TouchableOpacity style={styles.btnApct} onPress={BackTo}>
-                                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>XÁC NHẬN</Text>
-                            </TouchableOpacity>
-                        
+                        <TouchableOpacity style={styles.btnApct} onPress={handleResetPassword}>
+                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>XÁC NHẬN</Text>
+                        </TouchableOpacity>
                     </View>
-
                 </KeyboardAvoidingView>
             </ImageBackground>
         </View>
@@ -113,11 +128,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
-    },
-    icon: {
-        width: 100,
-        height: 100,
     },
     header: {
         color: 'white',
@@ -127,8 +137,7 @@ const styles = StyleSheet.create({
         textShadowColor: 'black',
         textShadowOffset: { width: 1, height: 2 },
         textShadowRadius: 20,
-        marginTop: 10
-
+        marginTop: 10,
     },
     loginContainer: {
         paddingHorizontal: 20,
@@ -138,19 +147,13 @@ const styles = StyleSheet.create({
         width: 350,
         height: '78%',
         backgroundColor: 'white',
-        elevation: 10
-    },
-    titleInput: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: 'rgba(214, 149, 0, 1)',
+        elevation: 10,
     },
     textInput: {
         height: 40,
         borderColor: '#000000',
         borderBottomWidth: 1,
         marginBottom: 28,
-
     },
     btnApct: {
         borderRadius: 15,
@@ -159,19 +162,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 151, 126, 1)',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 90,
-        marginTop: 10,
-        elevation: 5
-
-    },
-    textLogin: {
         alignSelf: 'center',
-        paddingTop: 15,
-        fontWeight: 'bold',
-        color: 'rgba(214, 149, 0, 1)',
-        fontFamily: 'Segoe UI'
-    }
-
+        marginTop: 10,
+        elevation: 5,
+    },
 });
 
 export default ResetPassScreen;
