@@ -1,37 +1,27 @@
-import 'react-native-gesture-handler';
-import React from 'react';
-import type { PropsWithChildren } from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  KeyboardAvoidingView,
-  Image,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  FlatList
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-type ItemProps = { title: any, name: any, value: any }
-const StockButton = ({ title, name, value }: ItemProps) => {
+type StockData = {
+  id: number;
+  title: string;
+  name: string;
+  value: number;
+  changePercent?: string; // Thêm dấu ? để cho phép trường 'changePercent' có thể không có
+  highValue?: string;
+  lowValue?: string;
+};
+
+type ItemProps = {
+  title: string;
+  name: string;
+  value: number;
+  onPress: () => void;
+};
+
+const StockButton = ({ title, name, value, onPress }: ItemProps) => {
   return (
-    <TouchableOpacity style={styles.btn}>
+    <TouchableOpacity style={styles.btn} onPress={onPress}>
       <View style={styles.titleBtn}>
         <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>{title}</Text>
       </View>
@@ -39,89 +29,130 @@ const StockButton = ({ title, name, value }: ItemProps) => {
         <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{name}</Text>
         <Text style={{ color: 'white', fontSize: 18 }}> Giá trị: {value}</Text>
       </View>
-
     </TouchableOpacity>
-  )
-}
-
-const DATA = [
-  {
-    id: 1,
-    title: "VNM",
-    name: "Vinamaik",
-    value: 100
-  },
-  {
-    id: 2,
-    title: "VIN",
-    name: "Vinpreal",
-    value: 120
-  },
-  {
-    id: 3,
-    title: "POLI",
-    name: "Petrolimex",
-    value: 50
-  },
-  {
-    id: 4,
-    title: "TH",
-    name: "TH true milk",
-    value: 72
-  },
-]
-
+  );
+};
 
 const StockScreen = ({ navigation }: any) => {
+  const [stockData, setStockData] = useState<StockData[]>([]);
+  const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
+
+  useEffect(() => {
+    const apiKey = 'IK88DT3BVNVQH2SE';
+    const stockSymbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'];
+
+    const fetchStockData = async () => {
+      try {
+        const stockDataPromises = stockSymbols.map(async (symbol) => {
+          const response = await axios.get(
+            `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`
+          );
+          console.log("________________________________________________________________________________________")
+          console.log("| API response for symbol -", symbol, ":", response.data);
+          return response.data;
+        });
+
+        const fetchedStockData = await Promise.all(stockDataPromises);
+        // console.log("Fetched stock data:", fetchedStockData);
+
+        const formattedStockData: StockData[] = fetchedStockData.map((data, index) => {
+          const changePercent = data['Global Quote']['10. change percent'];
+          const highValue = data['Global Quote']['03. high'];
+          const lowValue = data['Global Quote']['04. low'];
+
+          return {
+            id: index,
+            title: data['Global Quote']['01. symbol'],
+            name: data['Global Quote']['02. open'],
+            value: parseFloat(data['Global Quote']['05. price']),
+            changePercent: changePercent ? changePercent : '', // Gán giá trị 'changePercent' nếu có, nếu không thì gán là chuỗi rỗng
+            highValue: highValue ? highValue : '',
+            lowValue: lowValue ? lowValue : '',
+          };
+        });
+
+        setStockData(formattedStockData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchStockData();
+  }, []);
+
+  const handleStockPress = (stock: StockData) => {
+    setSelectedStock(stock);
+  };
+
   return (
     <View style={{ flex: 1 }}>
-
-
       <ImageBackground style={styles.panel} source={require('./assets/src/img/stock-bg.jpg')} resizeMode='cover'>
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>TÊN STOCK(CALL API phaanf nayf)</Text>
+
+        {/* View for stock title */}
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Tên: {selectedStock ? selectedStock.title : ''}</Text>
         </View>
 
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>GIÁ TRỊ</Text>
+        {/* View for stock open value */}
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Giá Sàn: {selectedStock ? selectedStock.name : ''}</Text>
         </View>
 
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>% TĂNG HAY GIẢM , NẾU GIẢM THÌ CHO MÀU ĐỎ , TĂNG THÌ CHO MÀU XANH</Text>
+        {/* View for High & Low value */}
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
+          <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>
+            High: {selectedStock ? selectedStock.highValue : ''} {"\n"}
+            Low: {selectedStock ? selectedStock.lowValue : ''}
+          </Text>
         </View>
 
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 10 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>THÔNG TIN NẾU CÓ (CALL API phaanf nayf)</Text>
+        {/* View for stock change percent */}
+        <View style={{
+          borderWidth: 4,
+          borderColor: 'white',
+          borderRadius: 15,
+          marginBottom: 10,
+          backgroundColor: selectedStock && selectedStock.changePercent ? (selectedStock.changePercent.includes('-') ? 'red' : 'green') : 'white',
+        }}>
+          <Text style={{
+            fontSize: 30,
+            fontWeight: 'bold',
+            color: selectedStock && selectedStock.changePercent ? (selectedStock.changePercent.includes('-') ? 'yellow' : 'white') : 'rgba(214, 149, 0, 1)',
+          }}>
+            {selectedStock ? selectedStock.changePercent : '%'}
+          </Text>
         </View>
+
+
+
+
       </ImageBackground>
 
-
       <View style={{ flex: 1, marginBottom: 40 }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', marginLeft: 10, marginTop: 10 }}>NGÀY THÁNG NĂM: </Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', marginLeft: 10, marginTop: 10 }}>Hôm nay:  {new Date().toLocaleDateString()} </Text>
         <View style={{ justifyContent: 'center', marginBottom: 30, marginLeft: 50 }}>
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <StockButton title={item.title} name={item.name} value={item.value} />}
-          />
+          {stockData && stockData.length > 0 ? (
+            <FlatList
+              data={stockData}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => <StockButton title={item.title} name={item.name} value={item.value} onPress={() => handleStockPress(item)} />}
+            />
+          ) : (
+            <Text>Không có dữ liệu</Text>
+          )}
         </View>
       </View>
     </View>
-
-  )
-}
+  );
+};
 
 export default StockScreen;
-
-
-
-
 
 const styles = StyleSheet.create({
   panel: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   btn: {
     borderTopWidth: 2,
@@ -150,5 +181,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginLeft: 5
   }
-
-})
+});
