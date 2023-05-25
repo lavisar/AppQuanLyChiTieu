@@ -185,7 +185,8 @@ function RegisterScreen({ navigation }: any): JSX.Element {
                         <TouchableOpacity style={{ marginLeft: -30, marginBottom: 10 }} onPress={BackTo}>
                             <Image source={require('./assets/src/img/icon-back.png')}></Image>
                         </TouchableOpacity>
-                        <ScrollView style={{ flex: 1 }}>
+                        <ScrollView style={{ flex: 1 }}   scrollEnabled={false}
+  nestedScrollEnabled={false}>
                             <Text style={[styles.titleInput,{fontWeight:'bold'}]}>Tên đăng nhập:</Text>
                             <TextInput
                                 placeholder="Tên đăng nhập"

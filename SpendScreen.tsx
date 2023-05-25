@@ -351,7 +351,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
                 <Text style={styles.textBigger}>{pointer.date}</Text>
               </View>
               <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
-                <Text style={styles.text}>Số tiền: {pointer.amount}</Text>
+                <Text style={styles.text}>Số tiền: {pointer.amount}đ</Text>
               </View>
             </View>
           </View>
@@ -376,7 +376,7 @@ const TotalSpendScreen = ({ navigation }: any) => {
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
             <Text style={[styles.textBigger, { marginLeft: 10 }]}>Tiền chi tiêu tháng {currentMonthYear}: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull==true ? currentMonthSpending : "*********"} </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull==true ? currentMonthSpending : "*********"}đ</Text>
           </View>
         </View>
       </View>
@@ -402,7 +402,8 @@ const TotalSpendScreen = ({ navigation }: any) => {
             data={pull == true ? data : null}
             renderItem={renderItem}
             keyExtractor={item => item.id}
-
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
 
             refreshControl={
               <RefreshControl refreshing={refreshControl} onRefresh={() => {

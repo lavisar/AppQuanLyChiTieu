@@ -340,9 +340,9 @@ const AddSpendScreen = ({ navigation }: any) => {
           <View style={{ width: 60, height: 60, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, flex: 1 }}>
             <Image resizeMode='cover' source={require('./assets/src/img/icon-account.png')} />
           </View>
-          <View style={{ marginLeft: 50, flex: 3.3 }}>
+          <View style={{ marginLeft: 50, flex: 3.3 ,justifyContent:'center',alignItems:'center'}}>
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Xin chào, {fullname}</Text>
-
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>Hôm nay xài tiền cho việc gì thế ^^</Text>
           </View>
         </View>
 
@@ -351,6 +351,8 @@ const AddSpendScreen = ({ navigation }: any) => {
           <FlatList
             horizontal={true}
             data={DATA}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => <IconButton title={item.name} src={item.url}
               onPress={() => {[ setType(item.name) ]}}
             />}
@@ -371,7 +373,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             <View style={{ flex: 3 }}>
               <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginLeft: 10, marginTop: 10, marginBottom: 2 }}>Ngày tháng năm</Text>
               <View style={[styles.textInput, { justifyContent: 'center', alignItems: 'flex-start' }]}>
-                <Text style={{ fontSize: 14, color: 'black' }}>{text}</Text>
+                <Text style={{ fontSize: 14, color: 'black',fontWeight:'bold' }}>{text}</Text>
               </View>
             </View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -391,7 +393,7 @@ const AddSpendScreen = ({ navigation }: any) => {
             </View>
           </View>
 
-          <InputInfo title="Số tiền chi" placeholder="Số tiền" value={amount} onChangeText = {setAmount}/>
+          <InputInfo title="Số tiền chi" placeholder="Số tiền việt nam đồng" value={amount} onChangeText = {setAmount}/>
           <View style={{ flexDirection: 'row', flex: 2,justifyContent:'center' }}>
             
             <ButtonUpdatePay onPress={Pay} />
@@ -458,6 +460,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderRadius: 15,
     paddingLeft: 15,
+    fontWeight:'bold'
   },
   textSelected: {
     fontWeight: 'bold', fontSize: 18, color: '#D69500',

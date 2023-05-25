@@ -87,22 +87,24 @@ const StockScreen = ({ navigation }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground style={styles.panel} source={require('./assets/src/img/stock-bg.jpg')} resizeMode='cover'>
-
+      <View style={{ backgroundColor: '#00977E', height: 60,width:432, flex: 1, alignItems: 'center', justifyContent: 'center',marginBottom:15 }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>CHỨNG KHOÁN</Text>
+      </View>
         {/* View for stock title */}
         <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Tên: {selectedStock ? selectedStock.title : ''}</Text>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Tên: {selectedStock ? selectedStock.title : '*******'}</Text>
         </View>
 
         {/* View for stock open value */}
         <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Giá Sàn: {selectedStock ? selectedStock.name : ''}</Text>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>Giá Sàn: {selectedStock ? selectedStock.name : '*******'}</Text>
         </View>
 
         {/* View for High & Low value */}
-        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5 }}>
+        <View style={{ borderWidth: 4, borderColor: 'white', borderRadius: 15, backgroundColor: 'white', marginBottom: 5,flexDirection:'row' }}>
           <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', color: 'rgba(214, 149, 0, 1)' }}>
-            High: {selectedStock ? selectedStock.highValue : ''} {"\n"}
-            Low: {selectedStock ? selectedStock.lowValue : ''}
+            High: {selectedStock ? selectedStock.highValue : '******'} {"\n"}
+            Low: {selectedStock ? selectedStock.lowValue : '******'}
           </Text>
         </View>
 
@@ -134,6 +136,8 @@ const StockScreen = ({ navigation }: any) => {
           {stockData && stockData.length > 0 ? (
             <FlatList
               data={stockData}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => <StockButton title={item.title} name={item.name} value={item.value} onPress={() => handleStockPress(item)} />}
             />

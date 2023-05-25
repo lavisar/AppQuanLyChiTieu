@@ -248,29 +248,29 @@ const TotalSpendScreen = ({ navigation }: any) => {
 
     <View style={{ flex: 4, marginHorizontal: 20 }}>
       <View style={{ flex: 4, }} >
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           <View style={{ flex: 3, width: 70, height: 70, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 55, marginVertical: 20 }}>
             <Image source={require('./assets/src/img/wallet.png')} />
           </View>
           <View style={{ flex: 9, alignItems: 'center' }}>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Số tiền đã chi tháng {currentMonthYearTitle}: </Text>
-            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull == true ? currentSpending : "*******"} </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>Tiền chi tiêu tháng {currentMonthYearTitle}: </Text>
+            <Text style={[styles.textBigger, { marginLeft: 10 }]}>{pull == true ? currentSpending : "*******"}đ </Text>
           </View>
         </View>
         <View style={{ flex: 1 }}>
           {pull == false ?
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center',borderTopWidth:1 }}>
-              <Text style={[styles.textBigger, { fontSize: 25, color: '#00977E' }]}>Vuốt xuống để mở khóa</Text>
-              <View style={{ height: 60, justifyContent: 'center', alignItems: 'center' }}>
-                <Image style={{ width: 40, height: 40 }} source={require('./assets/src/img/icons8-here-48.png')}></Image>
-              </View>
-            </View>
+        <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+        <Text style={[styles.textBigger,{fontSize:20,color:'#00977E'}]}>Vuốt xuống để mở khóa hoặc để refresh</Text>
+        <View style={{  height: 30, justifyContent: 'center', alignItems: 'center' }}>
+        <Image style={{ width: 40, height: 40 }} source={require('./assets/src/img/icons8-here-48.png')}></Image>
+      </View>
+      </View>
             :
-            <View style={{flex:1,borderTopWidth:1}}>      
+            <View style={{flex:1}}>      
             <Text style={styles.textBigger}>Tháng cần tìm:</Text>
             <InputFind placeholder="Tháng" value={searchInput} onChangeText={setSearchInput} onPress={handleFind}/>
-            <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40, marginTop: 20, }}>
-              <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 2, backgroundColor: '#00977E', height: 50,borderRadius:15,marginBottom:50,marginTop:10 ,}}>
+              <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU THÁNG</Text>
             </View>
             </View>}
             {/* placeholder, color, onPress, value, onChangeText, eventHandle */}
@@ -282,22 +282,18 @@ const TotalSpendScreen = ({ navigation }: any) => {
 
 
 
-      {/* <Text style={styles.textBigger}>Tháng cần tìm:</Text>
-            <InputFind placeholder="Tháng/Năm" />
-            <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40 }}>
-              <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
-            </View> */}
 
 
 
 
-      <View style={{ flex: 10, marginBottom: 30, paddingTop: 5, marginTop: 45 }}>
+      <View style={{ flex: 10, marginBottom: 30, paddingTop: 5, marginTop: 60}}>
 
         <FlatList
           data={pull == true ? data : null}
           renderItem={({ item }: { item: Props }) => <MoneySaveList month={item.month} spendingCount={item.spendingCount} amountSpent={item.amountSpent} />}
           keyExtractor={item => item.month}
-
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
 
           refreshControl={
             <RefreshControl refreshing={refreshControl} onRefresh={() => {
@@ -338,7 +334,7 @@ const styles = StyleSheet.create({
 
   },
   textBigger: {
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'black'
   },

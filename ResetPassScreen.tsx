@@ -10,6 +10,7 @@ import {
     ImageBackground,
     StyleSheet,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import SQLite from 'react-native-sqlite-storage';
 
 const db = SQLite.openDatabase(
@@ -73,7 +74,7 @@ function ResetPassScreen({ navigation }: any) {
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground style={styles.panel} source={require('./assets/src/img/panel-login.png')}>
-                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <KeyboardAvoidingView style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }} >
                     <Text style={styles.header}>QUÊN MẬT KHẨU</Text>
 
                     <View style={styles.loginContainer}>
@@ -83,41 +84,50 @@ function ResetPassScreen({ navigation }: any) {
                         >
                             <Image source={require('./assets/src/img/icon-back.png')} />
                         </TouchableOpacity>
-
-                        <TextInput
-                            placeholder="Tên đăng nhâp"
-                            style={styles.textInput}
-                            placeholderTextColor="black"
-                            value={username}
-                            onChangeText={(text) => setUsername(text)}
-                        />
-                        <TextInput
-                            placeholder="Email"
-                            style={styles.textInput}
-                            placeholderTextColor="black"
-                            value={email}
-                            onChangeText={(text) => setEmail(text)}
-                        />
-                        <TextInput
-                            placeholder="Mật khẩu mới"
-                            style={styles.textInput}
-                            placeholderTextColor="black"
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
-                            secureTextEntry
-                        />
-                        <TextInput
-                            placeholder="Xác nhận mật khẩu"
-                            style={styles.textInput}
-                            placeholderTextColor="black"
-                            value={confirmPassword}
-                            onChangeText={(text) => setConfirmPassword(text)}
-                            secureTextEntry
-                        />
-
-                        <TouchableOpacity style={styles.btnApct} onPress={handleResetPassword}>
-                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>XÁC NHẬN</Text>
-                        </TouchableOpacity>
+                        <ScrollView style={{flex:1}}   scrollEnabled={false}
+  nestedScrollEnabled={false}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Tên đăng nhập:</Text>
+                            <TextInput
+                                placeholder="Tên đăng nhâp của tài khoản bạn"
+                                style={styles.textInput}
+                                placeholderTextColor="black"
+                                value={username}
+                                onChangeText={(text) => setUsername(text)}
+                            />
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Email:</Text>
+                            <TextInput
+                                placeholder="Nhập Email của tài khoản bạn"
+                                style={styles.textInput}
+                                placeholderTextColor="black"
+                                value={email}
+                                onChangeText={(text) => setEmail(text)}
+                            />
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Mật Khẩu mới:</Text>
+                            <TextInput
+                                placeholder="Mật khẩu mới"
+                                style={styles.textInput}
+                                placeholderTextColor="black"
+                                value={password}
+                                onChangeText={(text) => setPassword(text)}
+                                secureTextEntry
+                            />
+                            
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Nhập lại mật khẩu mới:</Text>
+                            <TextInput
+                                placeholder="Xác nhận mật khẩu"
+                                style={styles.textInput}
+                                placeholderTextColor="black"
+                                value={confirmPassword}
+                                onChangeText={(text) => setConfirmPassword(text)}
+                                secureTextEntry
+                            />
+                            
+                            </ScrollView>
+                            <Text style={{fontSize: 15, color: 'rgba(0, 151, 126, 1)', }}>Vui lòng nhập đúng tên đăng nhập và email để thay đổi được mật khẩu mới của bạn</Text>
+                            <TouchableOpacity style={styles.btnApct} onPress={handleResetPassword}>
+                                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>XÁC NHẬN</Text>
+                            </TouchableOpacity>
+                        
                     </View>
                 </KeyboardAvoidingView>
             </ImageBackground>
@@ -147,7 +157,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 10,
         width: 350,
-        height: '78%',
+        height: '65%',
         backgroundColor: 'white',
         elevation: 10,
     },
@@ -156,11 +166,12 @@ const styles = StyleSheet.create({
         borderColor: '#000000',
         borderBottomWidth: 1,
         marginBottom: 28,
+        fontWeight: 'bold'
     },
     btnApct: {
         borderRadius: 15,
         width: 120,
-        height: 45,
+        height: 50,
         backgroundColor: 'rgba(0, 151, 126, 1)',
         alignItems: 'center',
         justifyContent: 'center',

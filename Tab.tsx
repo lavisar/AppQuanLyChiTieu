@@ -64,7 +64,7 @@ const Tabs = () => {
 
                             }}
                         />
-                        <Text style={{ color: focused ? '#D69500' : '#00977E', fontSize: 13, fontWeight: 'bold' }}>chi tiêu</Text>
+                        <Text style={{ color: focused ? '#D69500' : '#00977E', fontSize: 13, fontWeight: 'bold' }}>Chi tiêu</Text>
                     </View>
                 )
             }} />

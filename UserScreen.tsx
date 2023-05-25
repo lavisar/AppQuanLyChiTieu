@@ -49,7 +49,7 @@ const InputInfo = ({ title, value, onChangeText, placeholder }: ItemProps) => {
     <View>
       <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>{title}</Text>
       <TextInput
-        style={styles.textInput}
+        style={[styles.textInput,{fontWeight:'bold'}]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
@@ -118,26 +118,28 @@ const UserScreen = ({ navigation }: any) => {
     }
   }
   return (
-    <ScrollView>
+    <ScrollView   scrollEnabled={false}
+    nestedScrollEnabled={false}>
       <View style={{ flex: 1, marginHorizontal: 20 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginTop: 20 }}>
           <View style={{ width: 80, height: 80, borderColor: 'black', borderWidth: 3, justifyContent: 'center', alignItems: 'center', borderRadius: 45 }}>
             <Image source={require('./assets/src/img/icon-account.png')} />
           </View>
           <View>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end' }}>  Xin chào, {fullname}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'flex-end',marginLeft:30 }}>Xin chào, {fullname}</Text>
           </View>
         </View>
         <View>
           <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Tên Đăng Nhập</Text>
           <TextInput
-            style={styles.textInput}
+            style={[styles.textInput,{fontWeight:'bold'}]}
             placeholder={userName.toString()}
             editable={false}
           />
         </View>
 
         <InputInfo
+          
           title="Họ và Tên"
           value={newFullname}
           onChangeText={setNewFullname}
@@ -162,8 +164,9 @@ const UserScreen = ({ navigation }: any) => {
           />
         </View>
 
-        <View>
+        <View style={{}}>
           <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black', marginBottom: 5, marginLeft: 10, marginTop: 10 }}>Mật Khẩu</Text>
+          <View style={{flexDirection:'row'}}>
           <TextInput
             style={styles.textInput}
             value={newPassword}
@@ -175,6 +178,7 @@ const UserScreen = ({ navigation }: any) => {
           <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
             <Image source={require('./assets/src/img/showhide.png')}></Image>
           </TouchableOpacity>
+          </View>
         </View>
 
         <ButtonUpdate onPress={HandleUpdate} />
@@ -213,7 +217,7 @@ const styles = StyleSheet.create({
     fontSize: 20, fontWeight: 'bold',
   },
   textInput: {
-
+    fontWeight:'bold',
     height: 45,
     borderColor: 'black',
     borderTopWidth: 1,
@@ -222,5 +226,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderRadius: 15,
     paddingLeft: 15,
+    flex:6
   },
 })
