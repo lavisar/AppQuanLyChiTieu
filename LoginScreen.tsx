@@ -46,29 +46,29 @@ function LoginScreen({ navigation }: any): JSX.Element {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [hide,setHide] = useState(true);
+    const [hide, setHide] = useState(true);
     const Hide = () => {
         setHide(!hide)
-      }
-    useEffect(() =>{
-      createUsersTable();
-      createTypeTable();
-      createSpendingTable();
-      insertTypes();
-      
+    }
+    useEffect(() => {
+        createUsersTable();
+        createTypeTable();
+        createSpendingTable();
+        insertTypes();
+
     });
-    
+
     const createUsersTable = () => {
-        db.transaction((tx) =>{
+        db.transaction((tx) => {
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS "
                 + "Users "
                 + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, fullname TEXT, birthday TEXT, email TEXT);"
-             )
+            )
         })
     }
     const createTypeTable = () => {
-        db.transaction((tx) =>{
+        db.transaction((tx) => {
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS "
                 + "Type "
@@ -77,16 +77,16 @@ function LoginScreen({ navigation }: any): JSX.Element {
         })
     }
     const createSpendingTable = () => {
-        db.transaction((tx) =>{
+        db.transaction((tx) => {
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS Spending (id INTEGER, type TEXT NOT NULL, amount INTEGER, date TEXT, purpose TEXT, spendUsername TEXT, FOREIGN KEY(type) REFERENCES Type(type), PRIMARY KEY(id AUTOINCREMENT));"
             )
         })
     }
-    
-    const typeArray = ["Quà tặng","Xã giao","Mua sắm","Gửi tiền","Nhận tiền","Hóa đơn","Tiết kiệm","Tiền nhà","Hẹn hò","Học tập","Mua Online","CH Tiện Lợi","Du lịch","Sức khỏe","Tiền nước","Tiền điện","Ăn uống","Thú cưng","Trẻ nhỏ","Ăn vặt","Quần áo","Sửa chữa","Đi chơi","Nhiên liệu","Chăm sóc","Khác"]
+
+    const typeArray = ["Quà tặng", "Xã giao", "Mua sắm", "Gửi tiền", "Nhận tiền", "Hóa đơn", "Tiết kiệm", "Tiền nhà", "Hẹn hò", "Học tập", "Mua Online", "CH Tiện Lợi", "Du lịch", "Sức khỏe", "Tiền nước", "Tiền điện", "Ăn uống", "Thú cưng", "Trẻ nhỏ", "Ăn vặt", "Quần áo", "Sửa chữa", "Đi chơi", "Nhiên liệu", "Chăm sóc", "Khác"]
     const insertTypes = () => {
-        db.transaction((tx) =>{
+        db.transaction((tx) => {
             typeArray.forEach(element => {
                 tx.executeSql(
                     "INSERT INTO Type (type) VALUES (?)",
@@ -176,21 +176,21 @@ function LoginScreen({ navigation }: any): JSX.Element {
                             placeholderTextColor='black'
                             onChangeText={setUsername}
                         />
-                            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Mật Khẩu:</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <TextInput
-                                    placeholder="Mật khẩu"
-                                    placeholderTextColor='black'
-                                    style={styles.textInput}
-                                    secureTextEntry={hide}
-                                    onChangeText={setPassword}
-                                >
+                        <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'rgba(214, 149, 0, 1)', }}>Mật Khẩu:</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextInput
+                                placeholder="Mật khẩu"
+                                placeholderTextColor='black'
+                                style={styles.textInput}
+                                secureTextEntry={hide}
+                                onChangeText={setPassword}
+                            >
 
-                                </TextInput>
-                                <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
-                                    <Image source={require('./assets/src/img/showhide.png')}></Image>
-                                </TouchableOpacity>
-                            </View>
+                            </TextInput>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={Hide}>
+                                <Image source={require('./assets/src/img/showhide.png')}></Image>
+                            </TouchableOpacity>
+                        </View>
 
 
 
