@@ -75,8 +75,29 @@ const InputAdd = ({ placeholder }: any) => {
     </View>
   )
 }
-const InputFind = ({ placeholder, color,onPress }: any) => {
-    const event = () => {
+
+// const InputFind = ({ placeholder, color, onPress, value, onChangeText }: any) => {
+//     const event = () => {
+//     onPress();
+//   }
+//   return (
+//     <View style={{ flexDirection: 'row' }}>
+//       <TextInput
+//         placeholder={placeholder}
+//         placeholderTextColor='black'
+//         style={styles.textInput}
+//         keyboardType='number-pad'
+//         value={value}
+//         onChangeText={onChangeText}
+//       />
+//       <TouchableOpacity style={[styles.btn, { borderColor: '#00977E' }]} onPress={handleFind(value)}>
+//         <Text style={[styles.titleBtn, { color: '#00977E' }]}>TÌM</Text>
+//       </TouchableOpacity>
+//     </View>
+//   )
+// }
+const InputFind = ({ placeholder, color, onPress, value, onChangeText }: any) => {
+  const event = () => {
     onPress();
   }
   return (
@@ -86,8 +107,10 @@ const InputFind = ({ placeholder, color,onPress }: any) => {
         placeholderTextColor='black'
         style={styles.textInput}
         keyboardType='number-pad'
+        value={value}
+        onChangeText={onChangeText}
       />
-      <TouchableOpacity style={[styles.btn, { borderColor: '#00977E' }]}>
+      <TouchableOpacity style={[styles.btn, { borderColor: '#00977E' }]} onPress={event}>
         <Text style={[styles.titleBtn, { color: '#00977E' }]}>TÌM</Text>
       </TouchableOpacity>
     </View>
@@ -122,11 +145,14 @@ const TotalSpendScreen = ({ navigation }: any) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [show, setShow] = useState(false);
   const [text, setText] = useState('');
+
+  const [searchInput, setSearchInput] = useState('');
   useLayoutEffect(() => {
     getDataFromDatabase();
     calculateSpending();
 
   }, [])
+  
   const onChangeDate = (event: Event, value?: Date) => {
     const curDate = value || date;
     setDate(curDate);
@@ -184,6 +210,40 @@ const TotalSpendScreen = ({ navigation }: any) => {
     }
   }
 
+  const handleFind = () => {
+    try {
+      if (parseInt(searchInput) < 1 || parseInt(searchInput) > 12 || searchInput.length > 2){
+        Alert.alert("Thông báo", "Số tháng không hợp lệ");
+      }
+      else {
+        let searchInputString = searchInput.toString();
+        if (searchInputString.length < 2){
+          searchInputString = '0'+searchInputString;
+        }
+        setData([]);
+        db.transaction((tx) =>
+          tx.executeSql(
+            "SELECT strftime('%m-%Y', date) AS Month, COUNT(*) AS RowsCount, SUM(amount) AS TotalAmount FROM Spending WHERE spendUsername = ? AND strftime('%m', date) = ? GROUP BY Month ORDER by Month DESC;",
+            [userName, searchInputString],
+            (tx, result) => {
+              for (let i = 0; i < result.rows.length; i++) {
+                const newData: Props = {
+                  month: result.rows.item(i).Month,
+                  spendingCount: result.rows.item(i).RowsCount,
+                  amountSpent: result.rows.item(i).TotalAmount,
+                }
+                setData(prevData => [...prevData, newData]);
+              }
+            }
+          )
+        )
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+    // console.log(searchInput);
+  }
   return (
 
     <View style={{ flex: 4, marginHorizontal: 20 }}>
@@ -208,12 +268,12 @@ const TotalSpendScreen = ({ navigation }: any) => {
             :
             <View style={{flex:1,borderTopWidth:1}}>      
             <Text style={styles.textBigger}>Tháng cần tìm:</Text>
-            <InputFind placeholder="Tháng" />
+            <InputFind placeholder="Tháng" value={searchInput} onChangeText={setSearchInput} onPress={handleFind}/>
             <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, backgroundColor: '#00977E', height: 40, marginTop: 20, }}>
               <Text style={[styles.textBigger]}>DANH SÁCH CHI TIÊU</Text>
             </View>
             </View>}
-
+            {/* placeholder, color, onPress, value, onChangeText, eventHandle */}
         </View>
       </View>
 
