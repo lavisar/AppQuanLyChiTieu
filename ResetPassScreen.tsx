@@ -53,6 +53,8 @@ function ResetPassScreen({ navigation }: any) {
                                 (tx, results) => {
                                     if (results.rowsAffected > 0) {
                                         Alert.alert('Thông báo', 'Mật khẩu đã được đặt lại thành công');
+                                        console.log(">> Đặt lại mật khẩu thành công");
+                                        console.log(">> Mật khẩu mới :", password);
                                         navigation.goBack();
                                     } else {
                                         Alert.alert('Thông báo', 'Đã xảy ra lỗi, vui lòng thử lại sau');
