@@ -15,7 +15,9 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  FlatList
+  FlatList,
+  RefreshControl,
+  
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -39,12 +41,13 @@ const db = SQLite.openDatabase(
   error => { console.log(error) }
 );
 type Props = {
+  id: any,
   month: any;
   spendingCount: any;
   amountSpent: any;
 };
 
-const MoneySaveList = ({ month, spendingCount, amountSpent }: Props) => {
+const MoneySaveList = ({ id, month, spendingCount, amountSpent }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>THÁNG: {month}</Text>
@@ -92,6 +95,7 @@ const InputFind = ({ placeholder,color }: any) => {
 const TotalSpendScreen = ({ navigation }:any) => {
   const { userName } = useContext(UserContext);
   const [currentSpending, setCurrentSpending] = useState(0);
+  const [refreshControl, setRefreshControl] = useState(false);
   const [data, setData] = useState<Props[]>([]);
 
   const currentDate = new Date();
@@ -131,6 +135,7 @@ const TotalSpendScreen = ({ navigation }:any) => {
           (tx, result) => {
             for (let i = 0; i < result.rows.length; i++) {
               const newData : Props = {
+                id: i,
                 month: result.rows.item(i).Month,
                 spendingCount: result.rows.item(i).RowsCount,
                 amountSpent: result.rows.item(i).TotalAmount,
@@ -166,13 +171,14 @@ const TotalSpendScreen = ({ navigation }:any) => {
       <KeyboardAvoidingView style={{ flex: 1, }} enabled={true} behavior='padding'>
         <View style={{ flex: 6, }}>
           <View style={{ flex: 4, marginTop: 10, }}>
-            <Text style={styles.textBigger}>Số tiền cần được tiết kiệm tháng hiện tại: (Tháng 4)</Text>
+            {/* <Text style={styles.textBigger}>Số tiền cần được tiết kiệm tháng hiện tại: (Tháng 4)</Text>
 
-            <InputAdd placeholder="Số tiền" />
+            <InputAdd placeholder="Số tiền" /> */}
 
             <Text style={styles.textBigger}>Tháng cần tìm:</Text>
 
             <InputFind placeholder="Tháng/Năm" />
+            
 
           </View>
         </View>
@@ -182,7 +188,20 @@ const TotalSpendScreen = ({ navigation }:any) => {
         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', alignSelf: 'center' }}> DANH SÁCH</Text>
         <FlatList
           data={data}
-          renderItem={({ item }: { item: Props }) => <MoneySaveList month={item.month} spendingCount={item.spendingCount} amountSpent={item.amountSpent}/>}
+          renderItem={({ item }: { item: Props }) => <MoneySaveList id = {item.id} month={item.month} spendingCount={item.spendingCount} amountSpent={item.amountSpent}/>}
+          keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl refreshing={refreshControl} onRefresh={() => {
+              setData([])
+              getDataFromDatabase();
+              setRefreshControl(true);
+              // setPull(true)
+              setTimeout(() => {
+                setRefreshControl(false);
+              }, 500)
+
+            }} />
+          }
         />
       </View>
     </View>
