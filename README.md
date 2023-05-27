@@ -35,7 +35,7 @@ To install this React Native project, you can follow the steps below:
 ![My Skills](https://skillicons.dev/icons?i=react,sqlite)
 Stock API Provider: www.alphavantage.co
 ## Contributing
-If you want to contribute to this project, please fork the repository and create a pull request with your changes. 
+If you want to contribute to this project, feel free for fork the repository and create a pull request with your changes. 
 ## Author
 👤 Phạm Lê Khánh Minh <br>
 👤 Nguyễn Hoàng Trung <br>
