@@ -3,6 +3,8 @@
 * Demo: coming soon...
 * Documentation: [Documentation.pdf](https://github.com/lavisar/eLearning-system/files/11581282/Documentation.pdf)
 ## Installation
+### License
+<a href="https://github.com/lavisar/AppQuanLyChiTieu/blob/master/LICENSE">MIT license</a>
 ### Release
 * APK file: coming soon...
 ### Requirements
